@@ -11,14 +11,14 @@ services:
   api:
     container_name: api-container
     build: .
-    image: survey-pet-api
+    image: car-pet-api
     restart: always
     command: npm debug
     environment:
-      - MONGO_URL=mongodb://mongo:27017/survey-pet-api
+      - MONGO_URL=mongodb://mongo:27017/car-pet-api
     volumes:
-      - ./dist:/usr/src/survey-pet-api/dist
-      - ./package.json:/usr/src/survey-pet-api/package.json
+      - ./dist:/usr/src/car-pet-api/dist
+      - ./package.json:/usr/src/car-pet-api/package.json
     ports:
       - "5050:5050"
       - "9222:9222"

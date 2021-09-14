@@ -30,13 +30,17 @@ describe('Account Mongo Repository', () => {
       const account = await sut.add({
         name: 'any_name',
         email: 'any_email@email.com',
-        password: 'any_password'
+        password: 'any_password',
+        cpf: '00000000000',
+        contact: '0000000000000'
       })
       expect(account).toBeTruthy() // eu espero que tenha retornado algum valor do "add"
       expect(account.id).toBeTruthy() // espero que a account tenha algum id
       expect(account.name).toBe('any_name')
       expect(account.email).toBe('any_email@email.com')
       expect(account.password).toBe('any_password')
+      expect(account.cpf).toBe('00000000000')
+      expect(account.contact).toBe('0000000000000')
     })
   })
 
