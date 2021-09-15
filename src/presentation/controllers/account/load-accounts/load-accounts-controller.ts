@@ -1,7 +1,7 @@
 import {
   LoadAccounts, LoadAccountByToken, HttpRequest, HttpResponse,
   Controller, forbidden, serverSuccess, serverError,
-  AccessDeniedError
+  AccessDeniedError, noContent
 } from './load-accounts-controller-protocols'
 
 export class LoadAccountsController implements Controller {
@@ -16,7 +16,7 @@ export class LoadAccountsController implements Controller {
       const account = await this.loadAccountByToken.load(accessToken)
       if (account) { // se tiver autenticado
         const account = await this.loadAccounts.load()
-        return serverSuccess(account)
+        return account.length >= 1 ? serverSuccess(account) : noContent()
       } else {
         return forbidden(new AccessDeniedError())
       }
