@@ -38,4 +38,10 @@ describe('Load Accounts Controller', () => {
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(forbidden(new AccessDeniedError()))
   })
+  test('Should call loadAccounts', async () => {
+    const { sut, loadAccountsStub } = makeSut()
+    const loadAccountsStubSpy = jest.spyOn(loadAccountsStub, 'load')
+    await sut.handle(mockRequest())
+    expect(loadAccountsStubSpy).toHaveBeenCalled()
+  })
 })
