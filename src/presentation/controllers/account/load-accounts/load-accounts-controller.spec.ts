@@ -1,6 +1,7 @@
 import { LoadAccounts, LoadAccountByToken, HttpRequest, forbidden, AccessDeniedError } from './load-accounts-controller-protocols'
 import { LoadAccountsController } from './load-accounts-controller'
-import { mockLoadAccountByToken, mockLoadAccounts } from '@/domain/test'
+import { mockAccountModel, mockLoadAccountByToken, mockLoadAccounts } from '@/domain/test'
+import { serverSuccess } from '@/presentation/helpers/http/http-helper'
 
 type SutTypes = {
   sut: LoadAccountsController
@@ -43,5 +44,10 @@ describe('Load Accounts Controller', () => {
     const loadAccountsStubSpy = jest.spyOn(loadAccountsStub, 'load')
     await sut.handle(mockRequest())
     expect(loadAccountsStubSpy).toHaveBeenCalled()
+  })
+  test('Should return 200 on success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(serverSuccess([mockAccountModel()]))
   })
 })
