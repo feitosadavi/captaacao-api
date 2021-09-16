@@ -32,6 +32,13 @@ describe('Load Accounts Controller', () => {
     await sut.handle(mockRequest())
     expect(loadAccountByTokenSpy).toHaveBeenCalledWith('any_acess_token')
   })
+  test('Should return 403 if header was not provided', async () => {
+    const { sut, loadAccountByToken } = makeSut()
+    const loadAccountByTokenSpy = jest.spyOn(loadAccountByToken, 'load')
+    loadAccountByTokenSpy.mockReturnValueOnce(Promise.resolve(null))
+    const httpResponse = await sut.handle({})
+    expect(httpResponse).toEqual(forbidden(new AccessDeniedError()))
+  })
   test('Should return 403 if token is invalid or was not provided', async () => {
     const { sut, loadAccountByToken } = makeSut()
     const loadAccountByTokenSpy = jest.spyOn(loadAccountByToken, 'load')
@@ -61,6 +68,13 @@ describe('Load Accounts Controller', () => {
     const { sut, loadAccountByToken } = makeSut()
     const loadAccountByTokenSpy = jest.spyOn(loadAccountByToken, 'load')
     loadAccountByTokenSpy.mockImplementationOnce(throwError)
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(serverError(new Error()))
+  })
+  test('Should return 500 if loadAccounts throws', async () => {
+    const { sut, loadAccountsStub } = makeSut() // should throw if throws
+    const loadAccountsStubSpy = jest.spyOn(loadAccountsStub, 'load')
+    loadAccountsStubSpy.mockImplementationOnce(throwError)
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
   })
