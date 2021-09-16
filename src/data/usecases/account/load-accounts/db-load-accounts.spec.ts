@@ -29,4 +29,12 @@ describe('DbLoadAccounts', () => {
     const accounts = await sut.load()
     expect(accounts).toEqual([mockAccountModel()])
   })
+
+  test('Should return null if LoadAccountsRepository return null', async () => {
+    const { sut, loadAccountsRepositoryStub } = makeSut()
+    const loadAccountsRepositoryStubSpy = jest.spyOn(loadAccountsRepositoryStub, 'loadAccounts')
+    loadAccountsRepositoryStubSpy.mockReturnValueOnce(Promise.resolve(null))
+    const accounts = await sut.load()
+    expect(accounts).toBeNull()
+  })
 })
