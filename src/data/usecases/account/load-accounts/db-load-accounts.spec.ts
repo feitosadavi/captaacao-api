@@ -1,6 +1,6 @@
 import { DbLoadAccounts } from './db-load-accounts'
 import { LoadAccountsRepository } from './db-load-accounts-protocols'
-import { mockLoadAccounts } from '@/domain/test/mock-account-repository'
+import { mockAccountModel, mockLoadAccounts } from '@/domain/test/mock-account-repository'
 
 type SutTypes = {
   sut: DbLoadAccounts
@@ -22,5 +22,11 @@ describe('DbLoadAccounts', () => {
     const loadAccountsRepositoryStubSpy = jest.spyOn(loadAccountsRepositoryStub, 'loadAccounts')
     await sut.load()
     expect(loadAccountsRepositoryStubSpy).toHaveBeenCalled()
+  })
+
+  test('Should return account array if LoadAccountsRepository return account array', async () => {
+    const { sut } = makeSut()
+    const accounts = await sut.load()
+    expect(accounts).toEqual([mockAccountModel()])
   })
 })
