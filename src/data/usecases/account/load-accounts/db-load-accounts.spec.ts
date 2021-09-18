@@ -1,6 +1,6 @@
 import { DbLoadAccounts } from './db-load-accounts'
 import { LoadAccountsRepository } from './db-load-accounts-protocols'
-import { mockAccountModel, mockLoadAccounts } from '@/domain/test/mock-account-repository'
+import { mockAccountModel, mockLoadAccountsRepository } from '@/domain/test/mock-account-repository'
 import { throwError } from '@/domain/test'
 
 type SutTypes = {
@@ -9,7 +9,7 @@ type SutTypes = {
 }
 
 const makeSut = (): SutTypes => {
-  const loadAccountsRepositoryStub = mockLoadAccounts()
+  const loadAccountsRepositoryStub = mockLoadAccountsRepository()
   const sut = new DbLoadAccounts(loadAccountsRepositoryStub)
   return {
     sut,
