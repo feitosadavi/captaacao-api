@@ -57,7 +57,7 @@ export const mockLoadAccountByTokenRepository = (): LoadAccountByTokenRepository
   return new LoadAccountByTokenRepositoryStub()
 }
 
-export const mockLoadAccounts = (): LoadAccountsRepository => {
+export const mockLoadAccountsRepository = (): LoadAccountsRepository => {
   class LoadAccountsRepositoryStub implements LoadAccountsRepository {
     async loadAccounts (): Promise<AccountModel[]> {
       return Promise.resolve([mockAccountModel()])

@@ -44,6 +44,36 @@ describe('Account Mongo Repository', () => {
     })
   })
 
+  describe('loadAccouts()', () => {
+    test('Should return an account array on loadAccouts success', async () => {
+      const sut = makeSut()
+
+      await accountCollection.insertMany([{
+        name: 'any_name',
+        email: 'any_email@email.com',
+        password: 'any_password'
+      }, {
+        name: 'other_name',
+        email: 'other_email@email.com',
+        password: 'other_password'
+      }])
+
+      const accounts = await sut.loadAccounts()
+      expect(accounts).toBeTruthy()
+      expect(accounts.length).toBe(2)
+      expect(accounts[0].id).toBeTruthy()
+      expect(accounts[0].name).toBe('any_name')
+      expect(accounts[0].email).toBe('any_email@email.com')
+      expect(accounts[0].password).toBe('any_password')
+    })
+
+    test('Should return null if loadByEmail fails', async () => {
+      const sut = makeSut()
+      const account = await sut.loadAccounts()
+      expect(account).toEqual([])
+    })
+  })
+
   describe('loadByEmail()', () => {
     test('Should return an account on loadByEmail success', async () => {
       const sut = makeSut()
