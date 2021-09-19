@@ -1,6 +1,7 @@
 import { AddAccountRepository } from '@/data/protocols/db/account/add-account-repository'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { LoadAccountByEmailRepository } from '@/data/protocols/db/account/load-account-by-email-repository'
+import { LoadAccountByIdRepository } from '@/data/protocols/db/account/load-account-by-id-repository'
 import { LoadAccountByTokenRepository } from '@/data/protocols/db/account/load-account-by-token-repository'
 import { LoadAccountsRepository } from '@/data/protocols/db/account/load-accounts-repository'
 import { UpdateAccessTokenRepository } from '@/data/protocols/db/account/update-access-token-repository'
@@ -73,4 +74,13 @@ export const mockUpdateAccessTokenRepository = (): UpdateAccessTokenRepository =
     }
   }
   return new UpdateAccessTokenRepositoryStub()
+}
+
+export const mockLoadAccountByIdRepository = (): LoadAccountByIdRepository => {
+  class LoadAccountByIdRepositoryStub implements LoadAccountByIdRepository {
+    async loadById (id: string): Promise<AccountModel> {
+      return Promise.resolve(mockAccountModel())
+    }
+  }
+  return new LoadAccountByIdRepositoryStub()
 }
