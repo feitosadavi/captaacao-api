@@ -1,13 +1,16 @@
 import { AddAccountRepository } from '@/data/protocols/db/account/add-account-repository'
 import { LoadAccountByEmailRepository } from '@/data/protocols/db/account/load-account-by-email-repository'
+import { LoadAccountByIdRepository } from '@/data/protocols/db/account/load-account-by-id-repository'
 import { LoadAccountByTokenRepository } from '@/data/protocols/db/account/load-account-by-token-repository'
 import { LoadAccountsRepository } from '@/data/protocols/db/account/load-accounts-repository'
 import { UpdateAccessTokenRepository } from '@/data/usecases/authentication/db-authentication-protocols'
 import { AccountModel } from '@/domain/models/account'
 import { AddAccountParams } from '@/domain/usecases/account/add-account'
+import { ObjectID } from 'mongodb'
 import { MongoHelper } from '../helpers/mongo-helper'
 
-export class AccountMongoRepository implements AddAccountRepository, LoadAccountsRepository, LoadAccountByEmailRepository, LoadAccountByTokenRepository, UpdateAccessTokenRepository {
+export class AccountMongoRepository implements AddAccountRepository, LoadAccountsRepository, LoadAccountByEmailRepository,
+  LoadAccountByTokenRepository, UpdateAccessTokenRepository, LoadAccountByIdRepository {
   async add (accountData: AddAccountParams): Promise<AccountModel> {
     const accountsCollection = await MongoHelper.getCollection('accounts')
     const result = await accountsCollection.insertOne(accountData)
@@ -19,6 +22,12 @@ export class AccountMongoRepository implements AddAccountRepository, LoadAccount
     const accountsCollection = await MongoHelper.getCollection('accounts')
     const accounts = await accountsCollection.find({}).toArray()
     return accounts && MongoHelper.mapCollection(accounts)
+  }
+
+  async loadById (id: string): Promise<AccountModel> {
+    const accountsCollection = await MongoHelper.getCollection('accounts')
+    const account = await accountsCollection.findOne({ _id: new ObjectID(id) })
+    return account && MongoHelper.map(account)
   }
 
   async loadByEmail (email: string): Promise<AccountModel> {
