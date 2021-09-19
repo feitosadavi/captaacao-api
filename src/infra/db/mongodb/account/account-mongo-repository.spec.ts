@@ -74,6 +74,24 @@ describe('Account Mongo Repository', () => {
     })
   })
 
+  describe('loadById()', () => {
+    test('Should return an account on loadById success', async () => {
+      const sut = makeSut()
+      const res = await accountCollection.insertOne({
+        name: 'any_name',
+        email: 'any_email@email.com',
+        password: 'any_password'
+      })
+
+      const account = await sut.loadById(res.ops[0]._id)
+      expect(account).toBeTruthy()
+      expect(account.id).toBeTruthy()
+      expect(account.name).toBe('any_name')
+      expect(account.email).toBe('any_email@email.com')
+      expect(account.password).toBe('any_password')
+    })
+  })
+
   describe('loadByEmail()', () => {
     test('Should return an account on loadByEmail success', async () => {
       const sut = makeSut()
