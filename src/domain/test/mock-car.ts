@@ -1,4 +1,4 @@
-import { LoadCarById } from '@/presentation/controllers/car/load-car-by-id/load-car-by-id-protocols'
+import { LoadCarById } from '@/domain/usecases/car/load-car-by-id'
 import { CarModel } from '../models/car'
 import { AddCar, AddCarParams } from '../usecases/car/add-car'
 import { LoadCars } from '../usecases/car/load-cars'
