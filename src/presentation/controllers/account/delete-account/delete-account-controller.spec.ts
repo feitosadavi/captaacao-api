@@ -1,6 +1,6 @@
 import { mockAccountModel, mockDeleteAccount, mockLoadAccountByToken } from '@/domain/test'
 import { DeleteAccount } from '@/domain/usecases/account/delete-account'
-import { unauthorized } from '@/presentation/helpers/http/http-helper'
+import { serverError, unauthorized } from '@/presentation/helpers/http/http-helper'
 import { LoadAccountByToken } from '@/presentation/middlewares/auth-middleware-protocols'
 import { DeleteAccountController } from './delete-account-controller'
 
@@ -55,6 +55,20 @@ describe('DeleteAccount Controller', () => {
     })
     expect(response).toEqual(unauthorized())
   })
+
+  test('Should return 401 if user is not admin or is not deleting your own account', async () => {
+    const { sut, loadAccountByTokenStub } = makeSut()
+    const loadAccountByTokenStubSpy = jest.spyOn(loadAccountByTokenStub, 'load')
+    loadAccountByTokenStubSpy.mockReturnValueOnce(Promise.reject(new Error()))
+    const response = await sut.handle({
+      params: { id: 'other_id' },
+      headers: {
+        'x-access-token': 'any_access_token'
+      }
+    })
+    expect(response).toEqual(serverError(new Error()))
+  })
+
   test('Should call deleteAccount with correct params', async () => {
     const { sut, deleteAccountStub } = makeSut()
     const deleteAccountStubSpy = jest.spyOn(deleteAccountStub, 'delete')
