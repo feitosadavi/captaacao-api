@@ -31,6 +31,18 @@ const makeSut = (): SutTypes => {
 // role: 'any_role'
 
 describe('DeleteAccount Controller', () => {
+  test('Should call loadAccountByToken with correct params', async () => {
+    const { sut, loadAccountByTokenStub } = makeSut()
+    const loadAccountByTokenStubSpy = jest.spyOn(loadAccountByTokenStub, 'load')
+    await sut.handle({
+      params: { id: 'other_id' },
+      headers: {
+        'x-access-token': 'any_access_token'
+      }
+    })
+    expect(loadAccountByTokenStubSpy).toHaveBeenCalledWith('any_access_token')
+  })
+
   test('Should return 401 if user is not admin or is not deleting your own account', async () => {
     const { sut, loadAccountByTokenStub } = makeSut()
     const loadAccountByTokenStubSpy = jest.spyOn(loadAccountByTokenStub, 'load')
