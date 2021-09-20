@@ -3,17 +3,12 @@ import { MissingParamError, ServerError, EmailInUseError } from '@/presentation/
 import { AddAccount, HttpRequest, Validation } from './signup-controller-protocols'
 import { badRequest, serverError, serverSuccess, forbidden } from '@/presentation/helpers/http/http-helper'
 import { Authentication } from '../login/login-controller-protocols'
-import { mockAddAccountRepository, mockValidation, throwError } from '@/domain/test'
+import { mockAccountParams, mockAddAccountRepository, mockValidation, throwError } from '@/domain/test'
 import { mockAuthentication } from '@/domain/test/mock-authentication'
 
 const mockRequest = (): HttpRequest => {
   return {
-    body: {
-      name: 'any_name',
-      email: 'any_email@mail.com',
-      password: 'any_password',
-      passwordConfirmation: 'any_password'
-    }
+    body: mockAccountParams()
   }
 }
 
@@ -53,9 +48,7 @@ describe('SignUp Controller', () => {
     const addSpy = jest.spyOn(addAccountStub, 'add')
     await sut.handle(mockRequest())
     expect(addSpy).toHaveBeenCalledWith({
-      name: 'any_name',
-      email: 'any_email@mail.com',
-      password: 'any_password'
+      ...mockAccountParams()
     })
   })
 

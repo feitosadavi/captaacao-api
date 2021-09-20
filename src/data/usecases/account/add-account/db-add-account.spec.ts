@@ -55,14 +55,24 @@ describe('DbAddAccount Usecase', () => {
   test('Should call AddAccountRepository with correct values', async () => {
     const { sut, addAccountRepositoryStub } = makeSut()
     const addSpy = jest.spyOn(addAccountRepositoryStub, 'add')
-    const accountData = mockAccountParams()
+    const accountData = {
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'hashed_password',
+      cpf: 'any_cpf',
+      birthDate: '00/00/0000',
+      phoneNumber: '9999999999999',
+      role: 'any_role'
+    }
     await sut.add(accountData)
     expect(addSpy).toHaveBeenCalledWith({
       name: 'any_name',
       email: 'any_email@mail.com',
       password: 'hashed_password',
-      contact: '0000000000000',
-      cpf: '00000000000'
+      cpf: 'any_cpf',
+      birthDate: '00/00/0000',
+      phoneNumber: '9999999999999',
+      role: 'any_role'
     })
   })
 

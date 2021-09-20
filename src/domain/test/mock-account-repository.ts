@@ -13,8 +13,10 @@ export const mockAccountParams = (): AddAccountParams => {
     name: 'any_name',
     email: 'any_email@mail.com',
     password: 'any_password',
-    contact: '0000000000000',
-    cpf: '00000000000'
+    cpf: 'any_cpf',
+    birthDate: '00/00/0000',
+    phoneNumber: '9999999999999',
+    role: 'any_role'
   }
 }
 
@@ -24,8 +26,10 @@ export const mockAccountModel = (): AccountModel => {
     name: 'any_name',
     email: 'any_email@mail.com',
     password: 'hashed_password',
-    contact: '0000000000000',
-    cpf: '00000000000'
+    cpf: 'any_cpf',
+    birthDate: '00/00/0000',
+    phoneNumber: '9999999999999',
+    role: 'any_role'
   }
 }
 
