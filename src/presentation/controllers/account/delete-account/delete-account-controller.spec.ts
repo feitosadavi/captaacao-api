@@ -55,4 +55,15 @@ describe('DeleteAccount Controller', () => {
     })
     expect(response).toEqual(unauthorized())
   })
+  test('Should call deleteAccount with correct params', async () => {
+    const { sut, deleteAccountStub } = makeSut()
+    const deleteAccountStubSpy = jest.spyOn(deleteAccountStub, 'delete')
+    await sut.handle({
+      params: { id: 'any_id' }, // id igual, por isso irá passar ;)
+      headers: {
+        'x-access-token': 'any_access_token'
+      }
+    })
+    expect(deleteAccountStubSpy).toHaveBeenCalledWith('any_id')
+  })
 })
