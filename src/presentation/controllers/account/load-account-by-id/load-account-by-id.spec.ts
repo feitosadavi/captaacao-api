@@ -1,6 +1,6 @@
 import { LoadAccountById } from '@/domain/usecases/account/load-account-by-id'
 import { LoadAccountByIdController } from './load-account-by-id'
-import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
+import { serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
 import { mockLoadAccountById, mockAccountModel, throwError } from '@/domain/test'
 import MockDate from 'mockdate'
 import { HttpRequest } from '@/presentation/protocols'
@@ -47,13 +47,6 @@ describe('LoadCar Controller', () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(serverSuccess(mockAccountModel()))
-  })
-
-  test('Should return 204 LoadAccountById returns empty', async () => {
-    const { sut, LoadAccountByIdStub } = makeSut()
-    jest.spyOn(LoadAccountByIdStub, 'loadById').mockReturnValueOnce(Promise.resolve(null))
-    const httpResponse = await sut.handle(mockRequest())
-    expect(httpResponse).toEqual(noContent())
   })
 
   test('Should return 500 if LoadAccountById throws', async () => {
