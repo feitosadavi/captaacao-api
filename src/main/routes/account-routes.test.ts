@@ -101,4 +101,25 @@ describe('Login Routes', () => {
         .expect(200)
     })
   })
+
+  describe('GET /accounts', () => {
+    test('should return 403 if user has no authorization', async () => {
+      await request(app)
+        .get('/api/accounts/:id')
+        .query({ id: 'any_id' })
+        .expect(403)
+    })
+    test('should return 200 on success', async () => {
+      const res = await insertAccount()
+      const id = res.ops[0]._id
+      const accessToken = sign({ id }, env.secret)
+      await updateAccountToken(id, accessToken)
+
+      await request(app)
+        .get('/api/accounts/:id')
+        .set('x-access-token', accessToken)
+        .query({ id: 'any_id' })
+        .expect(200)
+    })
+  })
 })
