@@ -56,7 +56,7 @@ describe('DeleteAccount Controller', () => {
     expect(response).toEqual(unauthorized())
   })
 
-  test('Should return 401 if user is not admin or is not deleting your own account', async () => {
+  test('Should return 500 if loadAccountByToken throws', async () => {
     const { sut, loadAccountByTokenStub } = makeSut()
     const loadAccountByTokenStubSpy = jest.spyOn(loadAccountByTokenStub, 'load')
     loadAccountByTokenStubSpy.mockReturnValueOnce(Promise.reject(new Error()))
@@ -79,5 +79,18 @@ describe('DeleteAccount Controller', () => {
       }
     })
     expect(deleteAccountStubSpy).toHaveBeenCalledWith('any_id')
+  })
+
+  test('Should return 500 if deleteAccount throws', async () => {
+    const { sut, deleteAccountStub } = makeSut()
+    const deleteAccountStubSpy = jest.spyOn(deleteAccountStub, 'delete')
+    deleteAccountStubSpy.mockReturnValueOnce(Promise.reject(new Error()))
+    const response = await sut.handle({
+      params: { id: 'any_id' },
+      headers: {
+        'x-access-token': 'any_access_token'
+      }
+    })
+    expect(response).toEqual(serverError(new Error()))
   })
 })
