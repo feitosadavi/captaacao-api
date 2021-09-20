@@ -9,4 +9,5 @@ export default (router: Router): void => {
   router.post('/signup', adaptRoute(makeSignUpController()))
   router.post('/login', adaptRoute(makeLoginController()))
   router.get('/accounts', adminAuth, adaptRoute(makeLoadAccountsController()))
+  router.get('/accounts/:id', adminAuth, adaptRoute(makeLoadAccountsController()))
 }
