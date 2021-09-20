@@ -1,6 +1,6 @@
 import { mockAccountModel, mockDeleteAccount, mockLoadAccountByToken } from '@/domain/test'
 import { DeleteAccount } from '@/domain/usecases/account/delete-account'
-import { serverError, unauthorized } from '@/presentation/helpers/http/http-helper'
+import { serverError, serverSuccess, unauthorized } from '@/presentation/helpers/http/http-helper'
 import { LoadAccountByToken } from '@/presentation/middlewares/auth-middleware-protocols'
 import { DeleteAccountController } from './delete-account-controller'
 
@@ -92,5 +92,16 @@ describe('DeleteAccount Controller', () => {
       }
     })
     expect(response).toEqual(serverError(new Error()))
+  })
+
+  test('Should return 200 on success', async () => {
+    const { sut } = makeSut()
+    const response = await sut.handle({
+      params: { id: 'any_id' }, // id igual, por isso irá passar ;)
+      headers: {
+        'x-access-token': 'any_access_token'
+      }
+    })
+    expect(response).toEqual(serverSuccess(true))
   })
 })
