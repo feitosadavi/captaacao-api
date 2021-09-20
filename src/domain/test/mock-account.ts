@@ -1,3 +1,4 @@
+import { DeleteAccount } from '@/presentation/controllers/account/delete-account/delete-account-controller-protocols'
 import { LoadAccountById } from '@/presentation/controllers/account/load-account-by-id/load-account-by-id-protocols'
 import { LoadAccounts } from '@/presentation/controllers/account/load-accounts/load-accounts-controller-protocols'
 import { AccountModel } from '../models/account'
@@ -31,4 +32,13 @@ export const mockLoadAccountById = (): LoadAccountById => {
     }
   }
   return new LoadAccountByIdStub()
+}
+
+export const mockDeleteAccount = (): DeleteAccount => {
+  class DeleteAccountStub implements DeleteAccount {
+    async delete (): Promise<boolean> {
+      return Promise.resolve(true)
+    }
+  }
+  return new DeleteAccountStub()
 }
