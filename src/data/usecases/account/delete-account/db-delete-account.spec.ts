@@ -1,5 +1,5 @@
 import { DeleteAccountRepository } from './db-delete-account-protocols'
-import { mockDeleteAccountRepository } from '@/domain/test'
+import { mockDeleteAccountRepository, throwError } from '@/domain/test'
 import { DbDeleteAccount } from './db-delete-account'
 
 type SutTypes = {
@@ -23,5 +23,12 @@ describe('DbDeleteAccount', () => {
     const deleteAccountRepositoryStubSpy = jest.spyOn(deleteAccountRepositoryStub, 'deleteAccount')
     await sut.delete('any_id')
     expect(deleteAccountRepositoryStubSpy).toBeCalledWith('any_id')
+  })
+  test('Should throw if deleteAccountRepository throws', async () => {
+    const { sut, deleteAccountRepositoryStub } = makeSut()
+    const deleteAccountRepositoryStubSpy = jest.spyOn(deleteAccountRepositoryStub, 'deleteAccount')
+    deleteAccountRepositoryStubSpy.mockImplementation(throwError)
+    const deletionResult = sut.delete('any_id')
+    await expect(deletionResult).rejects.toThrow()
   })
 })
