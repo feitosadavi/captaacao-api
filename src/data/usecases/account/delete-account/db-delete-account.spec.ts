@@ -31,6 +31,13 @@ describe('DbDeleteAccount', () => {
     const deletionResult = sut.delete('any_id')
     await expect(deletionResult).rejects.toThrow()
   })
+  test('Should return false if deleteAccountRepository returns false', async () => {
+    const { sut, deleteAccountRepositoryStub } = makeSut()
+    const deleteAccountRepositoryStubSpy = jest.spyOn(deleteAccountRepositoryStub, 'deleteAccount')
+    deleteAccountRepositoryStubSpy.mockReturnValueOnce(Promise.resolve(false))
+    const deletionResult = await sut.delete('any_id')
+    expect(deletionResult).toBe(false)
+  })
   test('Should return true if deleteAccountRepository returns true', async () => {
     const { sut } = makeSut()
     const deletionResult = await sut.delete('any_id')
