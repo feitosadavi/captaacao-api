@@ -31,4 +31,9 @@ describe('DbDeleteAccount', () => {
     const deletionResult = sut.delete('any_id')
     await expect(deletionResult).rejects.toThrow()
   })
+  test('Should return true if deleteAccountRepository returns true', async () => {
+    const { sut } = makeSut()
+    const deletionResult = await sut.delete('any_id')
+    expect(deletionResult).toBe(true)
+  })
 })
