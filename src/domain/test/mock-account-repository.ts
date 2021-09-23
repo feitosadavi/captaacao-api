@@ -1,4 +1,5 @@
 import { AddAccountRepository } from '@/data/protocols/db/account/add-account-repository'
+import { DeleteAccountRepository } from '@/data/protocols/db/account/delete-account-repository'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { LoadAccountByEmailRepository } from '@/data/protocols/db/account/load-account-by-email-repository'
 import { LoadAccountByIdRepository } from '@/data/protocols/db/account/load-account-by-id-repository'
@@ -87,4 +88,13 @@ export const mockLoadAccountByIdRepository = (): LoadAccountByIdRepository => {
     }
   }
   return new LoadAccountByIdRepositoryStub()
+}
+
+export const mockDeleteAccountRepository = (): DeleteAccountRepository => {
+  class DeleteAccountRepositoryStub implements DeleteAccountRepository {
+    async deleteAccount (id: string): Promise<boolean> {
+      return Promise.resolve(true)
+    }
+  }
+  return new DeleteAccountRepositoryStub()
 }
