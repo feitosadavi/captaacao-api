@@ -212,4 +212,23 @@ describe('Account Mongo Repository', () => {
       expect(account.accessToken).toBe('any_token')
     })
   })
+
+  describe('deleteAccount', () => {
+    test('Should return true on success', async () => {
+      const sut = makeSut()
+
+      const res = await accountCollection.insertOne({
+        ...makeFakeAccounts()[0]
+      })
+      const id = res.ops[0]._id
+
+      const deletionResult = await sut.deleteAccount(id)
+      expect(deletionResult).toBe(true)
+    })
+    test('Should return false if account doesnt exists', async () => {
+      const sut = makeSut()
+      const deletionResult = await sut.deleteAccount('614e1d63u0aaf09b9ed42af2')
+      expect(deletionResult).toBe(false)
+    })
+  })
 })
