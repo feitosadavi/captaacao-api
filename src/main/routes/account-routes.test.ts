@@ -137,5 +137,18 @@ describe('Login Routes', () => {
         .query({ id: 'any_id' })
         .expect(403)
     })
+
+    test('should return 200 on success', async () => {
+      const res = await insertAccount()
+      const id = res.ops[0]._id
+      const accessToken = sign({ id }, env.secret)
+      await updateAccountToken(id, accessToken)
+
+      await request(app)
+        .delete('/api/accounts/delete/:id')
+        .set('x-access-token', accessToken)
+        .query({ id: 'any_id' })
+        .expect(200)
+    })
   })
 })
