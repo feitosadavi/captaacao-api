@@ -1,4 +1,5 @@
 import { AddAccountRepository } from '@/data/protocols/db/account/add-account-repository'
+import { DeleteAccountRepository } from '@/data/protocols/db/account/delete-account-repository'
 import { LoadAccountByEmailRepository } from '@/data/protocols/db/account/load-account-by-email-repository'
 import { LoadAccountByIdRepository } from '@/data/protocols/db/account/load-account-by-id-repository'
 import { LoadAccountByTokenRepository } from '@/data/protocols/db/account/load-account-by-token-repository'
@@ -10,7 +11,7 @@ import { ObjectID } from 'mongodb'
 import { MongoHelper } from '../helpers/mongo-helper'
 
 export class AccountMongoRepository implements AddAccountRepository, LoadAccountsRepository, LoadAccountByEmailRepository,
-  LoadAccountByTokenRepository, UpdateAccessTokenRepository, LoadAccountByIdRepository {
+  LoadAccountByTokenRepository, UpdateAccessTokenRepository, LoadAccountByIdRepository, DeleteAccountRepository {
   async add (accountData: AddAccountParams): Promise<AccountModel> {
     const accountsCollection = await MongoHelper.getCollection('accounts')
     const result = await accountsCollection.insertOne(accountData)
@@ -61,5 +62,11 @@ export class AccountMongoRepository implements AddAccountRepository, LoadAccount
         $set: { accessToken: token }
       }
     )
+  }
+
+  async deleteAccount (id: string): Promise<boolean> {
+    const accountsCollection = await MongoHelper.getCollection('accounts')
+    const deletionResult = await accountsCollection.deleteOne({ _id: new ObjectID(id) })
+    return deletionResult.deletedCount === 1
   }
 }
