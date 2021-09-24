@@ -109,7 +109,7 @@ describe('Login Routes', () => {
     })
   })
 
-  describe('GET /accounts', () => {
+  describe('GET /accounts/:id', () => {
     test('should return 403 if user has no authorization', async () => {
       await request(app)
         .get('/api/accounts/:id')
@@ -127,6 +127,15 @@ describe('Login Routes', () => {
         .set('x-access-token', accessToken)
         .query({ id: 'any_id' })
         .expect(200)
+    })
+  })
+
+  describe('DELETE /accounts/delete/:id', () => {
+    test('should return 403 if user has no authorization', async () => {
+      await request(app)
+        .delete('/api/accounts/delete/:id')
+        .query({ id: 'any_id' })
+        .expect(403)
     })
   })
 })
