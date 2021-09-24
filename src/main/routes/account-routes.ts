@@ -10,4 +10,5 @@ export default (router: Router): void => {
   router.post('/login', adaptRoute(makeLoginController()))
   router.get('/accounts', adminAuth, adaptRoute(makeLoadAccountsController()))
   router.get('/accounts/:id', adminAuth, adaptRoute(makeLoadAccountsController()))
+  router.delete('/accounts/delete/:id', adminAuth, adaptRoute(makeLoadAccountsController()))
 }
