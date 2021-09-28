@@ -227,7 +227,7 @@ describe('Account Mongo Repository', () => {
     })
     test('Should return false if account doesnt exists', async () => {
       const sut = makeSut()
-      const deletionResult = await sut.deleteAccount('614e1d63u0aaf09b9ed42af2')
+      const deletionResult = await sut.deleteAccount('61539180dd2622353d5e11c8')
       expect(deletionResult).toBe(false)
     })
   })
