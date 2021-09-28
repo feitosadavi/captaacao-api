@@ -4,7 +4,8 @@ import { HttpRequest, Middleware } from '@/presentation/protocols'
 export const adaptMiddleware = (middleware: Middleware) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const httpRequest: HttpRequest = { // adapta o request
-      headers: req.headers // pega os headers que foram enviados
+      headers: req.headers, // pega os headers que foram enviados
+      params: req.params
     }
     const httpResponse = await middleware.handle(httpRequest)
     if (httpResponse.statusCode === 200) {

@@ -5,7 +5,8 @@ import { forbidden, serverError, serverSuccess } from '../helpers/http/http-help
 export class AuthMiddleware implements Middleware {
   constructor (
     private readonly loadAccountByToken: LoadAccountByToken,
-    private readonly role: string
+    private readonly role: string,
+    private readonly checkId?: boolean
   ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -13,8 +14,17 @@ export class AuthMiddleware implements Middleware {
       const accessToken = httpRequest.headers?.['x-access-token'] // pega o accessToken que eu coloquei nos headers
 
       if (accessToken) {
-        const account = await this.loadAccountByToken.load(accessToken, this.role) // procura uma conta que tenha o accessToken dos headers
-        if (account) { // se tiver:
+        const account = await this.loadAccountByToken.load(accessToken, this.role)
+        if (account) {
+          if (this.checkId) {
+            const accountIdToDelete = httpRequest.params.id
+            if (account.role === 'admin' || account.id === accountIdToDelete) {
+              return serverSuccess({ accountId: account.id })
+            } else {
+              return forbidden(new AccessDeniedError())
+            }
+          }
+
           return serverSuccess({ accountId: account.id }) // retorna o id da conta encontrada com o accessToken e coloca no body da resposta do middleware
         }
       }

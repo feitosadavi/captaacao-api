@@ -8,6 +8,9 @@ const mockRequest = (): HttpRequest => {
   return {
     headers: {
       'x-access-token': 'any_token'
+    },
+    params: {
+      id: 'any_id'
     }
   }
 }
@@ -17,9 +20,9 @@ type SutTypes = {
   loadAccountByTokenStub: LoadAccountByToken
 }
 
-const makeSut = (role?: string): SutTypes => {
+const makeSut = (role?: string, checkId?: boolean): SutTypes => {
   const loadAccountByTokenStub = mockLoadAccountByToken()
-  const sut = new AuthMiddleware(loadAccountByTokenStub, role)
+  const sut = new AuthMiddleware(loadAccountByTokenStub, role, checkId)
   return {
     sut,
     loadAccountByTokenStub
@@ -27,6 +30,20 @@ const makeSut = (role?: string): SutTypes => {
 }
 
 describe('Auth Middleware', () => {
+  test('Should 403 if user isnt admin or his id is not equal params id', async () => {
+    const role = 'any_role'
+    const { sut } = makeSut(role, true)
+    const response = await sut.handle({
+      headers: {
+        'x-access-token': 'any_token'
+      },
+      params: {
+        id: 'other_id'
+      }
+    })
+    expect(response).toEqual(forbidden(new AccessDeniedError()))
+  })
+
   test('Should 403 if no x-access-token exists in headers ', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle({})
@@ -46,6 +63,25 @@ describe('Auth Middleware', () => {
     jest.spyOn(loadAccountByTokenStub, 'load').mockReturnValueOnce(Promise.resolve(null))
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(forbidden(new AccessDeniedError()))
+  })
+
+  test('Should 200 on id verification success', async () => {
+    const role = 'any_role'
+    const { loadAccountByTokenStub } = makeSut(role)
+    const sut = new AuthMiddleware(loadAccountByTokenStub, role, true)
+    const loadSpy = jest.spyOn(loadAccountByTokenStub, 'load')
+    loadSpy.mockReturnValueOnce(Promise.resolve({
+      id: 'any_id',
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'hashed_password',
+      cpf: 'any_cpf',
+      birthDate: '00/00/0000',
+      phoneNumber: '9999999999999',
+      role: 'admin'
+    }))
+    const response = await sut.handle(mockRequest())
+    expect(response).toEqual(serverSuccess({ accountId: 'any_id' }))
   })
 
   test('Should return 200 if LoadAccountByToken returns an account ', async () => {

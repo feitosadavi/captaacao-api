@@ -143,11 +143,12 @@ describe('Login Routes', () => {
       const id = res.ops[0]._id
       const accessToken = sign({ id }, env.secret)
       await updateAccountToken(id, accessToken)
+      console.log(id)
 
       await request(app)
         .delete('/api/accounts/delete/:id')
         .set('x-access-token', accessToken)
-        .query({ id: 'any_id' })
+        .query({ id })
         .expect(200)
     })
   })
