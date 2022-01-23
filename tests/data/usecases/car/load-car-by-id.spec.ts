@@ -1,7 +1,7 @@
 import MockDate from 'mockdate'
 
 import { LoadCarByIdRepository } from '@/data/protocols'
-import { DbLoadCarById } from './load-car-by-id'
+import { DbLoadCarById } from '@/data/usecases'
 import { mockLoadCarByIdRepository, mockCarsModel, throwError } from '@/domain/test'
 
 type SutTypes = {

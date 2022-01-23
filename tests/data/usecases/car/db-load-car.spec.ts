@@ -1,6 +1,6 @@
 import MockDate from 'mockdate'
 
-import { DbLoadCars } from './db-load-car'
+import { DbLoadCars } from '@/data/usecases'
 import { LoadCarsRepository } from '@/data/protocols'
 
 import { mockLoadCarsRepository, mockCarsModel, throwError } from '@/domain/test'
