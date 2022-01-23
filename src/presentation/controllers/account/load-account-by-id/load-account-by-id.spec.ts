@@ -1,10 +1,12 @@
+import MockDate from 'mockdate'
+
 import { LoadAccountById } from '@/domain/usecases/account/load-account-by-id'
 import { LoadAccountByIdController } from './load-account-by-id'
 import { serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
-import { mockLoadAccountById, throwError } from '@/domain/test'
-import MockDate from 'mockdate'
+import { throwError } from '@/domain/test'
 import { HttpRequest } from '@/presentation/protocols'
 import { mockAccountModel } from '@tests/domain/mocks'
+import { mockLoadAccountById } from '@tests/data/mocks'
 
 type SutTypes = {
   sut: LoadAccountByIdController

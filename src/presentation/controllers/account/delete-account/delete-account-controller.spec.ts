@@ -1,6 +1,6 @@
-import { mockDeleteAccount } from '@/domain/test'
 import { DeleteAccount } from '@/domain/usecases/account/delete-account'
 import { serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
+import { mockDeleteAccount } from '@tests/data/mocks'
 import { DeleteAccountController } from './delete-account-controller'
 
 type SutTypes = {

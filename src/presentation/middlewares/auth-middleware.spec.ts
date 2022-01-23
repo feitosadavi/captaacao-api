@@ -2,8 +2,9 @@ import { LoadAccountByToken, HttpRequest } from './auth-middleware-protocols'
 import { AccessDeniedError } from '../errors'
 import { forbidden, serverError, serverSuccess } from '../helpers/http/http-helper'
 import { AuthMiddleware } from './auth-middleware'
-import { mockLoadAccountByToken, throwError } from '@/domain/test'
+import { throwError } from '@/domain/test'
 import { mockAccountModel } from '@tests/domain/mocks'
+import { mockLoadAccountByToken } from '@tests/data/mocks'
 
 const mockRequest = (): HttpRequest => {
   return {
