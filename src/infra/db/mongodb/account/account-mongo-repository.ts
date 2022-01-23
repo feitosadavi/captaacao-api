@@ -66,7 +66,7 @@ export class AccountMongoRepository implements AddAccountRepository, LoadAccount
 
   async deleteAccount (id: string): Promise<boolean> {
     const accountsCollection = await MongoHelper.getCollection('accounts')
-    const deletionResult = await accountsCollection.deleteOne({ _id: new ObjectID(id) })
+    const deletionResult = await accountsCollection.deleteOne({ _id: id })
     return deletionResult.deletedCount === 1
   }
 }
