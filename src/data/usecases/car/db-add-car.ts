@@ -1,5 +1,5 @@
+import { AddCarRepository } from '@/data/protocols'
 import { AddCar, AddCarParams } from '@/domain/usecases/car/add-car'
-import { AddCarRepository } from './db-add-car-protocols'
 
 export class DbAddCar implements AddCar {
   constructor (
