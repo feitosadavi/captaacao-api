@@ -1,3 +1,5 @@
+import MockDate from 'mockdate'
+
 import { Decrypter, LoadAccountByTokenRepository } from '@/data/protocols'
 import { DbLoadAccountByToken } from '@/data/usecases'
 
@@ -22,6 +24,14 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbLoadAccountByToken', () => {
+  beforeAll(() => {
+    MockDate.set(new Date()) // congela a data com base no valor inserido
+  })
+
+  afterAll(() => {
+    MockDate.reset() // congela a data com base no valor inserido
+  })
+
   test('Should call Decrypter with correct values', async () => {
     const { sut, decrypterStub } = makeSut()
     const decryptSpy = jest.spyOn(decrypterStub, 'decrypt')

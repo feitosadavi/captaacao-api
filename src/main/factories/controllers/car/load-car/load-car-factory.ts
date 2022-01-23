@@ -1,4 +1,4 @@
-import { DbLoadCars } from '@/data/usecases/car/load-car/db-load-car'
+import { DbLoadCars } from '@/data/usecases'
 import { CarMongoRepository } from '@/infra/db/mongodb/car/car-mongo-repository'
 import { LoadCarsController } from '@/presentation/controllers/car/load-car/load-cars'
 import { Controller } from '@/presentation/protocols'

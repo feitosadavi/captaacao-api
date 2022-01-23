@@ -1,4 +1,4 @@
-import { DbLoadAccounts } from '@/data/usecases/account/load-accounts/db-load-accounts'
+import { DbLoadAccounts } from '@/data/usecases'
 import { AccountMongoRepository } from '@/infra/db/mongodb/account/account-mongo-repository'
 import { LoadAccountsController } from '@/presentation/controllers/account/load-accounts/load-accounts-controller'
 import { Controller } from '@/presentation/protocols'
