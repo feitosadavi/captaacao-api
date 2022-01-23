@@ -3,10 +3,10 @@ import { MissingParamError, ServerError, EmailInUseError } from '@/presentation/
 import { AddAccount, HttpRequest, Validation } from './signup-controller-protocols'
 import { badRequest, serverError, serverSuccess, forbidden } from '@/presentation/helpers/http/http-helper'
 import { Authentication } from '../login/login-controller-protocols'
-import { mockValidation, throwError } from '@/domain/test'
+import { throwError } from '@/domain/test'
 import { mockAuthentication } from '@/domain/test/mock-authentication'
 import { mockAccountParams } from '@tests/domain/mocks'
-import { mockAddAccountStub } from '@tests/presentation/mocks'
+import { mockAddAccountStub, mockValidation } from '@tests/presentation/mocks'
 
 const mockRequest = (): HttpRequest => {
   return {
