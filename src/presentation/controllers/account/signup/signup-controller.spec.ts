@@ -1,3 +1,5 @@
+import MockDate from 'mockdate'
+
 import { SignUpController } from './signup-controller'
 import { MissingParamError, ServerError, EmailInUseError } from '@/presentation/errors'
 import { AddAccount, HttpRequest, Validation } from './signup-controller-protocols'
@@ -35,6 +37,14 @@ const makeSut = (): SutTypes => {
 }
 
 describe('SignUp Controller', () => {
+  beforeAll(() => {
+    MockDate.set(new Date()) // congela a data com base no valor inserido
+  })
+
+  afterAll(() => {
+    MockDate.reset() // congela a data com base no valor inserido
+  })
+
   test('Should return 500 if AddAccount throws', async () => {
     const { sut, addAccountStub } = makeSut()
     jest.spyOn(addAccountStub, 'add').mockImplementationOnce(async () => {

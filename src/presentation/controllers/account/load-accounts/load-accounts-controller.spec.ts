@@ -1,3 +1,5 @@
+import MockDate from 'mockdate'
+
 import { LoadAccounts, HttpRequest } from './load-accounts-controller-protocols'
 import { LoadAccountsController } from './load-accounts-controller'
 import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
@@ -25,6 +27,14 @@ const mockRequest = (): HttpRequest => ({
 })
 
 describe('Load Accounts Controller', () => {
+  beforeAll(() => {
+    MockDate.set(new Date()) // congela a data com base no valor inserido
+  })
+
+  afterAll(() => {
+    MockDate.reset() // congela a data com base no valor inserido
+  })
+
   test('Should call loadAccounts', async () => {
     const { sut, loadAccountsStub } = makeSut()
     const loadAccountsStubSpy = jest.spyOn(loadAccountsStub, 'load')

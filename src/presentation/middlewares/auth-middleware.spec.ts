@@ -1,3 +1,5 @@
+import MockDate from 'mockdate'
+
 import { LoadAccountByToken, HttpRequest } from './auth-middleware-protocols'
 import { AccessDeniedError } from '../errors'
 import { forbidden, serverError, serverSuccess } from '../helpers/http/http-helper'
@@ -32,6 +34,14 @@ const makeSut = (role?: string, checkId?: boolean): SutTypes => {
 }
 
 describe('Auth Middleware', () => {
+  beforeAll(() => {
+    MockDate.set(new Date()) // congela a data com base no valor inserido
+  })
+
+  afterAll(() => {
+    MockDate.reset() // congela a data com base no valor inserido
+  })
+
   test('Should 403 if user isnt admin or his id is not equal params id', async () => {
     const role = 'any_role'
     const { sut } = makeSut(role, true)

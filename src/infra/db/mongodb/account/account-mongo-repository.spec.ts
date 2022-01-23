@@ -1,3 +1,5 @@
+import MockDate from 'mockdate'
+
 import { mockAccountParams } from '@tests/domain/mocks'
 import { Collection } from 'mongodb'
 import { MongoHelper } from '../helpers/mongo-helper'
@@ -8,10 +10,12 @@ describe('Account Mongo Repository', () => {
 
   // antes e depois de cada teste de integração, precisamos conectar e desconectar do banco
   beforeAll(async () => {
+    MockDate.set(new Date()) // congela a data com base no valor inserido
     await MongoHelper.connect(process.env.MONGO_URL)
   })
 
   afterAll(async () => {
+    MockDate.reset() // congela a data com base no valor inserido
     await MongoHelper.disconnect()
   })
 
