@@ -2,7 +2,7 @@ import MockDate from 'mockdate'
 
 import { DbLoadAccounts } from './db-load-accounts'
 import { LoadAccountsRepository } from './db-load-accounts-protocols'
-import { mockLoadAccountsRepository } from '@/domain/test/mock-account-repository'
+import { mockLoadAccountsRepository } from '@tests/data/mocks/mock-account-repository'
 import { throwError } from '@/domain/test'
 import { mockAccountsModel } from '@tests/domain/mocks'
 

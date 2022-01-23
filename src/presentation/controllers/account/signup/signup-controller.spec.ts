@@ -6,7 +6,7 @@ import { Authentication } from '../login/login-controller-protocols'
 import { mockValidation, throwError } from '@/domain/test'
 import { mockAuthentication } from '@/domain/test/mock-authentication'
 import { mockAccountParams } from '@tests/domain/mocks'
-import { mockAddAccountRepositoryStub } from '@tests/data/mocks/mock-db-account'
+import { mockAddAccountStub } from '@tests/presentation/mocks'
 
 const mockRequest = (): HttpRequest => {
   return {
@@ -22,7 +22,7 @@ type SutTypes = {
 }
 
 const makeSut = (): SutTypes => {
-  const addAccountStub = mockAddAccountRepositoryStub()
+  const addAccountStub = mockAddAccountStub()
   const validationStub = mockValidation()
   const authenticationStub = mockAuthentication()
   const sut = new SignUpController(addAccountStub, validationStub, authenticationStub)

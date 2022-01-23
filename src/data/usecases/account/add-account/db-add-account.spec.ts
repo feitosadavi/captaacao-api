@@ -1,9 +1,8 @@
 import { DbAddAccount } from './db-add-account'
 import { Hasher, AccountModel, AddAccountRepository } from './db-add-account-protocols'
 import { LoadAccountByEmailRepository } from '@/data/protocols/db/account/load-account-by-email-repository'
-import { mockHasher } from '@/domain/test'
 import { mockAccountModel, mockAccountParams } from '@tests/domain/mocks'
-import { mockAddAccountRepositoryStub } from '@tests/data/mocks/mock-db-account'
+import { mockAddAccountRepositoryStub, mockHasher } from '@tests/data/mocks'
 
 const mockLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepository implements LoadAccountByEmailRepository {

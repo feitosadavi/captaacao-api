@@ -6,7 +6,7 @@ import { serverError, serverSuccess } from '@/presentation/helpers/http/http-hel
 import { throwError } from '@/domain/test'
 import { HttpRequest } from '@/presentation/protocols'
 import { mockAccountModel } from '@tests/domain/mocks'
-import { mockLoadAccountById } from '@tests/data/mocks'
+import { mockLoadAccountById } from '@tests/presentation/mocks'
 
 type SutTypes = {
   sut: LoadAccountByIdController

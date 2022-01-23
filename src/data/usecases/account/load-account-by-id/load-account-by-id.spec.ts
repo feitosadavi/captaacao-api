@@ -1,6 +1,7 @@
 import { LoadAccountByIdRepository } from '@/data/protocols/db/account/load-account-by-id-repository'
 import { DbLoadAccountById } from './load-account-by-id'
-import { mockLoadAccountByIdRepository, throwError } from '@/domain/test'
+import { throwError } from '@/domain/test'
+import { mockLoadAccountByIdRepository } from '@tests/data/mocks'
 import MockDate from 'mockdate'
 import { mockAccountModel } from '@tests/domain/mocks'
 

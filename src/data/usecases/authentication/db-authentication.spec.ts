@@ -1,4 +1,4 @@
-import { mockEncrypter, mockHashComparer, mockLoadAccountByEmailRepository, mockUpdateAccessTokenRepository } from '@/domain/test'
+import { mockEncrypter, mockHashComparer, mockLoadAccountByEmailRepository, mockUpdateAccessTokenRepository } from '@tests/data/mocks'
 import { DbAuthentication } from './db-authentication'
 import {
   AuthenticationParams,

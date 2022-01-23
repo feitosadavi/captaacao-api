@@ -1,5 +1,6 @@
 import { DeleteAccountRepository } from './db-delete-account-protocols'
-import { mockDeleteAccountRepository, throwError } from '@/domain/test'
+import { throwError } from '@/domain/test'
+import { mockDeleteAccountRepository } from '@tests/data/mocks'
 import { DbDeleteAccount } from './db-delete-account'
 
 type SutTypes = {

@@ -3,7 +3,7 @@ import { LoadAccountsController } from './load-accounts-controller'
 import { throwError } from '@/domain/test'
 import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
 import { mockAccountModel } from '@tests/domain/mocks'
-import { mockLoadAccounts } from '@tests/data/mocks/mock-db-account'
+import { mockLoadAccounts } from '@tests/presentation/mocks'
 
 type SutTypes = {
   sut: LoadAccountsController

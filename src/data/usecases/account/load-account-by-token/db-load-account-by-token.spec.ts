@@ -1,6 +1,7 @@
 import { Decrypter, LoadAccountByTokenRepository } from './db-load-account-by-token-protocols'
 import { DbLoadAccountByToken } from './db-load-account-by-token'
-import { mockLoadAccountByTokenRepository, throwError, mockDecrypter } from '@/domain/test'
+import { throwError } from '@/domain/test'
+import { mockLoadAccountByTokenRepository, mockDecrypter } from '@tests/data/mocks'
 import { mockAccountModel } from '@tests/domain/mocks'
 
 type SutTypes = {

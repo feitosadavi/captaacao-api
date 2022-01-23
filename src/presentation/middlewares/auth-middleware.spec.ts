@@ -4,7 +4,7 @@ import { forbidden, serverError, serverSuccess } from '../helpers/http/http-help
 import { AuthMiddleware } from './auth-middleware'
 import { throwError } from '@/domain/test'
 import { mockAccountModel } from '@tests/domain/mocks'
-import { mockLoadAccountByToken } from '@tests/data/mocks'
+import { mockLoadAccountByToken } from '@tests/presentation/mocks'
 
 const mockRequest = (): HttpRequest => {
   return {
