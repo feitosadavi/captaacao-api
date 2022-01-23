@@ -1,7 +1,7 @@
-import { throwError } from '@/domain/test'
 import { DeleteAccountRepository } from '@/data/protocols'
 import { DbDeleteAccount } from '@/data/usecases'
 
+import { throwError } from '@tests/domain/mocks'
 import { mockDeleteAccountRepository } from '@tests/data/mocks'
 
 type SutTypes = {

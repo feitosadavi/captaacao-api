@@ -1,9 +1,8 @@
 import MockDate from 'mockdate'
 
 import { DbAddCar } from '@/data/usecases'
-import { throwError } from '@/domain/test'
 
-import { mockCarsParams } from '@tests/domain/mocks'
+import { mockCarsParams, throwError } from '@tests/domain/mocks'
 import { mockAddCarRepository } from '@tests/data/mocks/db/mock-db-car'
 
 const makeSut = (): any => {

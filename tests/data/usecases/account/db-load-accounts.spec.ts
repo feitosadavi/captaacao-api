@@ -1,11 +1,10 @@
 import MockDate from 'mockdate'
 
-import { throwError } from '@/domain/test'
 import { DbLoadAccounts } from '@/data/usecases'
 import { LoadAccountsRepository } from '@/data/protocols'
 
 import { mockLoadAccountsRepository } from '@tests/data/mocks'
-import { mockAccountsModel } from '@tests/domain/mocks'
+import { mockAccountsModel, throwError } from '@tests/domain/mocks'
 
 type SutTypes = {
   sut: DbLoadAccounts

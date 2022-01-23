@@ -2,11 +2,10 @@ import MockDate from 'mockdate'
 
 import { LoadCarByIdController } from './load-car-by-id'
 import { LoadCarById } from '@/domain/usecases/car/load-car-by-id'
-import { throwError } from '@/domain/test'
 import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
 
-import { mockCarsModel } from '@tests/domain/mocks'
+import { mockCarsModel, throwError } from '@tests/domain/mocks'
 import { mockLoadCarById } from '@tests/presentation/mocks'
 
 type SutTypes = {

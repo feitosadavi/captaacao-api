@@ -3,9 +3,9 @@ import MockDate from 'mockdate'
 import { LoadAccountById } from '@/domain/usecases/account/load-account-by-id'
 import { LoadAccountByIdController } from './load-account-by-id'
 import { serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
-import { throwError } from '@/domain/test'
 import { HttpRequest } from '@/presentation/protocols'
-import { mockAccountModel } from '@tests/domain/mocks'
+
+import { mockAccountModel, throwError } from '@tests/domain/mocks'
 import { mockLoadAccountById } from '@tests/presentation/mocks'
 
 type SutTypes = {

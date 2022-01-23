@@ -1,9 +1,8 @@
-import { throwError } from '@/domain/test'
 import { Decrypter, LoadAccountByTokenRepository } from '@/data/protocols'
 import { DbLoadAccountByToken } from '@/data/usecases'
 
+import { mockAccountModel, throwError } from '@tests/domain/mocks'
 import { mockLoadAccountByTokenRepository, mockDecrypter } from '@tests/data/mocks'
-import { mockAccountModel } from '@tests/domain/mocks'
 
 type SutTypes = {
   sut: DbLoadAccountByToken
