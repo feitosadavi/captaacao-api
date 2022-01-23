@@ -1,4 +1,6 @@
-import { LoadAccounts, LoadAccountsRepository, AccountModel } from './db-load-accounts-protocols'
+import { LoadAccountsRepository } from '@/data/protocols'
+import { LoadAccounts } from '@/domain/usecases'
+import { AccountModel } from '@/domain/models'
 
 export class DbLoadAccounts implements LoadAccounts {
   constructor (

@@ -1,4 +1,5 @@
-import { DeleteAccountRepository, DeleteAccount } from './db-delete-account-protocols'
+import { DeleteAccountRepository } from '@/data/protocols'
+import { DeleteAccount } from '@/domain/usecases'
 
 export class DbDeleteAccount implements DeleteAccount {
   constructor (
