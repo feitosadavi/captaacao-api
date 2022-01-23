@@ -1,8 +1,12 @@
+import MockDate from 'mockdate'
+
 import { Validation, HttpRequest, AddCar } from './add-car-protocols'
 import { AddCarController } from './add-car-controller'
 import { badRequest, serverError, noContent } from '@/presentation/helpers/http/http-helper'
-import { mockAddCar, mockCarsParams, mockValidation, throwError } from '@/domain/test'
-import MockDate from 'mockdate'
+
+import { mockCarsParams } from '@tests/domain/mocks'
+import { mockAddCar } from '@tests/presentation/mocks'
+import { mockValidation, throwError } from '@/domain/test'
 
 const mockRequest = (): HttpRequest => ({
   body: {

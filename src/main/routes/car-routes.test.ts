@@ -1,10 +1,12 @@
-import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
-import { mockCarsParams } from '@/domain/test'
 import { Collection, InsertOneWriteOpResult } from 'mongodb'
 import request from 'supertest'
 import { sign } from 'jsonwebtoken'
+
 import app from '../config/app'
 import env from '../config/env'
+
+import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
+import { mockCarsParams } from '@tests/domain/mocks'
 
 let carsCollection: Collection
 let accountsCollection: Collection

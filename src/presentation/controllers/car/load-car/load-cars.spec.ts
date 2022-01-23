@@ -1,8 +1,12 @@
-import { LoadCars } from '@/domain/usecases/car/load-cars'
-import { LoadCarsController } from './load-cars'
-import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
-import { mockLoadCars, mockCarsModel, throwError } from '@/domain/test'
 import MockDate from 'mockdate'
+
+import { LoadCarsController } from './load-cars'
+import { LoadCars } from '@/domain/usecases/car/load-cars'
+import { throwError } from '@/domain/test'
+import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
+
+import { mockCarsModel } from '@tests/domain/mocks'
+import { mockLoadCars } from '@tests/presentation/mocks'
 
 type SutTypes = {
   sut: LoadCarsController

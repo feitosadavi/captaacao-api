@@ -1,7 +1,5 @@
-import { LoadCarById } from '@/domain/usecases/car/load-car-by-id'
-import { CarModel } from '../models/car'
-import { AddCar, AddCarParams } from '../usecases/car/add-car'
-import { LoadCars } from '../usecases/car/load-cars'
+import { CarModel } from '../../../src/domain/models/car'
+import { AddCarParams } from '../../../src/domain/usecases/car/add-car'
 
 export const mockCarsModel = (): CarModel[] => {
   return [{
@@ -71,31 +69,4 @@ export const mockCarsParams = (): AddCarParams[] => {
     ] // airbag, alarme, etc
   }
   ]
-}
-
-export const mockAddCar = (): AddCar => {
-  class AddCarStub implements AddCar {
-    async add (data: AddCarParams): Promise<void> {
-      return Promise.resolve()
-    }
-  }
-  return new AddCarStub()
-}
-
-export const mockLoadCars = (): LoadCars => {
-  class LoadCarsStub implements LoadCarsStub {
-    async load (): Promise<CarModel[]> {
-      return Promise.resolve(mockCarsModel())
-    }
-  }
-  return new LoadCarsStub()
-}
-
-export const mockLoadCarById = (): LoadCarById => {
-  class LoadCarByIdStub implements LoadCarByIdStub {
-    async loadById (): Promise<CarModel> {
-      return Promise.resolve(mockCarsModel()[0])
-    }
-  }
-  return new LoadCarByIdStub()
 }

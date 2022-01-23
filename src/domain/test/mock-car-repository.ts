@@ -3,7 +3,7 @@ import { LoadCarByIdRepository } from '@/data/protocols/db/car/load-car-by-id-re
 import { LoadCarsRepository } from '@/data/protocols/db/car/load-car-repository'
 import { CarModel } from '../models/car'
 import { AddCarParams } from '../usecases/car/add-car'
-import { mockCarsModel } from './mock-car'
+import { mockCarsModel } from '@tests/domain/mocks'
 
 export const mockAddCarRepository = (): AddCarRepository => {
   class AddCarRepositoryStub implements AddCarRepository {

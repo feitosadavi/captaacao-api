@@ -3,7 +3,8 @@ import MockDate from 'mockdate'
 import { DbLoadCars } from '@/data/usecases'
 import { LoadCarsRepository } from '@/data/protocols'
 
-import { mockLoadCarsRepository, mockCarsModel, throwError } from '@/domain/test'
+import { mockLoadCarsRepository, throwError } from '@/domain/test'
+import { mockCarsModel } from '@tests/domain/mocks'
 
 type SutTypes = {
   sut: DbLoadCars
