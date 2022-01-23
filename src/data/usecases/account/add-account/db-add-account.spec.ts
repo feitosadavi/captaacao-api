@@ -1,7 +1,9 @@
 import { DbAddAccount } from './db-add-account'
 import { Hasher, AccountModel, AddAccountRepository } from './db-add-account-protocols'
 import { LoadAccountByEmailRepository } from '@/data/protocols/db/account/load-account-by-email-repository'
-import { mockAccountModel, mockAccountParams, mockAddAccountRepository, mockHasher } from '@/domain/test'
+import { mockHasher } from '@/domain/test'
+import { mockAccountModel, mockAccountParams } from '@tests/domain/mocks'
+import { mockAddAccountRepositoryStub } from '@tests/data/mocks/mock-db-account'
 
 const mockLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepository implements LoadAccountByEmailRepository {
@@ -24,7 +26,7 @@ type SutTypes = {
 
 const makeSut = (): SutTypes => {
   const hasherStub = mockHasher()
-  const addAccountRepositoryStub = mockAddAccountRepository()
+  const addAccountRepositoryStub = mockAddAccountRepositoryStub()
   const loadAccountByEmailRepositoryStub = mockLoadAccountByEmailRepository()
   const sut = new DbAddAccount(hasherStub, addAccountRepositoryStub, loadAccountByEmailRepositoryStub)
   return {
@@ -36,12 +38,12 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbAddAccount Usecase', () => {
-  test('Should call Hasher with correct password', async () => {
+  test('Should call Hasher with correct plaintext', async () => {
     const { sut, hasherStub } = makeSut()
-    const hashSpy = jest.spyOn(hasherStub, 'hash')
-    const accountData = mockAccountParams()
-    await sut.add(accountData)
-    expect(hashSpy).toHaveBeenCalledWith('any_password')
+    const addAccountParams = mockAccountParams()
+    const hasherSpy = jest.spyOn(hasherStub, 'hash')
+    await sut.add(addAccountParams)
+    expect(hasherSpy).toHaveBeenCalledWith('any_password')
   })
 
   test('Should throw if Hasher throws', async () => {
@@ -55,25 +57,9 @@ describe('DbAddAccount Usecase', () => {
   test('Should call AddAccountRepository with correct values', async () => {
     const { sut, addAccountRepositoryStub } = makeSut()
     const addSpy = jest.spyOn(addAccountRepositoryStub, 'add')
-    const accountData = {
-      name: 'any_name',
-      email: 'any_email@mail.com',
-      password: 'hashed_password',
-      cpf: 'any_cpf',
-      birthDate: '00/00/0000',
-      phoneNumber: '9999999999999',
-      role: 'any_role'
-    }
+    const accountData = { ...mockAccountParams(), password: 'hashed_password' } // add should be called with a hashed password
     await sut.add(accountData)
-    expect(addSpy).toHaveBeenCalledWith({
-      name: 'any_name',
-      email: 'any_email@mail.com',
-      password: 'hashed_password',
-      cpf: 'any_cpf',
-      birthDate: '00/00/0000',
-      phoneNumber: '9999999999999',
-      role: 'any_role'
-    })
+    expect(addSpy).toHaveBeenCalledWith(accountData)
   })
 
   test('Should DbAddAccount throw if AddAccountRepository throws', async () => {
@@ -84,10 +70,10 @@ describe('DbAddAccount Usecase', () => {
     await expect(promise).rejects.toThrow()
   })
 
-  test('Should return an account on success', async () => {
+  test('Should return true on success', async () => {
     const { sut } = makeSut()
     const account = await sut.add(mockAccountParams())
-    expect(account).toEqual(mockAccountModel())
+    expect(account).toEqual(true)
   })
 
   test('Should call LoadAccountByEmailRepository with correct email', async () => {
@@ -97,10 +83,10 @@ describe('DbAddAccount Usecase', () => {
     expect(loadSpy).toHaveBeenCalledWith('any_email@mail.com')
   })
 
-  test('Should return null if LoadAccountByEmailRepository not return null', async () => {
+  test('Should return false if LoadAccountByEmailRepository not return null', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
     jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockResolvedValueOnce(Promise.resolve(mockAccountModel()))
     const account = await sut.add(mockAccountParams())
-    expect(account).toBe(null)
+    expect(account).toBe(false)
   })
 })

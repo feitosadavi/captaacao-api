@@ -3,8 +3,10 @@ import { MissingParamError, ServerError, EmailInUseError } from '@/presentation/
 import { AddAccount, HttpRequest, Validation } from './signup-controller-protocols'
 import { badRequest, serverError, serverSuccess, forbidden } from '@/presentation/helpers/http/http-helper'
 import { Authentication } from '../login/login-controller-protocols'
-import { mockAccountParams, mockAddAccountRepository, mockValidation, throwError } from '@/domain/test'
+import { mockValidation, throwError } from '@/domain/test'
 import { mockAuthentication } from '@/domain/test/mock-authentication'
+import { mockAccountParams } from '@tests/domain/mocks'
+import { mockAddAccountRepositoryStub } from '@tests/data/mocks/mock-db-account'
 
 const mockRequest = (): HttpRequest => {
   return {
@@ -20,7 +22,7 @@ type SutTypes = {
 }
 
 const makeSut = (): SutTypes => {
-  const addAccountStub = mockAddAccountRepository()
+  const addAccountStub = mockAddAccountRepositoryStub()
   const validationStub = mockValidation()
   const authenticationStub = mockAuthentication()
   const sut = new SignUpController(addAccountStub, validationStub, authenticationStub)

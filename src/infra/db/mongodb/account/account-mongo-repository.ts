@@ -5,18 +5,16 @@ import { LoadAccountByIdRepository } from '@/data/protocols/db/account/load-acco
 import { LoadAccountByTokenRepository } from '@/data/protocols/db/account/load-account-by-token-repository'
 import { LoadAccountsRepository } from '@/data/protocols/db/account/load-accounts-repository'
 import { UpdateAccessTokenRepository } from '@/data/usecases/authentication/db-authentication-protocols'
-import { AccountModel } from '@/domain/models/account'
-import { AddAccountParams } from '@/domain/usecases/account/add-account'
+import { AccountModel } from '@/domain/models'
 import { ObjectID } from 'mongodb'
 import { MongoHelper } from '../helpers/mongo-helper'
 
 export class AccountMongoRepository implements AddAccountRepository, LoadAccountsRepository, LoadAccountByEmailRepository,
   LoadAccountByTokenRepository, UpdateAccessTokenRepository, LoadAccountByIdRepository, DeleteAccountRepository {
-  async add (accountData: AddAccountParams): Promise<AccountModel> {
+  async add (accountData: AddAccountRepository.Params): Promise<boolean> {
     const accountsCollection = await MongoHelper.getCollection('accounts')
     const result = await accountsCollection.insertOne(accountData)
-    const account = result.ops[0]
-    return MongoHelper.map(account) // converte o _id para id
+    return !!result.insertedId
   }
 
   async loadAccounts (): Promise<any> {
@@ -41,7 +39,7 @@ export class AccountMongoRepository implements AddAccountRepository, LoadAccount
     const accountsCollection = await MongoHelper.getCollection('accounts')
     let account: AccountModel
     if (role) {
-      account = await accountsCollection.findOne({ //
+      account = await accountsCollection.findOne({
         accessToken: token,
         $or: [{ // só aceita o role nulo ou o role admin
           role

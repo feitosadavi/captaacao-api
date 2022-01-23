@@ -1,7 +1,8 @@
 import { LoadAccounts, HttpRequest } from './load-accounts-controller-protocols'
 import { LoadAccountsController } from './load-accounts-controller'
-import { mockAccountModel, mockLoadAccounts, throwError } from '@/domain/test'
+import { mockLoadAccounts, throwError } from '@/domain/test'
 import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
+import { mockAccountModel } from '@tests/domain/mocks'
 
 type SutTypes = {
   sut: LoadAccountsController

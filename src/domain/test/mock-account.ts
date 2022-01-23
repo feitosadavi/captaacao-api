@@ -3,7 +3,7 @@ import { LoadAccountById } from '@/presentation/controllers/account/load-account
 import { LoadAccounts } from '@/presentation/controllers/account/load-accounts/load-accounts-controller-protocols'
 import { AccountModel } from '../models/account'
 import { LoadAccountByToken } from '../usecases/account/load-account-by-token'
-import { mockAccountModel } from './mock-account-repository'
+import { mockAccountModel } from '@tests/domain/mocks'
 
 export const mockLoadAccountByToken = (): LoadAccountByToken => {
   class LoadAccountByTokenStub implements LoadAccountByToken {

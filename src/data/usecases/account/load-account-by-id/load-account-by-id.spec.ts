@@ -1,7 +1,8 @@
 import { LoadAccountByIdRepository } from '@/data/protocols/db/account/load-account-by-id-repository'
 import { DbLoadAccountById } from './load-account-by-id'
-import { mockLoadAccountByIdRepository, mockAccountModel, throwError } from '@/domain/test'
+import { mockLoadAccountByIdRepository, throwError } from '@/domain/test'
 import MockDate from 'mockdate'
+import { mockAccountModel } from '@tests/domain/mocks'
 
 type SutTypes = {
   sut: DbLoadAccountById

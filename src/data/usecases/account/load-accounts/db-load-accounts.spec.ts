@@ -1,7 +1,10 @@
+import MockDate from 'mockdate'
+
 import { DbLoadAccounts } from './db-load-accounts'
 import { LoadAccountsRepository } from './db-load-accounts-protocols'
-import { mockAccountModel, mockLoadAccountsRepository } from '@/domain/test/mock-account-repository'
+import { mockLoadAccountsRepository } from '@/domain/test/mock-account-repository'
 import { throwError } from '@/domain/test'
+import { mockAccountsModel } from '@tests/domain/mocks'
 
 type SutTypes = {
   sut: DbLoadAccounts
@@ -18,6 +21,13 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbLoadAccounts', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   test('Should call LoadAccountsRepository', async () => {
     const { sut, loadAccountsRepositoryStub } = makeSut()
     const loadAccountsRepositoryStubSpy = jest.spyOn(loadAccountsRepositoryStub, 'loadAccounts')
@@ -36,7 +46,7 @@ describe('DbLoadAccounts', () => {
   test('Should return account array if LoadAccountsRepository return account array', async () => {
     const { sut } = makeSut()
     const accounts = await sut.load()
-    expect(accounts).toEqual([mockAccountModel()])
+    expect(accounts).toEqual(mockAccountsModel())
   })
 
   test('Should return null if LoadAccountsRepository return null', async () => {

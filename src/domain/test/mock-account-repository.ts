@@ -1,4 +1,3 @@
-import { AddAccountRepository } from '@/data/protocols/db/account/add-account-repository'
 import { DeleteAccountRepository } from '@/data/protocols/db/account/delete-account-repository'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { LoadAccountByEmailRepository } from '@/data/protocols/db/account/load-account-by-email-repository'
@@ -7,41 +6,7 @@ import { LoadAccountByTokenRepository } from '@/data/protocols/db/account/load-a
 import { LoadAccountsRepository } from '@/data/protocols/db/account/load-accounts-repository'
 import { UpdateAccessTokenRepository } from '@/data/protocols/db/account/update-access-token-repository'
 import { AccountModel } from '@/domain/models/account'
-import { AddAccountParams } from '@/domain/usecases/account/add-account'
-
-export const mockAccountParams = (): AddAccountParams => {
-  return {
-    name: 'any_name',
-    email: 'any_email@mail.com',
-    password: 'any_password',
-    cpf: 'any_cpf',
-    birthDate: '00/00/0000',
-    phoneNumber: '9999999999999',
-    role: 'any_role'
-  }
-}
-
-export const mockAccountModel = (): AccountModel => {
-  return {
-    id: 'any_id',
-    name: 'any_name',
-    email: 'any_email@mail.com',
-    password: 'hashed_password',
-    cpf: 'any_cpf',
-    birthDate: '00/00/0000',
-    phoneNumber: '9999999999999',
-    role: 'any_role'
-  }
-}
-
-export const mockAddAccountRepository = (): AddAccountRepository => {
-  class AddAccountRepositoryStub implements AddAccountRepository {
-    async add (accountData: AddAccountParams): Promise<AccountModel> {
-      return Promise.resolve(mockAccountModel())
-    }
-  }
-  return new AddAccountRepositoryStub()
-}
+import { mockAccountModel, mockAccountsModel } from '@tests/domain/mocks'
 
 export const mockLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
@@ -66,7 +31,7 @@ export const mockLoadAccountByTokenRepository = (): LoadAccountByTokenRepository
 export const mockLoadAccountsRepository = (): LoadAccountsRepository => {
   class LoadAccountsRepositoryStub implements LoadAccountsRepository {
     async loadAccounts (): Promise<AccountModel[]> {
-      return Promise.resolve([mockAccountModel()])
+      return Promise.resolve(mockAccountsModel())
     }
   }
   return new LoadAccountsRepositoryStub()

@@ -3,6 +3,7 @@ import { AccessDeniedError } from '../errors'
 import { forbidden, serverError, serverSuccess } from '../helpers/http/http-helper'
 import { AuthMiddleware } from './auth-middleware'
 import { mockLoadAccountByToken, throwError } from '@/domain/test'
+import { mockAccountModel } from '@tests/domain/mocks'
 
 const mockRequest = (): HttpRequest => {
   return {
@@ -70,16 +71,7 @@ describe('Auth Middleware', () => {
     const { loadAccountByTokenStub } = makeSut(role)
     const sut = new AuthMiddleware(loadAccountByTokenStub, role, true)
     const loadSpy = jest.spyOn(loadAccountByTokenStub, 'load')
-    loadSpy.mockReturnValueOnce(Promise.resolve({
-      id: 'any_id',
-      name: 'any_name',
-      email: 'any_email@mail.com',
-      password: 'hashed_password',
-      cpf: 'any_cpf',
-      birthDate: '00/00/0000',
-      phoneNumber: '9999999999999',
-      role: 'admin'
-    }))
+    loadSpy.mockReturnValueOnce(Promise.resolve(mockAccountModel()))
     const response = await sut.handle(mockRequest())
     expect(response).toEqual(serverSuccess({ accountId: 'any_id' }))
   })
