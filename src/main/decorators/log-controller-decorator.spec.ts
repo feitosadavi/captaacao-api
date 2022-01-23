@@ -1,5 +1,5 @@
 import { LogErrorRepository } from '@/data/protocols/db/log/log-error-repository'
-import { mockLogErrorRepositoryStub } from '@/domain/test'
+import { mockLogErrorRepositoryStub } from '@tests/data/mocks'
 import { mockController } from '@/domain/test/mock-controller'
 import { serverError } from '@/presentation/helpers/http/http-helper'
 import { Controller } from '@/presentation/protocols'

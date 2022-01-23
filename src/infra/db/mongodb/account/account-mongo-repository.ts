@@ -1,10 +1,12 @@
-import { AddAccountRepository } from '@/data/protocols/db/account/add-account-repository'
-import { DeleteAccountRepository } from '@/data/protocols/db/account/delete-account-repository'
-import { LoadAccountByEmailRepository } from '@/data/protocols/db/account/load-account-by-email-repository'
-import { LoadAccountByIdRepository } from '@/data/protocols/db/account/load-account-by-id-repository'
-import { LoadAccountByTokenRepository } from '@/data/protocols/db/account/load-account-by-token-repository'
-import { LoadAccountsRepository } from '@/data/protocols/db/account/load-accounts-repository'
-import { UpdateAccessTokenRepository } from '@/data/usecases/authentication/db-authentication-protocols'
+import {
+  AddAccountRepository,
+  DeleteAccountRepository,
+  LoadAccountByEmailRepository,
+  LoadAccountByIdRepository,
+  LoadAccountByTokenRepository,
+  LoadAccountsRepository,
+  UpdateAccessTokenRepository
+} from '@/data/protocols'
 import { AccountModel } from '@/domain/models'
 import { ObjectID } from 'mongodb'
 import { MongoHelper } from '../helpers/mongo-helper'
