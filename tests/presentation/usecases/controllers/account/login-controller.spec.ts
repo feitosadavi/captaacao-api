@@ -1,4 +1,4 @@
-import { LoginController } from './login-controller'
+import { LoginController } from '@/presentation/controllers'
 import { Authentication } from '@/domain/usecases'
 import { serverError, unauthorized, serverSuccess, badRequest } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest, Validation } from '@/presentation/protocols'

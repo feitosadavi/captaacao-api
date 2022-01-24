@@ -1,6 +1,5 @@
-import { LogMongoRepository } from '@/infra/db/mongodb/log/log-mongo-repository'
-import { CarMongoRepository } from '@/infra/db/mongodb/car/car-mongo-repository'
-import { AddCarController } from '@/presentation/controllers/car/add-car/add-car-controller'
+import { LogMongoRepository, CarMongoRepository } from '@/infra/db/mongodb'
+import { AddCarController } from '@/presentation/controllers'
 import { Controller } from '@/presentation/protocols'
 import { makeAddCarValidation } from './add-car-validation-factory'
 import { LogControllerDecorator } from '@/main/decorators/log-controller-decorator'

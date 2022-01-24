@@ -1,7 +1,8 @@
 import { DeleteAccount } from '@/domain/usecases/account/delete-account'
 import { serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
+import { DeleteAccountController } from '@/presentation/controllers'
+
 import { mockDeleteAccount } from '@tests/presentation/mocks'
-import { DeleteAccountController } from './delete-account-controller'
 
 type SutTypes = {
   sut: DeleteAccountController

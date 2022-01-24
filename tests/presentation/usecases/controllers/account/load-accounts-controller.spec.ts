@@ -1,12 +1,11 @@
 import MockDate from 'mockdate'
 
-import { LoadAccountsController } from './load-accounts-controller'
-
 import { LoadAccounts } from '@/domain/usecases'
-import { mockLoadAccounts } from '@tests/presentation/mocks'
+import { LoadAccountsController } from '@/presentation/controllers'
 import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
 
+import { mockLoadAccounts } from '@tests/presentation/mocks'
 import { mockAccountModel, throwError } from '@tests/domain/mocks'
 
 type SutTypes = {

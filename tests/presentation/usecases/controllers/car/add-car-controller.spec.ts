@@ -1,6 +1,6 @@
 import MockDate from 'mockdate'
 
-import { AddCarController } from './add-car-controller'
+import { AddCarController } from '@/presentation/controllers'
 import { badRequest, serverError, noContent } from '@/presentation/helpers/http/http-helper'
 
 import { mockCarsParams, throwError } from '@tests/domain/mocks'

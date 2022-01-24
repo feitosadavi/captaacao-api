@@ -1,7 +1,7 @@
 import MockDate from 'mockdate'
 
-import { LoadCarByIdController } from './load-car-by-id-controller'
 import { LoadCarById } from '@/domain/usecases/car/load-car-by-id'
+import { LoadCarByIdController } from '@/presentation/controllers'
 import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
 

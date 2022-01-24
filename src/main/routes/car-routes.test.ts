@@ -5,7 +5,7 @@ import { sign } from 'jsonwebtoken'
 import app from '../config/app'
 import env from '../config/env'
 
-import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
+import { MongoHelper } from '@/infra/db/mongodb'
 import { mockCarsParams } from '@tests/domain/mocks'
 
 let carsCollection: Collection

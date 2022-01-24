@@ -1,7 +1,7 @@
 import MockDate from 'mockdate'
 
-import { LoadCarsController } from './load-cars-controller'
 import { LoadCars } from '@/domain/usecases/car/load-cars'
+import { LoadCarsController } from '@/presentation/controllers'
 import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
 
 import { mockCarsModel, throwError } from '@tests/domain/mocks'
