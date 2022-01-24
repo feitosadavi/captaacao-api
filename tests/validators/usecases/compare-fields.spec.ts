@@ -1,5 +1,5 @@
 import { InvalidParamError } from '@/presentation/errors/invalid-param-error'
-import { CompareFieldsValidation } from './compare-fields'
+import { CompareFieldsValidation } from '@/validation/validators'
 import { Validation } from '@/presentation/protocols/validation'
 
 type SutTypes = {
