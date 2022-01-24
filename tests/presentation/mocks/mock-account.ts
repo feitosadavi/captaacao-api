@@ -7,6 +7,7 @@ import {
 } from '@/domain/usecases'
 import { AccountModel } from '@/domain/models'
 import { mockAccountModel } from '@tests/domain/mocks'
+import { Authentication, AuthenticationParams } from '@/domain/usecases/authentication'
 
 export const mockAddAccountStub = (): AddAccount => {
   class AddAccountStub implements AddAccount {
@@ -54,4 +55,14 @@ export const mockDeleteAccount = (): DeleteAccount => {
     }
   }
   return new DeleteAccountStub()
+}
+
+export const mockAuthentication = (): Authentication => {
+  class AuthenticationStub implements Authentication {
+    async auth (authentication: AuthenticationParams): Promise<string> {
+      return Promise.resolve('any_token')
+    }
+  }
+
+  return new AuthenticationStub()
 }
