@@ -1,5 +1,6 @@
+import { LoadCars } from '@/domain/usecases'
 import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
-import { LoadCars, Controller, HttpRequest, HttpResponse } from './load-cars-protocols'
+import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 
 export class LoadCarsController implements Controller {
   constructor (private readonly loadCars: LoadCars) { }

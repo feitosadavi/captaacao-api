@@ -1,10 +1,10 @@
 import MockDate from 'mockdate'
 
 import { SignUpController } from './signup-controller'
+import { AddAccount, Authentication } from '@/domain/usecases'
 import { MissingParamError, ServerError, EmailInUseError } from '@/presentation/errors'
-import { AddAccount, HttpRequest, Validation } from './signup-controller-protocols'
 import { badRequest, serverError, serverSuccess, forbidden } from '@/presentation/helpers/http/http-helper'
-import { Authentication } from '../login/login-controller-protocols'
+import { HttpRequest, Validation } from '@/presentation/protocols'
 
 import { mockAccountParams, throwError } from '@tests/domain/mocks'
 import { mockAddAccountStub, mockAuthentication, mockValidation } from '@tests/presentation/mocks'

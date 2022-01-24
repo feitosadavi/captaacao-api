@@ -1,7 +1,7 @@
 import MockDate from 'mockdate'
 
 import { LoadAccountById } from '@/domain/usecases/account/load-account-by-id'
-import { LoadAccountByIdController } from './load-account-by-id'
+import { LoadAccountByIdController } from './load-account-by-id-controller'
 import { serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
 

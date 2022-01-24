@@ -1,7 +1,6 @@
-import {
-  LoadAccounts, HttpRequest, HttpResponse, Controller,
-  serverSuccess, serverError, noContent
-} from './load-accounts-controller-protocols'
+import { LoadAccounts } from '@/domain/usecases'
+import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
+import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 
 export class LoadAccountsController implements Controller {
   constructor (

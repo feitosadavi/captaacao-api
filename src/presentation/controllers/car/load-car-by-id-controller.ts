@@ -1,5 +1,6 @@
+import { LoadCarById } from '@/domain/usecases'
 import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
-import { LoadCarById, Controller, HttpRequest, HttpResponse } from './load-car-by-id-protocols'
+import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 
 export class LoadCarByIdController implements Controller {
   constructor (private readonly loadCarById: LoadCarById) { }

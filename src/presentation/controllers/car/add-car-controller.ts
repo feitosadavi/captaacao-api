@@ -1,5 +1,6 @@
+import { AddCar } from '@/domain/usecases'
 import { badRequest, noContent, serverError } from '@/presentation/helpers/http/http-helper'
-import { Controller, HttpRequest, HttpResponse, Validation, AddCar } from './add-car-protocols'
+import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
 
 export class AddCarController implements Controller {
   constructor (

@@ -1,5 +1,6 @@
+import { LoadAccountById } from '@/domain/usecases'
 import { serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
-import { LoadAccountById, Controller, HttpRequest, HttpResponse } from './load-account-by-id-protocols'
+import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 
 export class LoadAccountByIdController implements Controller {
   constructor (private readonly loadAccountById: LoadAccountById) { }

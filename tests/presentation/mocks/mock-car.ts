@@ -1,7 +1,6 @@
+import { CarModel } from '@/domain/models'
+import { AddCar, AddCarParams, LoadCarById, LoadCars } from '@/domain/usecases'
 import { mockCarsModel } from '@tests/domain/mocks'
-import { AddCar, AddCarParams } from '../controllers/car/add-car/add-car-protocols'
-import { LoadCarById } from '../controllers/car/load-car-by-id/load-car-by-id-protocols'
-import { CarModel, LoadCars } from '../controllers/car/load-car/load-cars-protocols'
 
 export const mockAddCar = (): AddCar => {
   class AddCarStub implements AddCar {

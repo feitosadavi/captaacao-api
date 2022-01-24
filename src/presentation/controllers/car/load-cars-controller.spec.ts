@@ -1,6 +1,6 @@
 import MockDate from 'mockdate'
 
-import { LoadCarsController } from './load-cars'
+import { LoadCarsController } from './load-cars-controller'
 import { LoadCars } from '@/domain/usecases/car/load-cars'
 import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
 
