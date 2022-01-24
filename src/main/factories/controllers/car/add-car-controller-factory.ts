@@ -1,7 +1,7 @@
 import { LogMongoRepository, CarMongoRepository } from '@/infra/db/mongodb'
 import { AddCarController } from '@/presentation/controllers'
 import { Controller } from '@/presentation/protocols'
-import { makeAddCarValidation } from './add-car-validation-factory'
+import { makeAddCarValidation } from '@/main/factories'
 import { LogControllerDecorator } from '@/main/decorators/log-controller-decorator'
 
 export const makeAddCarController = (): Controller => {

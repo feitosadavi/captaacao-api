@@ -2,11 +2,13 @@
 import { Router } from 'express'
 import { adaptMiddleware } from '../adapters/express-middleware-adapter'
 import { adaptRoute } from '../adapters/express-route-adapter'
-import { makeDeleteAccountsController } from '../factories/controllers/account/delete-account/delete-account-factory'
-import { makeLoadAccountsController } from '../factories/controllers/account/load-accounts/load-accounts-factory'
-import { makeLoginController } from '../factories/controllers/account/login/login-controller-factory'
-import { makeSignUpController } from '../factories/controllers/account/signup/signup-controller-factory'
-import { makeAuthMiddleware } from '../factories/middlewares/auth-middleware-factory'
+import {
+  makeDeleteAccountsController,
+  makeLoadAccountsController,
+  makeLoginController,
+  makeSignUpController,
+  makeAuthMiddleware
+} from '@/main/factories'
 import { adminAuth } from '../middlewares/admin-auth'
 export default (router: Router): void => {
   router.post('/signup', adaptRoute(makeSignUpController()))
