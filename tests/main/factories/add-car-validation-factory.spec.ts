@@ -1,6 +1,6 @@
 import { ValidationComposite, RequiredFieldValidation } from '@/validation/validators'
 import { Validation } from '@/presentation/protocols/validation'
-import { makeAddCarValidation } from './add-car-validation-factory'
+import { makeAddCarValidation } from '@/main/factories'
 
 // quando eu mocko um módulo, ele passa a não ter mais o comportamento default dele
 jest.mock('@/validation/validators/validation-composite')
