@@ -1,6 +1,5 @@
 import { Collection } from 'mongodb'
-import { MongoHelper } from '../helpers/mongo-helper'
-import { CarMongoRepository } from './car-mongo-repository'
+import { MongoHelper, CarMongoRepository } from '@/infra/db/mongodb'
 import { mockCarsParams } from '@tests/domain/mocks'
 
 describe('CarMongo Repository', () => {

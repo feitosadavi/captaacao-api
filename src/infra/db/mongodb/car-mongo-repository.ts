@@ -4,7 +4,7 @@ import { LoadCarsRepository } from '@/data/protocols/db/car/load-car-repository'
 import { CarModel } from '@/domain/models/car'
 import { AddCarParams } from '@/domain/usecases/car/add-car'
 import { ObjectID } from 'mongodb'
-import { MongoHelper } from '../helpers/mongo-helper'
+import { MongoHelper } from './mongo-helper'
 
 export class CarMongoRepository implements AddCarRepository, LoadCarsRepository, LoadCarByIdRepository {
   async add (carData: AddCarParams): Promise<void> {
