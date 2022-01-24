@@ -2,7 +2,7 @@ import { LogErrorRepository } from '@/data/protocols/db/log/log-error-repository
 import { mockLogErrorRepositoryStub } from '@tests/data/mocks'
 import { serverError } from '@/presentation/helpers/http/http-helper'
 import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
-import { LogControllerDecorator } from './log-controller-decorator'
+import { LogControllerDecorator } from '@/main/decorators'
 
 type SutTypes = {
   sut: LogControllerDecorator
@@ -91,6 +91,6 @@ describe('LogController Decorator', () => {
       statusCode: 200
     }
     await sut.handle(httpRequest)
-    await expect(logSpy).toHaveBeenCalledWith(fakeError.stack)
+    expect(logSpy).toHaveBeenCalledWith(fakeError.stack)
   })
 })
