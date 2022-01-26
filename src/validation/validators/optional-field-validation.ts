@@ -12,9 +12,9 @@ export class OptionalFieldValidation implements Validation {
       if (!this.permittedFields.includes(field)) {
         return new InvalidParamError(field)
       } else {
-        const hasKeys = !!Object.keys(input[field]).length
+        const existentNestedKeys = Object.keys(input[field])
+        const hasKeys = !!existentNestedKeys.length && typeof input[field] === 'object' && input[field] !== null
         if (this.permittedNestedFields?.length > 0 && hasKeys) {
-          const existentNestedKeys = Object.keys(input[field])
           for (const key of existentNestedKeys) {
             if (!this.permittedNestedFields.includes(key)) {
               return new InvalidParamError(key)
