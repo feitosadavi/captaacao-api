@@ -5,7 +5,7 @@ export interface UpdateAccount {
 export namespace UpdateAccount {
   export type Params = {
     id: string
-    fields: [Record<string, any>]
+    fields: Record<string, any>
   }
   export type Result = boolean
 }
