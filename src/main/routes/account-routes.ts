@@ -7,13 +7,16 @@ import {
   makeLoadAccountsController,
   makeLoginController,
   makeSignUpController,
-  makeAuthMiddleware
+  makeAuthMiddleware,
+  makeUpdateAccountControllerFactory
 } from '@/main/factories'
-import { adminAuth } from '../middlewares/admin-auth'
+import { adminAuth, auth } from '@/main/middlewares'
+
 export default (router: Router): void => {
   router.post('/signup', adaptRoute(makeSignUpController()))
   router.post('/login', adaptRoute(makeLoginController()))
   router.get('/accounts', adminAuth, adaptRoute(makeLoadAccountsController()))
   router.get('/accounts/:id', adminAuth, adaptRoute(makeLoadAccountsController()))
   router.delete('/accounts/delete/:id', adaptMiddleware(makeAuthMiddleware(null, true)), adaptRoute(makeDeleteAccountsController()))
+  router.put('/account/update', auth, adaptRoute(makeUpdateAccountControllerFactory()))
 }
