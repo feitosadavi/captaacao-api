@@ -6,7 +6,7 @@ import { makeUpdateAccountValidationFactory } from '@/main/factories'
 jest.mock('@/validation/validators/validation-composite')
 
 // aqui vamos garantir que o validation composite não irá deixar de injetar nenhuma validação que precisa ter
-describe('SignUpValidation Factory', () => {
+describe('UpdateAccountValidation Factory', () => {
   test('Should call ValidationComposite with all validations', () => {
     makeUpdateAccountValidationFactory()
     const validations: Validation[] = []
