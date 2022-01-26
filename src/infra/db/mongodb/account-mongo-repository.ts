@@ -5,14 +5,15 @@ import {
   LoadAccountByIdRepository,
   LoadAccountByTokenRepository,
   LoadAccountsRepository,
-  UpdateAccessTokenRepository
+  UpdateAccessTokenRepository,
+  UpdateAccountRepository
 } from '@/data/protocols'
 import { AccountModel } from '@/domain/models'
 import { ObjectID } from 'mongodb'
 import { MongoHelper } from './mongo-helper'
 
 export class AccountMongoRepository implements AddAccountRepository, LoadAccountsRepository, LoadAccountByEmailRepository,
-  LoadAccountByTokenRepository, UpdateAccessTokenRepository, LoadAccountByIdRepository, DeleteAccountRepository {
+  LoadAccountByTokenRepository, UpdateAccessTokenRepository, UpdateAccountRepository, LoadAccountByIdRepository, DeleteAccountRepository {
   async add (accountData: AddAccountRepository.Params): Promise<boolean> {
     const accountsCollection = await MongoHelper.getCollection('accounts')
     const result = await accountsCollection.insertOne(accountData)
@@ -62,6 +63,16 @@ export class AccountMongoRepository implements AddAccountRepository, LoadAccount
         $set: { accessToken: token }
       }
     )
+  }
+
+  async update (params: UpdateAccountRepository.Params): Promise<UpdateAccountRepository.Result> {
+    const accountsCollection = await MongoHelper.getCollection('accounts')
+    await accountsCollection.updateOne({ _id: params.id },
+      {
+        $set: { ...params.fields }
+      }
+    )
+    return params
   }
 
   async deleteAccount (id: string): Promise<boolean> {
