@@ -72,7 +72,7 @@ export class AccountMongoRepository implements AddAccountRepository, LoadAccount
         $set: { ...params.fields }
       }
     )
-    return params
+    return true
   }
 
   async deleteAccount (id: string): Promise<boolean> {
