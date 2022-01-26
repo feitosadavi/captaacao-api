@@ -193,7 +193,7 @@ describe('Account Mongo Repository', () => {
         ...mockAccountParams()
       })
       const fakeAccount = res.ops[0]
-      const result = await sut.update({ id: fakeAccount._id, fields: { name: 'other_name', cep: 'other_cep' } })
+      const result = await sut.updateAccount({ id: fakeAccount._id, fields: { name: 'other_name', cep: 'other_cep' } })
       expect(result).toBe(true)
       const account = await accountCollection.findOne({ _id: fakeAccount._id })
       expect(account).toBeTruthy()

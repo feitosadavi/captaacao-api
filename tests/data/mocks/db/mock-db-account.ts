@@ -59,7 +59,7 @@ export const mockUpdateAccessTokenRepository = (): UpdateAccessTokenRepository =
 
 export const mockUpdateAccountRepository = (): UpdateAccountRepository => {
   class UpdateAccountRepositoryStub implements UpdateAccountRepository {
-    async update (params: UpdateAccountRepository.Params): Promise<boolean> {
+    async updateAccount (params: UpdateAccountRepository.Params): Promise<UpdateAccountRepository.Result> {
       return Promise.resolve(true)
     }
   }

@@ -65,7 +65,7 @@ export class AccountMongoRepository implements AddAccountRepository, LoadAccount
     )
   }
 
-  async update (params: UpdateAccountRepository.Params): Promise<UpdateAccountRepository.Result> {
+  async updateAccount (params: UpdateAccountRepository.Params): Promise<UpdateAccountRepository.Result> {
     const accountsCollection = await MongoHelper.getCollection('accounts')
     await accountsCollection.updateOne({ _id: params.id },
       {

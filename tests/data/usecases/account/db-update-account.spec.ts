@@ -54,7 +54,7 @@ describe('DbUpdateAccount Usecase', () => {
 
   test('Should call UpdateAccountRepository with correct values', async () => {
     const { sut, updateAccountRepositoryStub } = makeSut()
-    const updateSpy = jest.spyOn(updateAccountRepositoryStub, 'update')
+    const updateSpy = jest.spyOn(updateAccountRepositoryStub, 'updateAccount')
     const params = mockUpdateParams()
     await sut.update(params)
     expect(updateSpy).toHaveBeenCalledWith(params)
@@ -62,7 +62,7 @@ describe('DbUpdateAccount Usecase', () => {
 
   test('Should DbUpdateAccount throw if UpdateAccountRepository throws', async () => {
     const { sut, updateAccountRepositoryStub } = makeSut()
-    jest.spyOn(updateAccountRepositoryStub, 'update').mockReturnValueOnce(Promise.reject(new Error()))
+    jest.spyOn(updateAccountRepositoryStub, 'updateAccount').mockReturnValueOnce(Promise.reject(new Error()))
     const params = mockUpdateParams()
     const promise = sut.update(params)
     await expect(promise).rejects.toThrow()
