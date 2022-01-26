@@ -3,7 +3,8 @@ import {
   LoadAccountByToken,
   LoadAccounts,
   LoadAccountById,
-  DeleteAccount
+  DeleteAccount,
+  UpdateAccount
 } from '@/domain/usecases'
 import { AccountModel } from '@/domain/models'
 import { mockAccountModel } from '@tests/domain/mocks'
@@ -46,6 +47,15 @@ export const mockLoadAccountById = (): LoadAccountById => {
     }
   }
   return new LoadAccountByIdStub()
+}
+
+export const mockUpdateAccount = (): UpdateAccount => {
+  class UpdateAccountStub implements UpdateAccount {
+    async update (params: UpdateAccount.Params): Promise<UpdateAccount.Result> {
+      return Promise.resolve(true)
+    }
+  }
+  return new UpdateAccountStub()
 }
 
 export const mockDeleteAccount = (): DeleteAccount => {
