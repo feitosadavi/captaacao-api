@@ -14,7 +14,7 @@ type SutTypes = {
 
 const mockUpdateParams = (): UpdateAccount.Params => ({
   id: 'any_id',
-  fields: [{ any_field: 'any_value' }]
+  fields: { any_field: 'any_value' }
 })
 
 const makeSut = (): SutTypes => {
