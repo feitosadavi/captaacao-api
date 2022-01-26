@@ -44,7 +44,15 @@ describe('OptionalFieldValidation', () => {
     expect(error).toEqual(new InvalidParamError('other_field'))
   })
 
-  test('Should OptionalFieldValidation returns nothing if validation succeed', () => {
+  test('Should OptionalFieldValidation returns nothing if validation with only multiple nested params succeed', () => {
+    const permittedFields = ['person']
+    const permittedNestedFields = ['nested_field', 'other_field']
+    const { sut } = makeSut(permittedFields, permittedNestedFields)
+    const error = sut.validate({ person: { nested_field: 'any_value', other_field: 'any_value' } })
+    expect(error).toBeFalsy()
+  })
+
+  test('Should OptionalFieldValidation returns nothing if validation with only nested params succeed', () => {
     const permittedFields = ['field']
     const permittedNestedFields = ['nested_field', 'other_nested_field']
     const { sut } = makeSut(permittedFields, permittedNestedFields)
