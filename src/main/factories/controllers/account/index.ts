@@ -6,3 +6,4 @@ export * from './signup-controller-factory'
 
 export * from './signup-validation-factory'
 export * from './login-validation-factory'
+export * from './update-account-validation-factory'
