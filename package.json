@@ -11,7 +11,7 @@
     "build": "rimraf dist && tsc -p tsconfig-build.json",
     "up": "npm run build && sudo docker-compose up -d",
     "down": "sudo docker-compose down",
-    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand --watch",
+    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --watch --passWithNoTests --runInBand",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
     "test:integration": "npm test -- --watch -c jest-integration-config.js",
