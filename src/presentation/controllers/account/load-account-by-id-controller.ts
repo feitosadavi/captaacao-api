@@ -4,7 +4,7 @@ import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 
 export class LoadAccountByIdController implements Controller {
   constructor (private readonly loadAccountById: LoadAccountById) { }
-  async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
+  async handle (httpRequest: HttpRequest<any, any, {id: string}>): Promise<HttpResponse> {
     try {
       const account = await this.loadAccountById.loadById(httpRequest.params.id)
       return serverSuccess(account)

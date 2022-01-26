@@ -15,7 +15,7 @@ export class SignUpController implements Controller {
     private readonly authentication: Authentication
   ) { }
 
-  async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
+  async handle (httpRequest: HttpRequest<AddAccount.Params>): Promise<HttpResponse> {
     try {
       const error = this.validation.validate(httpRequest.body)
       if (error) {

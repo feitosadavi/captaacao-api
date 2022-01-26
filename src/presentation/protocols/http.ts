@@ -3,9 +3,9 @@ export type HttpResponse = {
   body: any
 }
 
-export type HttpRequest = {
-  body?: any
-  headers?: any
-  params?: any
+export type HttpRequest<B = any, H = any, P = any> = {
+  body?: B
+  headers?: H
+  params?: P
   accountId?: any
 }

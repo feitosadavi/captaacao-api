@@ -7,7 +7,7 @@ export class DeleteAccountController implements Controller {
     private readonly deleteAccount: DeleteAccount
   ) { }
 
-  async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
+  async handle (httpRequest: HttpRequest<any, any, {id: string}>): Promise<HttpResponse> {
     try {
       const accountIdToDelete = httpRequest.params.id
       const result = await this.deleteAccount.delete(accountIdToDelete)

@@ -1,4 +1,4 @@
-import { AddCar } from '@/domain/usecases'
+import { AddCar, AddCarParams } from '@/domain/usecases'
 import { badRequest, noContent, serverError } from '@/presentation/helpers/http/http-helper'
 import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
 
@@ -8,7 +8,7 @@ export class AddCarController implements Controller {
     private readonly addCar: AddCar
   ) {}
 
-  async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
+  async handle (httpRequest: HttpRequest<AddCarParams>): Promise<HttpResponse> {
     try {
       const error = this.validation.validate(httpRequest.body)
       if (error) return badRequest(new Error())
