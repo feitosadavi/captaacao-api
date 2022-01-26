@@ -57,7 +57,7 @@ describe('DbUpdateAccount Usecase', () => {
     const updateSpy = jest.spyOn(updateAccountRepositoryStub, 'update')
     const params = mockUpdateParams()
     await sut.update(params)
-    expect(updateSpy).toHaveBeenCalledWith([{ any_field: 'any_value' }])
+    expect(updateSpy).toHaveBeenCalledWith(params)
   })
 
   test('Should DbUpdateAccount throw if UpdateAccountRepository throws', async () => {

@@ -11,7 +11,7 @@ export class DbUpdateAccount implements UpdateAccount {
     const account = await this.loadAccountById.loadById(params.id)
     let result = false
     if (account?.id) {
-      result = await this.updateAccountRepository.update(params.fields)
+      result = await this.updateAccountRepository.update(params)
     }
     return result
   }
