@@ -131,6 +131,38 @@ describe('Login Routes', () => {
     })
   })
 
+  describe('PUT /account/update', () => {
+    test('should return 403 if user has no authorization', async () => {
+      await request(app)
+        .put('/api/account/update')
+        .expect(403)
+    })
+    test('should return 200 on success', async () => {
+      const res = await insertAccount()
+      const id = res.ops[0]._id
+      const accessToken = sign({ id }, env.secret)
+      await updateAccountToken(id, accessToken)
+
+      await request(app)
+        .put('/api/account/update')
+        .set('x-access-token', accessToken)
+        .send({ name: 'Davi', nickname: 'davizio' })
+        .expect(400)
+    })
+    test('should return 200 on success', async () => {
+      const res = await insertAccount()
+      const id = res.ops[0]._id
+      const accessToken = sign({ id }, env.secret)
+      await updateAccountToken(id, accessToken)
+
+      await request(app)
+        .put('/api/account/update')
+        .set('x-access-token', accessToken)
+        .send({ name: 'Davi' })
+        .expect(200)
+    })
+  })
+
   describe('DELETE /accounts/delete/:id', () => {
     test('should return 403 if user has no authorization', async () => {
       await request(app)
