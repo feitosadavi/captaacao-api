@@ -15,8 +15,12 @@ export class OptionalFieldValidation implements Validation {
         const hasKeys = !!Object.keys(input[field]).length
         if (this.nestedFields?.length > 0 && hasKeys) {
           const nestedKeys = Object.keys(input[field])
+          console.log('this nestedFields: ', this.nestedFields)
           for (const key of nestedKeys) {
-            if (!this.nestedFields.includes(input[field][key])) {
+            console.log({ key })
+            // console.log('obj key: ', Object.keys(input[field][key])[0])
+            console.log(!this.nestedFields.includes(key))
+            if (!this.nestedFields.includes(key)) {
               return new InvalidParamError(key)
             }
           }
