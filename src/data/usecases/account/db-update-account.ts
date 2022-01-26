@@ -1,14 +1,14 @@
-import { UpdateAccountRepository } from '@/data/protocols'
-import { LoadAccountById, UpdateAccount } from '@/domain/usecases'
+import { LoadAccountByIdRepository, UpdateAccountRepository } from '@/data/protocols'
+import { UpdateAccount } from '@/domain/usecases'
 
 export class DbUpdateAccount implements UpdateAccount {
   constructor (
     private readonly updateAccountRepository: UpdateAccountRepository,
-    private readonly loadAccountById: LoadAccountById
+    private readonly loadAccountByIdRepository: LoadAccountByIdRepository
   ) { }
 
   async update (params: UpdateAccount.Params): Promise<boolean> {
-    const account = await this.loadAccountById.loadById(params.id)
+    const account = await this.loadAccountByIdRepository.loadById(params.id)
     let result = false
     if (account?.id) {
       result = await this.updateAccountRepository.updateAccount(params)
