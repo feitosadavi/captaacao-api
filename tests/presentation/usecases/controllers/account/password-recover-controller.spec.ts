@@ -57,6 +57,13 @@ describe('PasswordRecover Controller', () => {
     expect(httpResponse).toEqual(badRequest(new NotFoundAccountError()))
   })
 
+  test('Should call GeneratePassRecoverInfoStub', async () => {
+    const { sut, generatePassRecoverInfoStub } = makeSut()
+    const generatePassRecoverInfoSpy = jest.spyOn(generatePassRecoverInfoStub, 'generate')
+    await sut.handle(mockRequest())
+    expect(generatePassRecoverInfoSpy).toHaveBeenCalled()
+  })
+
   test('Should call UpdateAccount with correct params', async () => {
     const { sut, updateAccountStub } = makeSut()
     const updateAccountSpy = jest.spyOn(updateAccountStub, 'update')
