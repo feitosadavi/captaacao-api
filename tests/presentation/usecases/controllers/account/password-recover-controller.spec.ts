@@ -1,14 +1,19 @@
-import { LoadAccountById } from '@/domain/usecases/account/load-account-by-id'
+import { GeneratePassRecoverInfo } from '@/data/protocols/others'
+import { UpdateAccount, LoadIdByEmail } from '@/domain/usecases'
 import { PasswordRecoverController } from '@/presentation/controllers/account/password-recover-controller'
 import { NotFoundAccountError } from '@/presentation/errors/not-found-account'
 import { badRequest } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
+import { mockRecoverPassInfo } from '@tests/domain/mocks'
 
-import { mockLoadAccountById } from '@tests/presentation/mocks'
+import { mockGeneratePassRecoverInfoStub, mockLoadIdByEmail, mockUpdateAccount } from '@tests/presentation/mocks'
 
 type SutTypes = {
   sut: PasswordRecoverController
-  LoadAccountByIdStub: LoadAccountById
+  loadIdByEmailStub: LoadIdByEmail
+  updateAccountStub: UpdateAccount
+  generatePassRecoverInfoStub: GeneratePassRecoverInfo
+
 }
 
 const mockRequest = (): HttpRequest => (
@@ -19,27 +24,43 @@ const mockRequest = (): HttpRequest => (
   }
 )
 
+const mockUpdateAccountParams = (): UpdateAccount.Params => ({
+  id: mockRequest().params.id,
+  fields: { recoverPassInfo: mockRecoverPassInfo() }
+})
+
 const makeSut = (): SutTypes => {
-  const LoadAccountByIdStub = mockLoadAccountById()
-  const sut = new PasswordRecoverController(LoadAccountByIdStub)
+  const loadIdByEmailStub = mockLoadIdByEmail()
+  const updateAccountStub = mockUpdateAccount()
+  const generatePassRecoverInfoStub = mockGeneratePassRecoverInfoStub()
+  const sut = new PasswordRecoverController(loadIdByEmailStub, updateAccountStub, generatePassRecoverInfoStub)
   return {
     sut,
-    LoadAccountByIdStub
+    loadIdByEmailStub,
+    updateAccountStub,
+    generatePassRecoverInfoStub
   }
 }
 
 describe('PasswordRecover Controller', () => {
-  test('Should call LoadAccountById with correct id', async () => {
-    const { sut, LoadAccountByIdStub } = makeSut()
-    const loadAccountByIdSpy = jest.spyOn(LoadAccountByIdStub, 'loadById')
+  test('Should call LoadIdByEmail with correct id', async () => {
+    const { sut, loadIdByEmailStub } = makeSut()
+    const loadAccountByIdSpy = jest.spyOn(loadIdByEmailStub, 'load')
     await sut.handle(mockRequest())
-    expect(loadAccountByIdSpy).toHaveBeenCalledWith('any_id')
+    expect(loadAccountByIdSpy).toHaveBeenCalledWith({ id: 'any_id' })
   })
 
-  test('Should return 400 if LoadAccountById dont find any account', async () => {
-    const { sut, LoadAccountByIdStub } = makeSut()
-    jest.spyOn(LoadAccountByIdStub, 'loadById').mockReturnValueOnce(Promise.resolve(null))
+  test('Should return 400 if LoadIdByEmail dont find any account', async () => {
+    const { sut, loadIdByEmailStub } = makeSut()
+    jest.spyOn(loadIdByEmailStub, 'load').mockReturnValueOnce(Promise.resolve(null))
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(badRequest(new NotFoundAccountError()))
+  })
+
+  test('Should call UpdateAccount with correct params', async () => {
+    const { sut, updateAccountStub } = makeSut()
+    const updateAccountSpy = jest.spyOn(updateAccountStub, 'update')
+    await sut.handle(mockRequest())
+    expect(updateAccountSpy).toHaveBeenCalledWith(mockUpdateAccountParams())
   })
 })
