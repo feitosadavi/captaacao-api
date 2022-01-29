@@ -1,7 +1,7 @@
 import { GeneratePassRecoverInfo } from '@/data/protocols/others'
 import { LoadIdByEmail, UpdateAccount } from '@/domain/usecases'
 import { NotFoundAccountError } from '@/presentation/errors/not-found-account'
-import { badRequest } from '@/presentation/helpers/http/http-helper'
+import { badRequest, serverSuccess } from '@/presentation/helpers/http/http-helper'
 import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 
 export class PasswordRecoverController implements Controller {
@@ -16,7 +16,7 @@ export class PasswordRecoverController implements Controller {
     const account = await this.loadIdByEmail.load({ id: accountId })
     if (!account) return badRequest(new NotFoundAccountError())
     const recoverPassInfo = this.generatePassRecoverInfo.generate()
-    await this.updateAccount.update({ id: accountId, fields: { recoverPassInfo } })
-    return null
+    const isUpdated = await this.updateAccount.update({ id: accountId, fields: { recoverPassInfo } })
+    return isUpdated && serverSuccess({ ok: true })
   }
 }
