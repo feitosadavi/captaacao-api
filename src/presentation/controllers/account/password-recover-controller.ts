@@ -18,7 +18,7 @@ export class PasswordRecoverController implements Controller {
       if (!account) return badRequest(new NotFoundAccountError())
       const recoverPassInfo = this.generatePassRecoverInfo.generate()
       const isUpdated = await this.updateAccount.update({ id: accountId, fields: { recoverPassInfo } })
-      return isUpdated && serverSuccess({ ok: true })
+      return isUpdated && serverSuccess({ accountId })
     } catch (error) {
       return serverError(error)
     }
