@@ -95,6 +95,6 @@ describe('PasswordRecover Controller', () => {
   test('Should return 200 on success', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(mockRequest())
-    expect(httpResponse).toEqual(serverSuccess({ ok: true }))
+    expect(httpResponse).toEqual(serverSuccess({ accountId: 'any_id' }))
   })
 })
