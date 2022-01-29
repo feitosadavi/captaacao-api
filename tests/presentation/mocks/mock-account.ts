@@ -4,7 +4,8 @@ import {
   LoadAccounts,
   LoadAccountById,
   DeleteAccount,
-  UpdateAccount
+  UpdateAccount,
+  LoadIdByEmail
 } from '@/domain/usecases'
 import { AccountModel } from '@/domain/models'
 import { mockAccountModel } from '@tests/domain/mocks'
@@ -47,6 +48,15 @@ export const mockLoadAccountById = (): LoadAccountById => {
     }
   }
   return new LoadAccountByIdStub()
+}
+
+export const mockLoadIdByEmail = (): LoadIdByEmail => {
+  class LoadIdByEmailStub implements LoadIdByEmailStub {
+    async load (params: LoadIdByEmail.Params): Promise<LoadIdByEmail.Result> {
+      return Promise.resolve(mockAccountModel().id)
+    }
+  }
+  return new LoadIdByEmailStub()
 }
 
 export const mockUpdateAccount = (): UpdateAccount => {

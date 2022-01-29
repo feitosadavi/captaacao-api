@@ -91,6 +91,12 @@ export const mockAccountModel = (): AccountModel => ({
   online: true
 })
 
+export const mockRecoverPassInfo = (): AccountModel.RecoverPassInfo => ({
+  code: 156987,
+  createdAt: new Date('2011-04-11T11:50:00'),
+  expiresAt: new Date('2011-04-11T11:55:00')
+})
+
 export const mockAccountsModel = (): AccountModel[] => ([
   mockAccountModel(),
   mockAccountModel()
