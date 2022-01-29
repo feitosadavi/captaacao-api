@@ -11,7 +11,7 @@ export type AccountModel = {
   role: string
   adress: AccountModel.Adress
 
-  notifications?: Notification[]
+  notifications?: AccountModel.Notification[]
   rating?: AccountModel.Rating[]
 
   recoverPassInfo?: AccountModel.RecoverPassInfo
