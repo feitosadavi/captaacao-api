@@ -2,9 +2,9 @@ import { GeneratePassRecoverInfo } from '@/data/protocols/others'
 import { UpdateAccount, LoadIdByEmail } from '@/domain/usecases'
 import { PasswordRecoverController } from '@/presentation/controllers/account/password-recover-controller'
 import { NotFoundAccountError } from '@/presentation/errors/not-found-account'
-import { badRequest, serverSuccess } from '@/presentation/helpers/http/http-helper'
+import { badRequest, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
-import { mockRecoverPassInfo } from '@tests/domain/mocks'
+import { mockRecoverPassInfo, throwError } from '@tests/domain/mocks'
 
 import { mockGeneratePassRecoverInfoStub, mockLoadIdByEmail, mockUpdateAccount } from '@tests/presentation/mocks'
 
@@ -62,6 +62,27 @@ describe('PasswordRecover Controller', () => {
     const updateAccountSpy = jest.spyOn(updateAccountStub, 'update')
     await sut.handle(mockRequest())
     expect(updateAccountSpy).toHaveBeenCalledWith(mockUpdateAccountParams())
+  })
+
+  test('Should return 500 if LoadIdByEmail throws', async () => {
+    const { sut, loadIdByEmailStub } = makeSut()
+    jest.spyOn(loadIdByEmailStub, 'load').mockImplementationOnce(throwError)
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  test('Should return 500 if UpdateAccount throws', async () => {
+    const { sut, updateAccountStub } = makeSut()
+    jest.spyOn(updateAccountStub, 'update').mockImplementationOnce(throwError)
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  test('Should return 500 if GeneratePassRecoverInfoStub throws', async () => {
+    const { sut, generatePassRecoverInfoStub } = makeSut()
+    jest.spyOn(generatePassRecoverInfoStub, 'generate').mockImplementationOnce(throwError)
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(serverError(new Error()))
   })
 
   test('Should return 200 on success', async () => {
