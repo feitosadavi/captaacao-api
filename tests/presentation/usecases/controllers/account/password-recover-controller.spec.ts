@@ -2,7 +2,7 @@ import { GeneratePassRecoverInfo } from '@/data/protocols/others'
 import { UpdateAccount, LoadIdByEmail } from '@/domain/usecases'
 import { PasswordRecoverController } from '@/presentation/controllers/account/password-recover-controller'
 import { NotFoundAccountError } from '@/presentation/errors/not-found-account'
-import { badRequest } from '@/presentation/helpers/http/http-helper'
+import { badRequest, serverSuccess } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
 import { mockRecoverPassInfo } from '@tests/domain/mocks'
 
@@ -62,5 +62,11 @@ describe('PasswordRecover Controller', () => {
     const updateAccountSpy = jest.spyOn(updateAccountStub, 'update')
     await sut.handle(mockRequest())
     expect(updateAccountSpy).toHaveBeenCalledWith(mockUpdateAccountParams())
+  })
+
+  test('Should return 200 on success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(serverSuccess({ ok: true }))
   })
 })
