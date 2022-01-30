@@ -4,7 +4,7 @@ export interface LoadIdByEmail {
 
 export namespace LoadIdByEmail {
   export type Params = {
-    id: string
+    email: string
   }
   export type Result = string
 }

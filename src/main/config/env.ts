@@ -3,8 +3,8 @@ export default {
   port: process.env.PORT || 5050,
   secret: process.env.SECRET || 'secret',
 
-  email: process.env.REC_EMAIL || 'captacaodevtesting@gmail.com',
-  emailPassword: process.env.REC_EMAIL_PASSWORD || '6dL5DFV3ePmspXS',
+  recEmail: process.env.REC_EMAIL || 'captacaodevtesting@gmail.com',
+  recEmailPassword: process.env.REC_EMAIL_PASSWORD || '6dL5DFV3ePmspXS',
 
   testingEmail1: process.env.TESTING_EMAIL1 || 'captacaodevtesting@gmail.com',
   testingEmailPassword1: process.env.TESTING_EMAIL1_PASSWORD || '6dL5DFV3ePmspXS',
