@@ -7,8 +7,9 @@ import { NotFoundAccountError } from '@/presentation/errors/not-found-account'
 import { makePasswordRecoverMail } from '@/presentation/helpers/email'
 import { badRequest, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
-import { mockRecoverPassInfo, throwError } from '@tests/domain/mocks'
+import { UnknownError } from '@/presentation/errors/unknown-error'
 
+import { mockRecoverPassInfo, throwError } from '@tests/domain/mocks'
 import { mockGeneratePassRecoverInfoStub, mockLoadIdByEmail, mockSendEmail, mockUpdateAccount } from '@tests/presentation/mocks'
 
 type SutTypes = {
@@ -77,11 +78,25 @@ describe('PasswordRecover Controller', () => {
     expect(updateAccountSpy).toHaveBeenCalledWith(mockUpdateAccountParams())
   })
 
+  test('Should return 400 if UpdateAccount returns false', async () => {
+    const { sut, updateAccountStub } = makeSut()
+    jest.spyOn(updateAccountStub, 'update').mockReturnValueOnce(Promise.resolve(false))
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(badRequest(new UnknownError('update account')))
+  })
+
   test('Should call SendEmail with correct params', async () => {
     const { sut, sendEmailStub } = makeSut()
     const sendEmailSpy = jest.spyOn(sendEmailStub, 'send')
     await sut.handle(mockRequest())
     expect(sendEmailSpy).toHaveBeenCalledWith(makePasswordRecoverMail(env.recEmail, mockRequest().body.email, mockRecoverPassInfo().code))
+  })
+
+  test('Should return 400 if SendEmail returns false', async () => {
+    const { sut, sendEmailStub } = makeSut()
+    jest.spyOn(sendEmailStub, 'send').mockReturnValueOnce(Promise.resolve(false))
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(badRequest(new UnknownError('send email')))
   })
 
   test('Should return 500 if LoadIdByEmail throws', async () => {
