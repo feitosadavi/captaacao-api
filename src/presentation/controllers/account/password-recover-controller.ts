@@ -6,6 +6,7 @@ import { NotFoundAccountError } from '@/presentation/errors/not-found-account'
 import { makePasswordRecoverMail } from '@/presentation/helpers/email'
 import { badRequest, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
 import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
+import { UnknownError } from '@/presentation/errors/unknown-error'
 
 export class PasswordRecoverController implements Controller {
   constructor (
@@ -24,8 +25,8 @@ export class PasswordRecoverController implements Controller {
         const isUpdated = await this.updateAccount.update({ id, fields: { recoverPassInfo } })
         if (isUpdated) {
           const emailIsSent = await this.sendEmail.send(makePasswordRecoverMail(env.recEmail, email, recoverPassInfo.code))
-          return emailIsSent && serverSuccess({ id })
-        }
+          return emailIsSent ? serverSuccess({ id }) : badRequest(new UnknownError('send email'))
+        } return badRequest(new UnknownError('update account'))
       } else { return badRequest(new NotFoundAccountError()) }
     } catch (error) {
       return serverError(error)
