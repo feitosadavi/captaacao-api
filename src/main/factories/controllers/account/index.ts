@@ -4,6 +4,7 @@ export * from './load-accounts-factory'
 export * from './login-controller-factory'
 export * from './signup-controller-factory'
 export * from './update-account-controller-factory'
+export * from './password-recover-controller-factory'
 
 export * from './signup-validation-factory'
 export * from './login-validation-factory'

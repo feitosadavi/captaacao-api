@@ -7,7 +7,7 @@ import { Controller } from '@/presentation/protocols'
 import { LogControllerDecorator } from '@/main/decorators/log-controller-decorator'
 import { makePasswordRecoverValidation } from './password-recover-validation-factory'
 
-export const makeLoginController = (): Controller => {
+export const makePasswordRecoverController = (): Controller => {
   const accountMongoRepository = new AccountMongoRepository()
   const codeGenerator = new CodeGenerator()
   const nodemailerAdapter = new NodemailerAdapter()
