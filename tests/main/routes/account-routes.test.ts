@@ -91,6 +91,21 @@ describe('Login Routes', () => {
     })
   })
 
+  describe('POST /password-recover', () => {
+    test('Should return 200 on success', async () => {
+      const password = await hash('123', 12)
+      await accountsCollection.insertOne({
+        name: 'Captação',
+        email: 'captacaodevtesting2@gmail.com',
+        password
+      })
+      await request(app)
+        .post('/api/account/password-recover')
+        .send({ email: 'captacaodevtesting2@gmail.com' })
+        .expect(200)
+    })
+  })
+
   describe('GET /accounts', () => {
     test('should return 403 if user has no authorization', async () => {
       await request(app)
@@ -148,18 +163,6 @@ describe('Login Routes', () => {
         .set('x-access-token', accessToken)
         .send({ name: 'Davi', nickname: 'davizio' })
         .expect(400)
-    })
-    test('should return 200 on success', async () => {
-      const res = await insertAccount()
-      const id = res.ops[0]._id
-      const accessToken = sign({ id }, env.secret)
-      await updateAccountToken(id, accessToken)
-
-      await request(app)
-        .put('/api/account/update')
-        .set('x-access-token', accessToken)
-        .send({ name: 'Davi' })
-        .expect(200)
     })
   })
 
