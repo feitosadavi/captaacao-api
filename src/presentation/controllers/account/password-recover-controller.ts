@@ -12,12 +12,11 @@ export class PasswordRecoverController implements Controller {
 
   async handle (httpRequest: HttpRequest<any, any, { email: string }>): Promise<HttpResponse> {
     try {
-      const email = httpRequest.body.email
-      const error = this.validation.validate(email)
+      const error = this.validation.validate(httpRequest.body)
       if (error) return badRequest(error)
 
+      const email = httpRequest.body.email
       const id = await this.loadIdByEmail.load({ email })
-
       if (id) {
         const ok = await this.passwordRecover.recover({ id, email })
         return ok ? serverSuccess({ id }) : badRequest(new UnknownError('password recover'))

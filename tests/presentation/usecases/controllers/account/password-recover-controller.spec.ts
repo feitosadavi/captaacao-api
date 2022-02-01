@@ -45,7 +45,7 @@ describe('PasswordRecover Controller', () => {
     const { sut, validationStub } = makeSut()
     const validateSpy = jest.spyOn(validationStub, 'validate')
     await sut.handle(mockRequest())
-    expect(validateSpy).toHaveBeenCalledWith(mockRequest().body.email)
+    expect(validateSpy).toHaveBeenCalledWith(mockRequest().body)
   })
 
   test('Should return 400 Validation returns an error', async () => {
