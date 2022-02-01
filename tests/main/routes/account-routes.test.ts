@@ -104,6 +104,30 @@ describe('Login Routes', () => {
         .send({ email: 'captacaodevtesting2@gmail.com' })
         .expect(200)
     })
+    test('Should return in case of no email has been sent', async () => {
+      const password = await hash('123', 12)
+      await accountsCollection.insertOne({
+        name: 'Captação',
+        email: 'captacaodevtesting2@gmail.com',
+        password
+      })
+      await request(app)
+        .post('/api/account/password-recover')
+        .send()
+        .expect(400)
+    })
+    test('Should return 400 if email is invalid', async () => {
+      const password = await hash('123', 12)
+      await accountsCollection.insertOne({
+        name: 'Captação',
+        email: 'captacaodevtesting2@gmail.com',
+        password
+      })
+      await request(app)
+        .post('/api/account/password-recover')
+        .send({ email: 'captacaodevtesting2gmail.com' })
+        .expect(400)
+    })
   })
 
   describe('GET /accounts', () => {
