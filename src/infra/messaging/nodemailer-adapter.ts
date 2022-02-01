@@ -2,12 +2,12 @@ import { createTransport, Transporter } from 'nodemailer'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
 
 import { SendEmailRepository } from '@/data/protocols'
-import { SetupEmail } from '@/data/protocols/messaging/email-setup'
+import { SetupEmailRepository } from '@/data/protocols/messaging/setup-email'
 
-export class NodemailerAdapter implements SetupEmail, SendEmailRepository {
+export class NodemailerAdapter implements SetupEmailRepository, SendEmailRepository {
   private transporter: Transporter<SMTPTransport.SentMessageInfo>
 
-  setup (params: SetupEmail.Params): SetupEmail.Result {
+  setup (params: SetupEmailRepository.Params): SetupEmailRepository.Result {
     const transporter = createTransport({
       service: params.service,
       host: 'smtp.ethereal.email',
@@ -23,7 +23,6 @@ export class NodemailerAdapter implements SetupEmail, SendEmailRepository {
 
   async send ({ from, to, subject, text, html }: SendEmailRepository.Params): Promise<SendEmailRepository.Result> {
     if (!this.transporter) return false
-
     const info = await this.transporter.sendMail({
       from: '"Captacao Dev Testing" <captacaodevtesting@gmail.com>',
       to: to,
