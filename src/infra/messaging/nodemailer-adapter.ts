@@ -1,10 +1,10 @@
 import { createTransport, Transporter } from 'nodemailer'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
 
-import { SendEmail } from '@/data/protocols'
+import { SendEmailRepository } from '@/data/protocols'
 import { SetupEmail } from '@/data/protocols/messaging/email-setup'
 
-export class NodemailerAdapter implements SetupEmail, SendEmail {
+export class NodemailerAdapter implements SetupEmail, SendEmailRepository {
   private transporter: Transporter<SMTPTransport.SentMessageInfo>
 
   setup (params: SetupEmail.Params): SetupEmail.Result {
@@ -21,7 +21,7 @@ export class NodemailerAdapter implements SetupEmail, SendEmail {
     this.transporter = transporter
   }
 
-  async send ({ from, to, subject, text, html }: SendEmail.Params): Promise<SendEmail.Result> {
+  async send ({ from, to, subject, text, html }: SendEmailRepository.Params): Promise<SendEmailRepository.Result> {
     if (!this.transporter) return false
 
     const info = await this.transporter.sendMail({

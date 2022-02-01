@@ -5,7 +5,8 @@ import {
   LoadAccountById,
   DeleteAccount,
   UpdateAccount,
-  LoadIdByEmail
+  LoadIdByEmail,
+  PasswordRecover
 } from '@/domain/usecases'
 import { AccountModel } from '@/domain/models'
 import { mockAccountModel } from '@tests/domain/mocks'
@@ -75,6 +76,15 @@ export const mockDeleteAccount = (): DeleteAccount => {
     }
   }
   return new DeleteAccountStub()
+}
+
+export const mockPasswordRecover = (): PasswordRecover => {
+  class PasswordRecoverStub implements PasswordRecover {
+    async recover (params: PasswordRecover.Params): Promise<PasswordRecover.Result> {
+      return Promise.resolve(true)
+    }
+  }
+  return new PasswordRecoverStub()
 }
 
 export const mockAuthentication = (): Authentication => {

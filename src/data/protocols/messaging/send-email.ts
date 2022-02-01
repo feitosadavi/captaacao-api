@@ -1,8 +1,8 @@
-export interface SendEmail {
-  send (params: SendEmail.Params): Promise<SendEmail.Result>
+export interface SendEmailRepository {
+  send (params: SendEmailRepository.Params): Promise<SendEmailRepository.Result>
 }
 
-export namespace SendEmail {
+export namespace SendEmailRepository {
   export type Params = {
     from: string
     to: string
