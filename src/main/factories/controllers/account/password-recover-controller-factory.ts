@@ -13,7 +13,7 @@ export const makePasswordRecoverController = (): Controller => {
   const nodemailerAdapter = new NodemailerAdapter()
 
   const dbLoadByEmail = new DbLoadIdByEmail(accountMongoRepository)
-  const dbPasswordRecover = new DbPasswordRecover(accountMongoRepository, codeGenerator, nodemailerAdapter)
+  const dbPasswordRecover = new DbPasswordRecover(accountMongoRepository, codeGenerator, nodemailerAdapter, nodemailerAdapter)
 
   const passwordRecoverController = new PasswordRecoverController(makePasswordRecoverValidation(), dbLoadByEmail, dbPasswordRecover)
   const logMongoRepository = new LogMongoRepository()

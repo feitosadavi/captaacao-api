@@ -1,19 +1,21 @@
-import { UpdateAccountRepository, SendEmailRepository } from '@/data/protocols'
-import { DbPasswordRecover } from '@/data/usecases'
-
-import { mockUpdateAccountRepository, mockSendEmailRepository } from '@tests/data/mocks'
-import { PasswordRecover } from '@/domain/usecases'
-import { mockRecoverPassInfo } from '@tests/domain/mocks'
-import { GeneratePassRecoverInfo } from '@/data/protocols/others'
-import { mockGeneratePassRecoverInfoStub } from '@tests/data/mocks/others'
-import { makePasswordRecoverMail } from '@/data/helpers'
 import env from '@/main/config/env'
+
+import { PasswordRecover } from '@/domain/usecases'
+import { UpdateAccountRepository, SendEmailRepository, SetupEmailRepository } from '@/data/protocols'
+import { DbPasswordRecover } from '@/data/usecases'
+import { GeneratePassRecoverInfo } from '@/data/protocols/others'
+import { makePasswordRecoverMail } from '@/data/helpers'
+
+import { mockUpdateAccountRepository, mockSendEmailRepository, mockSetupEmailRepository } from '@tests/data/mocks'
+import { mockGeneratePassRecoverInfoStub } from '@tests/data/mocks/others'
+import { mockRecoverPassInfo } from '@tests/domain/mocks'
 
 type SutTypes = {
   sut: DbPasswordRecover
   updateAccountRepositoryStub: UpdateAccountRepository
   generatePassRecoverInfoStub: GeneratePassRecoverInfo
   sendEmailStub: SendEmailRepository
+  setupEmailStub: SetupEmailRepository
 }
 
 const mockPasswordRecoverParams = (): PasswordRecover.Params => ({
@@ -25,16 +27,19 @@ const makeSut = (): SutTypes => {
   const updateAccountRepositoryStub = mockUpdateAccountRepository()
   const generatePassRecoverInfoStub = mockGeneratePassRecoverInfoStub()
   const sendEmailStub = mockSendEmailRepository()
+  const setupEmailStub = mockSetupEmailRepository()
   const sut = new DbPasswordRecover(
     updateAccountRepositoryStub,
     generatePassRecoverInfoStub,
-    sendEmailStub
+    sendEmailStub,
+    setupEmailStub
   )
   return {
     sut,
     updateAccountRepositoryStub,
     generatePassRecoverInfoStub,
-    sendEmailStub
+    sendEmailStub,
+    setupEmailStub
   }
 }
 

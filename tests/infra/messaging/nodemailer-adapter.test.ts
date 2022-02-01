@@ -1,5 +1,4 @@
-import { SendEmailRepository } from '@/data/protocols/messaging'
-import { SetupEmail } from '@/data/protocols/messaging/email-setup'
+import { SendEmailRepository, SetupEmailRepository } from '@/data/protocols/messaging'
 import { NodemailerAdapter } from '@/infra/messaging'
 import env from '@/main/config/env'
 
@@ -19,7 +18,7 @@ const mockEmailParams = (): SendEmailRepository.Params => ({
   text: 'Aqui está o código para a recuperação da sua senha: 123'
 })
 
-const mockSetupParams = (): SetupEmail.Params => ({
+const mockSetupParams = (): SetupEmailRepository.Params => ({
   service: 'gmail',
   user: env.testingEmail1,
   pass: env.testingEmailPassword1
