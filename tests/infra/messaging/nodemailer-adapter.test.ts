@@ -1,4 +1,4 @@
-import { SendEmail } from '@/data/protocols/messaging'
+import { SendEmailRepository } from '@/data/protocols/messaging'
 import { SetupEmail } from '@/data/protocols/messaging/email-setup'
 import { NodemailerAdapter } from '@/infra/messaging'
 import env from '@/main/config/env'
@@ -12,7 +12,7 @@ const makeSut = (): SutType => {
   return { sut }
 }
 
-const mockEmailParams = (): SendEmail.Params => ({
+const mockEmailParams = (): SendEmailRepository.Params => ({
   from: `"any_name" <${env.testingEmail1}>`,
   to: env.testingEmail2,
   subject: 'Recuperação da Senha - Captação',
