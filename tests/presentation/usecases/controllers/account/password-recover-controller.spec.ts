@@ -48,6 +48,13 @@ describe('PasswordRecover Controller', () => {
     expect(validateSpy).toHaveBeenCalledWith(mockRequest().body.email)
   })
 
+  test('Should return 400 Validation returns an error', async () => {
+    const { sut, validationStub } = makeSut()
+    jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new Error())
+    const httpReponse = await sut.handle(mockRequest())
+    expect(httpReponse).toEqual(badRequest(new Error()))
+  })
+
   test('Should call LoadIdByEmail with correct id', async () => {
     const { sut, loadIdByEmailStub } = makeSut()
     const loadSpy = jest.spyOn(loadIdByEmailStub, 'load')
