@@ -6,7 +6,8 @@ import {
   DeleteAccount,
   UpdateAccount,
   LoadIdByEmail,
-  PasswordRecover
+  PasswordRecover,
+  LoadAccountByPassRecoveryCode
 } from '@/domain/usecases'
 import { AccountModel } from '@/domain/models'
 import { mockAccountModel } from '@tests/domain/mocks'
@@ -58,6 +59,15 @@ export const mockLoadIdByEmail = (): LoadIdByEmail => {
     }
   }
   return new LoadIdByEmailStub()
+}
+
+export const mockLoadAccountByPassRecoveryCode = (): LoadAccountByPassRecoveryCode => {
+  class LoadAccountByPassRecoveryCodeStub implements LoadAccountByPassRecoveryCodeStub {
+    async load (params: LoadAccountByPassRecoveryCode.Params): Promise<LoadAccountByPassRecoveryCode.Result> {
+      return Promise.resolve(true)
+    }
+  }
+  return new LoadAccountByPassRecoveryCodeStub()
 }
 
 export const mockUpdateAccount = (): UpdateAccount => {

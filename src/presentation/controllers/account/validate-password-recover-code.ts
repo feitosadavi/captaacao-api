@@ -1,21 +1,23 @@
-import { LoadAccountById } from '@/domain/usecases'
-import { badRequest } from '@/presentation/helpers'
+import { LoadAccountByPassRecoveryCode } from '@/domain/usecases'
+import { badRequest, serverError } from '@/presentation/helpers'
 import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
 
 type Body = { code: number }
-type Params = { id: string };
-
 export class ValidatePassRecoverCode implements Controller {
   constructor (
     private readonly validation: Validation,
-    private readonly loadAccountById: LoadAccountById
-  ) { }
+    private readonly loadAccountByPassRecoveryCode: LoadAccountByPassRecoveryCode
+  ) {}
 
-  async handle (httpRequest: HttpRequest<Body, any, Params>): Promise<HttpResponse> {
-    const error = this.validation.validate(httpRequest.body)
-    if (error) return badRequest(error)
-    const { id } = httpRequest.params
-    await this.loadAccountById.loadById(id)
-    return null
+  async handle (httpRequest: HttpRequest<Body>): Promise<HttpResponse> {
+    try {
+      const error = this.validation.validate(httpRequest.body)
+      if (error) return badRequest(error)
+      const { code } = httpRequest.body
+      await this.loadAccountByPassRecoveryCode.load({ code })
+      return null
+    } catch (error) {
+      return serverError(error)
+    }
   }
 }
