@@ -20,11 +20,14 @@ export class ValidatePassRecoverCode implements Controller {
 
       const { code } = httpRequest.body
       const account = await this.loadAccountByPassRecoveryCode.load({ code })
-      const codeMatches = this.codeMatches.matches({ first: account?.recoverPassInfo.code, second: code })
-      const isExpired = this.codeExpiration.isExpired({ expiresAt: account?.recoverPassInfo.expiresAt })
-
-      const codeIsValid = account?.recoverPassInfo && codeMatches && isExpired === false
-      return codeIsValid ? serverSuccess({ ok: true }) : badRequest(new InvalidPasswordRecoveryCodeError())
+      if (account?.recoverPassInfo) {
+        const { recoverPassInfo } = account
+        const codeMatches = this.codeMatches.matches({ first: recoverPassInfo.code, second: code })
+        const isExpired = this.codeExpiration.isExpired({ expiresAt: recoverPassInfo.expiresAt })
+        const codeIsValid = codeMatches && isExpired === false
+        return codeIsValid ? serverSuccess({ ok: true }) : badRequest(new InvalidPasswordRecoveryCodeError())
+      }
+      return badRequest(new InvalidPasswordRecoveryCodeError())
     } catch (error) {
       return serverError(error)
     }
