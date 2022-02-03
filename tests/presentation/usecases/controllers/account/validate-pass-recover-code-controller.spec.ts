@@ -1,12 +1,13 @@
 import MockDate from 'mockdate'
 import { LoadAccountByPassRecoveryCode } from '@/domain/usecases'
 import { ValidatePassRecoverCode } from '@/presentation/controllers'
-import { badRequest, serverSuccess } from '@/presentation/helpers'
+import { badRequest, serverError, serverSuccess } from '@/presentation/helpers'
 import { HttpRequest, Validation } from '@/presentation/protocols'
 import { mockLoadAccountByPassRecoveryCode, mockValidation } from '@tests/presentation/mocks'
 import { InvalidPasswordRecoveryCodeError } from '@/presentation/errors'
 import { mockCodeExpiration, mockCodeMatches } from '@tests/presentation/mocks/mock-confirmation-code-validator'
 import { CodeExpiration, CodeMatches } from '@/validation/protocols'
+import { mockAccountModel, throwError } from '@tests/domain/mocks'
 
 type SutTypes = {
   sut: ValidatePassRecoverCode
@@ -70,6 +71,27 @@ describe('UpdateAccount Controller', () => {
     await sut.handle(mockRequest())
     const { code } = mockRequest().body
     expect(loadByPassRecoveryCodeSpy).toHaveBeenCalledWith({ code })
+  })
+
+  test('Should return 400 if loadByPassRecoveryCode returns null', async () => {
+    const { sut, loadByPassRecoveryCode } = makeSut()
+    jest.spyOn(loadByPassRecoveryCode, 'load').mockReturnValueOnce(Promise.resolve(null))
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(badRequest(new InvalidPasswordRecoveryCodeError()))
+  })
+
+  test('Should return 400 if loadByPassRecoveryCode returns an account without recovery code', async () => {
+    const { sut, loadByPassRecoveryCode } = makeSut()
+    jest.spyOn(loadByPassRecoveryCode, 'load').mockReturnValueOnce(Promise.resolve(mockAccountModel()))
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(badRequest(new InvalidPasswordRecoveryCodeError()))
+  })
+
+  test('Should return 500 if loadByPassRecoveryCode throws', async () => {
+    const { sut, loadByPassRecoveryCode } = makeSut()
+    jest.spyOn(loadByPassRecoveryCode, 'load').mockImplementationOnce(throwError)
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(serverError(new Error()))
   })
 
   test('Should return 400 if CodeMatches returns false', async () => {
