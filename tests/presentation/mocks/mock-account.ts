@@ -10,7 +10,7 @@ import {
   LoadAccountByPassRecoveryCode
 } from '@/domain/usecases'
 import { AccountModel } from '@/domain/models'
-import { mockAccountModel } from '@tests/domain/mocks'
+import { mockAccountModel, mockRecoverPassInfo } from '@tests/domain/mocks'
 import { Authentication, AuthenticationParams } from '@/domain/usecases/authentication'
 
 export const mockAddAccountStub = (): AddAccount => {
@@ -64,7 +64,7 @@ export const mockLoadIdByEmail = (): LoadIdByEmail => {
 export const mockLoadAccountByPassRecoveryCode = (): LoadAccountByPassRecoveryCode => {
   class LoadAccountByPassRecoveryCodeStub implements LoadAccountByPassRecoveryCodeStub {
     async load (params: LoadAccountByPassRecoveryCode.Params): Promise<LoadAccountByPassRecoveryCode.Result> {
-      return Promise.resolve(true)
+      return Promise.resolve({ ...mockAccountModel(), recoverPassInfo: { ...mockRecoverPassInfo() } })
     }
   }
   return new LoadAccountByPassRecoveryCodeStub()

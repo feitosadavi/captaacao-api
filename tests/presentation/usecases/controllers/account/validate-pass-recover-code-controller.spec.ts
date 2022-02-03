@@ -1,23 +1,32 @@
+import MockDate from 'mockdate'
 import { LoadAccountByPassRecoveryCode } from '@/domain/usecases'
 import { ValidatePassRecoverCode } from '@/presentation/controllers'
-import { badRequest, serverError } from '@/presentation/helpers'
+import { badRequest, serverSuccess } from '@/presentation/helpers'
 import { HttpRequest, Validation } from '@/presentation/protocols'
-import { throwError } from '@tests/domain/mocks'
 import { mockLoadAccountByPassRecoveryCode, mockValidation } from '@tests/presentation/mocks'
+import { InvalidPasswordRecoveryCodeError } from '@/presentation/errors'
+import { mockCodeExpiration, mockCodeMatches } from '@tests/presentation/mocks/mock-confirmation-code-validator'
+import { CodeExpiration, CodeMatches } from '@/validation/protocols'
 
 type SutTypes = {
   sut: ValidatePassRecoverCode
   validationStub: Validation
   loadByPassRecoveryCode: LoadAccountByPassRecoveryCode
+  codeMatchesStub: CodeMatches
+  codeExpirationStub: CodeExpiration
 }
 const makeSut = (): SutTypes => {
-  const loadByPassRecoveryCode = mockLoadAccountByPassRecoveryCode()
   const validationStub = mockValidation()
-  const sut = new ValidatePassRecoverCode(validationStub, loadByPassRecoveryCode)
+  const loadByPassRecoveryCode = mockLoadAccountByPassRecoveryCode()
+  const codeExpirationStub = mockCodeExpiration()
+  const codeMatchesStub = mockCodeMatches()
+  const sut = new ValidatePassRecoverCode(validationStub, loadByPassRecoveryCode, codeMatchesStub, codeExpirationStub)
   return {
     sut,
     validationStub,
-    loadByPassRecoveryCode
+    loadByPassRecoveryCode,
+    codeMatchesStub,
+    codeExpirationStub
   }
 }
 
@@ -32,6 +41,15 @@ const mockRequest = (): HttpRequest<Body> => ({
 })
 
 describe('UpdateAccount Controller', () => {
+  // preciso do mock date para que os codes não expirem
+  beforeAll(() => {
+    MockDate.set(new Date('2011-04-11T11:51:00'))
+  })
+
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   test('Should call Validation with correct values', async () => {
     const { sut, validationStub } = makeSut()
     const validateSpy = jest.spyOn(validationStub, 'validate')
@@ -54,10 +72,23 @@ describe('UpdateAccount Controller', () => {
     expect(loadByPassRecoveryCodeSpy).toHaveBeenCalledWith({ code })
   })
 
-  test('Should return 400 loadByPassRecoveryCode if throws', async () => {
-    const { sut, loadByPassRecoveryCode } = makeSut()
-    jest.spyOn(loadByPassRecoveryCode, 'load').mockImplementationOnce(throwError)
+  test('Should return 400 if CodeMatches returns false', async () => {
+    const { sut, codeMatchesStub } = makeSut()
+    jest.spyOn(codeMatchesStub, 'matches').mockReturnValueOnce(false)
     const httpResponse = await sut.handle(mockRequest())
-    expect(httpResponse).toEqual(serverError(new Error()))
+    expect(httpResponse).toEqual(badRequest(new InvalidPasswordRecoveryCodeError()))
+  })
+
+  test('Should return 400 if CodeExpiration returns false', async () => {
+    const { sut, codeExpirationStub } = makeSut()
+    jest.spyOn(codeExpirationStub, 'isExpired').mockReturnValueOnce(true)
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(badRequest(new InvalidPasswordRecoveryCodeError()))
+  })
+
+  test('Should return 200 on success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(serverSuccess({ ok: true }))
   })
 })

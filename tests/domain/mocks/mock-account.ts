@@ -92,7 +92,7 @@ export const mockAccountModel = (): AccountModel => ({
 })
 
 export const mockRecoverPassInfo = (): AccountModel.RecoverPassInfo => ({
-  code: 156987,
+  code: 999999,
   createdAt: new Date('2011-04-11T11:50:00'),
   expiresAt: new Date('2011-04-11T11:55:00')
 })
