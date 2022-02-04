@@ -16,4 +16,10 @@ describe('CodeExpiration Validation', () => {
     const isExpired = sut.isExpired({ expiresAt: new Date('2011-04-11T11:45:00') })
     expect(isExpired).toBe(true)
   })
+
+  test('should return false if expiration date is greather or equal current date', () => {
+    const sut = makeSut()
+    const isExpired = sut.isExpired({ expiresAt: new Date('2011-04-11T11:54:59') })
+    expect(isExpired).toBe(false)
+  })
 })
