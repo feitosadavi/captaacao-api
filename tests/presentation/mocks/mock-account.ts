@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   AddAccount,
   LoadAccountByToken,
@@ -7,7 +8,7 @@ import {
   UpdateAccount,
   LoadIdByEmail,
   PasswordRecover,
-  LoadAccountByPassRecoveryCode
+  LoadAccountByCode
 } from '@/domain/usecases'
 import { AccountModel } from '@/domain/models'
 import { mockAccountModel, mockRecoverPassInfo } from '@tests/domain/mocks'
@@ -61,13 +62,13 @@ export const mockLoadIdByEmail = (): LoadIdByEmail => {
   return new LoadIdByEmailStub()
 }
 
-export const mockLoadAccountByPassRecoveryCode = (): LoadAccountByPassRecoveryCode => {
-  class LoadAccountByPassRecoveryCodeStub implements LoadAccountByPassRecoveryCodeStub {
-    async load (params: LoadAccountByPassRecoveryCode.Params): Promise<LoadAccountByPassRecoveryCode.Result> {
+export const mockLoadAccountByCode = (): LoadAccountByCode => {
+  class LoadAccountByCode implements LoadAccountByCode {
+    async load (params: LoadAccountByCode.Params): Promise<LoadAccountByCode.Result> {
       return Promise.resolve({ ...mockAccountModel(), recoverPassInfo: { ...mockRecoverPassInfo() } })
     }
   }
-  return new LoadAccountByPassRecoveryCodeStub()
+  return new LoadAccountByCode()
 }
 
 export const mockUpdateAccount = (): UpdateAccount => {

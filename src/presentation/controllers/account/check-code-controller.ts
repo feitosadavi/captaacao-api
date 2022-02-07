@@ -1,14 +1,14 @@
-import { LoadAccountByPassRecoveryCode } from '@/domain/usecases'
-import { InvalidPasswordRecoveryCodeError } from '@/presentation/errors'
+import { LoadAccountByCode } from '@/domain/usecases'
+import { InvalidCodeError } from '@/presentation/errors'
 import { badRequest, serverError, serverSuccess } from '@/presentation/helpers'
 import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
 import { CodeMatches, CodeExpiration } from '@/validation/protocols'
 
 type Body = { code: number }
-export class ValidatePassRecoverCode implements Controller {
+export class CheckCodeController implements Controller {
   constructor (
     private readonly validation: Validation,
-    private readonly loadAccountByPassRecoveryCode: LoadAccountByPassRecoveryCode,
+    private readonly loadAccountByCode: LoadAccountByCode,
     private readonly codeMatches: CodeMatches,
     private readonly codeExpiration: CodeExpiration
   ) {}
@@ -19,15 +19,15 @@ export class ValidatePassRecoverCode implements Controller {
       if (error) return badRequest(error)
 
       const { code } = httpRequest.body
-      const account = await this.loadAccountByPassRecoveryCode.load({ code })
+      const account = await this.loadAccountByCode.load({ code })
       if (account?.recoverPassInfo) {
         const { recoverPassInfo } = account
         const codeMatches = this.codeMatches.matches({ first: recoverPassInfo.code, second: code })
         const isExpired = this.codeExpiration.isExpired({ expiresAt: recoverPassInfo.expiresAt })
         const codeIsValid = codeMatches && isExpired === false
-        return codeIsValid ? serverSuccess({ ok: true }) : badRequest(new InvalidPasswordRecoveryCodeError())
+        return codeIsValid ? serverSuccess({ ok: true }) : badRequest(new InvalidCodeError())
       }
-      return badRequest(new InvalidPasswordRecoveryCodeError())
+      return badRequest(new InvalidCodeError())
     } catch (error) {
       return serverError(error)
     }
