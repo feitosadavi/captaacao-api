@@ -14,15 +14,15 @@ export class DbPasswordRecover implements PasswordRecover {
   ) { }
 
   async recover ({ id, email }: PasswordRecover.Params): Promise<PasswordRecover.Result> {
-    const recoverPassInfo = this.generatePassRecoverInfo.generate()
-    const isUpdated = await this.updateAccountRepository.updateAccount({ id, fields: { recoverPassInfo } })
+    const code = this.generatePassRecoverInfo.generate()
+    const isUpdated = await this.updateAccountRepository.updateAccount({ id, fields: { code } })
     if (isUpdated) {
       await this.setupEmail.setup({
         service: 'gmail',
         user: env.recEmail,
         pass: env.recEmailPassword
       })
-      const emailIsSent = await this.sendEmail.send(makePasswordRecoverMail(env.recEmail, email, recoverPassInfo.code))
+      const emailIsSent = await this.sendEmail.send(makePasswordRecoverMail(env.recEmail, email, code.number))
       console.log(emailIsSent)
       return emailIsSent
     } else {

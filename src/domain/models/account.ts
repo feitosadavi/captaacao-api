@@ -14,7 +14,7 @@ export type AccountModel = {
   notifications?: AccountModel.Notification[]
   rating?: AccountModel.Rating[]
 
-  recoverPassInfo?: AccountModel.RecoverPassInfo
+  code?: AccountModel.Code
   canUseCookies: boolean
   status: boolean
   timeout: number
@@ -45,8 +45,8 @@ export namespace AccountModel {
     rater: AccountModel
   }
 
-  export type RecoverPassInfo = {
-    code: number
+  export type Code = {
+    number: number
     createdAt: Date
     expiresAt: Date
   }

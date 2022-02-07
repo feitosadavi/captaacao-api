@@ -18,12 +18,12 @@ export class CheckCodeController implements Controller {
       const error = this.validation.validate(httpRequest.body)
       if (error) return badRequest(error)
 
-      const { code } = httpRequest.body
-      const account = await this.loadAccountByCode.load({ code })
-      if (account?.recoverPassInfo) {
-        const { recoverPassInfo } = account
-        const codeMatches = this.codeMatches.matches({ first: recoverPassInfo.code, second: code })
-        const isExpired = this.codeExpiration.isExpired({ expiresAt: recoverPassInfo.expiresAt })
+      const { code: requestCode } = httpRequest.body
+      const account = await this.loadAccountByCode.load({ code: requestCode })
+      if (account?.code) {
+        const { code } = account
+        const codeMatches = this.codeMatches.matches({ first: code.number, second: requestCode })
+        const isExpired = this.codeExpiration.isExpired({ expiresAt: code.expiresAt })
         const codeIsValid = codeMatches && isExpired === false
         return codeIsValid ? serverSuccess({ ok: true }) : badRequest(new InvalidCodeError())
       }

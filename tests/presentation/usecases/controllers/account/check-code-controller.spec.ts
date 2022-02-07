@@ -12,20 +12,20 @@ import { mockAccountModel, throwError } from '@tests/domain/mocks'
 type SutTypes = {
   sut: CheckCodeController
   validationStub: Validation
-  loadByPassRecoveryCode: LoadAccountByCode
+  loadByCode: LoadAccountByCode
   codeMatchesStub: CodeMatches
   codeExpirationStub: CodeExpiration
 }
 const makeSut = (): SutTypes => {
   const validationStub = mockValidation()
-  const loadByPassRecoveryCode = mockLoadAccountByCode()
+  const loadByCode = mockLoadAccountByCode()
   const codeExpirationStub = mockCodeExpiration()
   const codeMatchesStub = mockCodeMatches()
-  const sut = new CheckCodeController(validationStub, loadByPassRecoveryCode, codeMatchesStub, codeExpirationStub)
+  const sut = new CheckCodeController(validationStub, loadByCode, codeMatchesStub, codeExpirationStub)
   return {
     sut,
     validationStub,
-    loadByPassRecoveryCode,
+    loadByCode,
     codeMatchesStub,
     codeExpirationStub
   }
@@ -65,31 +65,31 @@ describe('UpdateAccount Controller', () => {
     expect(httpResponse).toEqual(badRequest(new Error()))
   })
 
-  test('Should call loadByPassRecoveryCode with with correct values', async () => {
-    const { sut, loadByPassRecoveryCode } = makeSut()
-    const loadByPassRecoveryCodeSpy = jest.spyOn(loadByPassRecoveryCode, 'load')
+  test('Should call loadByCode with with correct values', async () => {
+    const { sut, loadByCode } = makeSut()
+    const loadByPasCodeSpy = jest.spyOn(loadByCode, 'load')
     await sut.handle(mockRequest())
     const { code } = mockRequest().body
-    expect(loadByPassRecoveryCodeSpy).toHaveBeenCalledWith({ code })
+    expect(loadByPasCodeSpy).toHaveBeenCalledWith({ code })
   })
 
-  test('Should return 400 if loadByPassRecoveryCode returns null', async () => {
-    const { sut, loadByPassRecoveryCode } = makeSut()
-    jest.spyOn(loadByPassRecoveryCode, 'load').mockReturnValueOnce(Promise.resolve(null))
+  test('Should return 400 if loadByCode returns null', async () => {
+    const { sut, loadByCode } = makeSut()
+    jest.spyOn(loadByCode, 'load').mockReturnValueOnce(Promise.resolve(null))
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(badRequest(new InvalidCodeError()))
   })
 
-  test('Should return 400 if loadByPassRecoveryCode returns an account without recovery code', async () => {
-    const { sut, loadByPassRecoveryCode } = makeSut()
-    jest.spyOn(loadByPassRecoveryCode, 'load').mockReturnValueOnce(Promise.resolve(mockAccountModel()))
+  test('Should return 400 if loadByCode returns an account without recovery code', async () => {
+    const { sut, loadByCode } = makeSut()
+    jest.spyOn(loadByCode, 'load').mockReturnValueOnce(Promise.resolve(mockAccountModel()))
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(badRequest(new InvalidCodeError()))
   })
 
-  test('Should return 500 if loadByPassRecoveryCode throws', async () => {
-    const { sut, loadByPassRecoveryCode } = makeSut()
-    jest.spyOn(loadByPassRecoveryCode, 'load').mockImplementationOnce(throwError)
+  test('Should return 500 if loadByCode throws', async () => {
+    const { sut, loadByCode } = makeSut()
+    jest.spyOn(loadByCode, 'load').mockImplementationOnce(throwError)
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
   })

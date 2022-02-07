@@ -8,7 +8,7 @@ import { makePasswordRecoverMail } from '@/data/helpers'
 
 import { mockUpdateAccountRepository, mockSendEmailRepository, mockSetupEmailRepository } from '@tests/data/mocks'
 import { mockGeneratePassRecoverInfoStub } from '@tests/data/mocks/others'
-import { mockRecoverPassInfo } from '@tests/domain/mocks'
+import { mockAccountConfirmationCode } from '@tests/domain/mocks'
 
 type SutTypes = {
   sut: DbPasswordRecover
@@ -57,7 +57,7 @@ describe('DbPasswordRecover Usecase', () => {
     await sut.recover(mockPasswordRecoverParams())
     expect(updateSpy).toHaveBeenCalledWith({
       id: 'any_id',
-      fields: { recoverPassInfo: mockRecoverPassInfo() }
+      fields: { code: mockAccountConfirmationCode() }
     })
   })
 
@@ -80,7 +80,11 @@ describe('DbPasswordRecover Usecase', () => {
     const { sut, sendEmailStub } = makeSut()
     const sendSpy = jest.spyOn(sendEmailStub, 'send')
     await sut.recover(mockPasswordRecoverParams())
-    expect(sendSpy).toHaveBeenCalledWith(makePasswordRecoverMail(env.recEmail, mockPasswordRecoverParams().email, mockRecoverPassInfo().code))
+    expect(sendSpy).toHaveBeenCalledWith(makePasswordRecoverMail(
+      env.recEmail,
+      mockPasswordRecoverParams().email,
+      mockAccountConfirmationCode().number)
+    )
   })
 
   test('Should return false if SendEmailRepository returns false', async () => {
