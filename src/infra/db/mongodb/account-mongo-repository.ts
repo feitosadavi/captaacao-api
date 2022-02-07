@@ -1,6 +1,7 @@
 import {
   AddAccountRepository,
   DeleteAccountRepository,
+  LoadAccountByCodeRepository,
   LoadAccountByEmailRepository,
   LoadAccountByIdRepository,
   LoadAccountByTokenRepository,
@@ -12,8 +13,15 @@ import { AccountModel } from '@/domain/models'
 import { ObjectID } from 'mongodb'
 import { MongoHelper } from './mongo-helper'
 
-export class AccountMongoRepository implements AddAccountRepository, LoadAccountsRepository, LoadAccountByEmailRepository,
-  LoadAccountByTokenRepository, UpdateAccessTokenRepository, UpdateAccountRepository, LoadAccountByIdRepository, DeleteAccountRepository {
+export class AccountMongoRepository implements AddAccountRepository,
+  LoadAccountsRepository,
+  LoadAccountByEmailRepository,
+  LoadAccountByCodeRepository,
+  LoadAccountByTokenRepository,
+  UpdateAccessTokenRepository,
+  UpdateAccountRepository,
+  LoadAccountByIdRepository,
+  DeleteAccountRepository {
   async add (accountData: AddAccountRepository.Params): Promise<boolean> {
     const accountsCollection = await MongoHelper.getCollection('accounts')
     const result = await accountsCollection.insertOne(accountData)
@@ -35,6 +43,12 @@ export class AccountMongoRepository implements AddAccountRepository, LoadAccount
   async loadByEmail (email: string): Promise<AccountModel> {
     const accountsCollection = await MongoHelper.getCollection('accounts')
     const account = await accountsCollection.findOne({ email })
+    return account && MongoHelper.map(account)
+  }
+
+  async loadByCode ({ code }: LoadAccountByCodeRepository.Params): Promise<LoadAccountByCodeRepository.Result> {
+    const accountsCollection = await MongoHelper.getCollection('accounts')
+    const account = await accountsCollection.findOne({ 'code.number': code })
     return account && MongoHelper.map(account)
   }
 
