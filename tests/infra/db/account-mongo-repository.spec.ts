@@ -1,6 +1,6 @@
 import MockDate from 'mockdate'
 
-import { mockAccountParams } from '@tests/domain/mocks'
+import { mockAccountParams, mockAccountConfirmationCode } from '@tests/domain/mocks'
 import { Collection } from 'mongodb'
 import { MongoHelper, AccountMongoRepository } from '@/infra/db/mongodb'
 
@@ -99,6 +99,28 @@ describe('Account Mongo Repository', () => {
     })
 
     test('Should return null if loadByEmail fails', async () => {
+      // não criei uma fake account, induzindo o método a falhar
+      const sut = makeSut()
+      const account = await sut.loadByEmail('any_email@mail.com')
+      expect(account).toBeFalsy()
+    })
+  })
+
+  describe('loadByCode()', () => {
+    test('Should return an account on loadByCode success', async () => {
+      const sut = makeSut()
+      const code = mockAccountConfirmationCode()
+      await accountCollection.insertOne({
+        ...mockAccountParams(),
+        code
+      })
+      const account = await sut.loadByCode({ code: code.number })
+      expect(account).toBeTruthy()
+      expect(account.id).toBeTruthy()
+      expect(account.name).toBe('any_name')
+    })
+
+    test('Should return null if loadByCode fails', async () => {
       // não criei uma fake account, induzindo o método a falhar
       const sut = makeSut()
       const account = await sut.loadByEmail('any_email@mail.com')
