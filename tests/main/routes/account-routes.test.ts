@@ -31,7 +31,7 @@ const updateAccountToken = async (id: string, accessToken: string): Promise<void
   })
 }
 
-describe('Login Routes', () => {
+describe('Account Routes', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL)
   })
@@ -127,6 +127,25 @@ describe('Login Routes', () => {
         .post('/api/account/password-recover')
         .send({ email: 'captacaodevtesting2gmail.com' })
         .expect(400)
+    })
+  })
+  describe('POST /check-code', () => {
+    test('Should return 200 on success', async () => {
+      const password = await hash('123', 12)
+      const createdAt = new Date()
+      await accountsCollection.insertOne({
+        email: 'captacaodevtesting2@gmail.com',
+        password,
+        code: {
+          number: 123456,
+          createdAt,
+          expiresAt: createdAt.setMinutes(createdAt.getMinutes() + 5)
+        }
+      })
+      await request(app)
+        .post('/api/account/check-code')
+        .send({ code: 123456 })
+        .expect(200)
     })
   })
 
