@@ -6,7 +6,7 @@ export class CodeGenerator implements GeneratePassRecoverInfo {
   public createdAt: Date
   public expiresAt: Date
 
-  generate (): AccountModel.RecoverPassInfo {
+  generate (): AccountModel.Code {
     const code = Math.floor(100000 + Math.random() * 900000)
     const createdAt = new Date()
     const expiresAt = new Date(createdAt)
@@ -16,8 +16,8 @@ export class CodeGenerator implements GeneratePassRecoverInfo {
     this.createdAt = createdAt
     this.expiresAt = expiresAt
 
-    const recoverPassInfo = {
-      code: this.code,
+    const recoverPassInfo: AccountModel.Code = {
+      number: this.code,
       createdAt: this.createdAt,
       expiresAt: this.expiresAt
     }
