@@ -1,6 +1,6 @@
 export class InvalidCodeError extends Error {
   constructor () {
-    super('Inserted code doesnt matches')
+    super('Inserted code is invalid')
     this.name = 'InvalidCode'
   }
 }
