@@ -9,7 +9,8 @@ import {
   makeSignUpController,
   makeAuthMiddleware,
   makeUpdateAccountControllerFactory,
-  makePasswordRecoverController
+  makePasswordRecoverController,
+  makeCheckCodeController
 } from '@/main/factories'
 import { adminAuth, auth } from '@/main/middlewares'
 
@@ -17,6 +18,7 @@ export default (router: Router): void => {
   router.post('/signup', adaptRoute(makeSignUpController()))
   router.post('/login', adaptRoute(makeLoginController()))
   router.post('/account/password-recover', adaptRoute(makePasswordRecoverController()))
+  router.post('/account/check-code', adaptRoute(makeCheckCodeController()))
 
   router.get('/accounts', adminAuth, adaptRoute(makeLoadAccountsController()))
   router.get('/accounts/:id', adminAuth, adaptRoute(makeLoadAccountsController()))
