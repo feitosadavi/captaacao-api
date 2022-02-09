@@ -14,13 +14,13 @@ const makeSut = (): SutTypes => {
 describe('SixDigitCodeValidation', () => {
   test('Should SixDigitCodeValidation returns SixDigitCodeValidation if validation fails', () => {
     const { sut } = makeSut()
-    const error = sut.validate(1)
+    const error = sut.validate({ code: 1 })
     expect(error).toEqual(new SixDigitCodeError())
   })
 
   test('Should SixDigitCodeValidation returns nothing if validation succeed', () => {
     const { sut } = makeSut()
-    const error = sut.validate(123456)
+    const error = sut.validate({ code: 123456 })
     expect(error).toBeFalsy()
   })
 })
