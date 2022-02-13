@@ -8,12 +8,18 @@ WORKDIR /usr/src/captaacao-api
 COPY package*.json ./
 RUN npm install --only=prod
 
-# Bundle app source
-COPY . .
+# Copy typescript configs
+COPY ./tsconfig*.json /usr/src/captaacao-api/
+
+# Copy project
+COPY ./src ./src
 
 # Typescript compile
-RUN npm install -g tsc
+RUN npm install typescript
 RUN npm run build
+
+RUN rm -rf src
+RUN npm uninstall typescript
 
 EXPOSE 5050
 
