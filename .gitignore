@@ -4,3 +4,4 @@ coverage
 .vscode
 playground.js
 globalConfig.json
+data
