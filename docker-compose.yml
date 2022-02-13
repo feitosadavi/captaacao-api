@@ -1,7 +1,7 @@
 version: "3"
 services:
   mongo:
-    container_name: mongo-container_name
+    container_name: mongo-container
     image: mongo:3
     restart: always
     volumes:
@@ -10,15 +10,15 @@ services:
       - "27017:27017"
   api:
     container_name: api-container
-    build: .
-    image: car-pet-api
+    image: node:12
+    working_dir: /usr/src/captaacao-api
     restart: always
-    command: npm debug
+    command: bash -c "npm install -g tsc && npm install --only=prod && npm run build && npm run start"
     environment:
-      - MONGO_URL=mongodb://mongo:27017/car-pet-api
+      - MONGO_URL=mongodb://mongo:27017/captaacao-api
     volumes:
-      - ./dist:/usr/src/car-pet-api/dist
-      - ./package.json:/usr/src/car-pet-api/package.json
+      - .:/usr/src/captaacao-api/
+      - ./node_modules:/usr/src/captaacao-api/node_modules
     ports:
       - "5050:5050"
       - "9222:9222"
