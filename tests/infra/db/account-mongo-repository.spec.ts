@@ -3,6 +3,7 @@ import MockDate from 'mockdate'
 import { mockAccountParams, mockAccountConfirmationCode } from '@tests/domain/mocks'
 import { Collection } from 'mongodb'
 import { MongoHelper, AccountMongoRepository } from '@/infra/db/mongodb'
+import { AccountModel } from '@/domain/models'
 
 describe('Account Mongo Repository', () => {
   let accountCollection: Collection
@@ -221,6 +222,22 @@ describe('Account Mongo Repository', () => {
       expect(account).toBeTruthy()
       expect(account.name).toBe('other_name')
       expect(account.cep).toBe('other_cep')
+    })
+  })
+
+  describe('updatePassword()', () => {
+    test('Should update accounts password on updatePassword success', async () => {
+      const sut = makeSut()
+
+      const res = await accountCollection.insertOne({
+        ...mockAccountParams()
+      })
+      const fakeAccount = res.ops[0]
+      const result = await sut.updatePassword({ id: fakeAccount._id, password: 'other_password' })
+      expect(result).toBe(true)
+      const account: AccountModel = await accountCollection.findOne({ _id: fakeAccount._id })
+      expect(account).toBeTruthy()
+      expect(account.password !== fakeAccount._id).toBe(true)
     })
   })
 
