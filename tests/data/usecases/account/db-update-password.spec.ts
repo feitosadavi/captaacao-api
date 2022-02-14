@@ -1,15 +1,13 @@
-import { LoadAccountByIdRepository, UpdatePasswordRepository, Hasher } from '@/data/protocols'
+import { UpdatePasswordRepository, Hasher } from '@/data/protocols'
 import { DbUpdatePassword } from '@/data/usecases'
 
-import { mockUpdatePasswordRepository, mockLoadAccountByIdRepository, mockHasher } from '@tests/data/mocks'
+import { mockUpdatePasswordRepository, mockHasher } from '@tests/data/mocks'
 import { UpdatePassword } from '@/domain/usecases'
-import { mockAccountModel } from '@tests/domain/mocks'
 
 type SutTypes = {
   sut: DbUpdatePassword
   hasherStub: Hasher
   updatePasswordRepositoryStub: UpdatePasswordRepository
-  loadAccountByIdRepositoryStub: LoadAccountByIdRepository
 }
 
 const mockUpdateParams = (): UpdatePassword.Params => ({
@@ -20,13 +18,11 @@ const mockUpdateParams = (): UpdatePassword.Params => ({
 const makeSut = (): SutTypes => {
   const hasherStub = mockHasher()
   const updatePasswordRepositoryStub = mockUpdatePasswordRepository()
-  const loadAccountByIdRepositoryStub = mockLoadAccountByIdRepository()
-  const sut = new DbUpdatePassword(hasherStub, updatePasswordRepositoryStub, loadAccountByIdRepositoryStub)
+  const sut = new DbUpdatePassword(hasherStub, updatePasswordRepositoryStub)
   return {
     sut,
     hasherStub,
-    updatePasswordRepositoryStub,
-    loadAccountByIdRepositoryStub
+    updatePasswordRepositoryStub
   }
 }
 
@@ -36,27 +32,6 @@ describe('DbUpdatePassword Usecase', () => {
     const hashSpy = jest.spyOn(hasherStub, 'hash')
     await sut.update(mockUpdateParams())
     expect(hashSpy).toHaveBeenCalledWith('any_password')
-  })
-
-  test('Should call LoadAccountByIdRepository with correct id', async () => {
-    const { sut, loadAccountByIdRepositoryStub } = makeSut()
-    const loadSpy = jest.spyOn(loadAccountByIdRepositoryStub, 'loadById')
-    await sut.update(mockUpdateParams())
-    expect(loadSpy).toHaveBeenCalledWith('any_id')
-  })
-
-  test('Should return false if LoadAccountByIdRepository returns null', async () => {
-    const { sut, loadAccountByIdRepositoryStub } = makeSut()
-    jest.spyOn(loadAccountByIdRepositoryStub, 'loadById').mockResolvedValueOnce(Promise.resolve(null))
-    const account = await sut.update(mockUpdateParams())
-    expect(account).toBe(false)
-  })
-
-  test('Should return true if LoadAccountByIdRepository returns an account', async () => {
-    const { sut, loadAccountByIdRepositoryStub } = makeSut()
-    jest.spyOn(loadAccountByIdRepositoryStub, 'loadById').mockResolvedValueOnce(Promise.resolve(mockAccountModel()))
-    const reuslt = await sut.update(mockUpdateParams())
-    expect(reuslt).toBe(true)
   })
 
   test('Should call UpdatePasswordRepository with correct values', async () => {
