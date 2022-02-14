@@ -7,7 +7,7 @@ import { LoadAccountsRepository } from '@/data/protocols/db/account/load-account
 import { UpdateAccessTokenRepository } from '@/data/protocols/db/account/update-access-token-repository'
 import { AccountModel } from '@/domain/models/account'
 import { mockAccountModel, mockAccountsModel } from '@tests/domain/mocks'
-import { AddAccountRepository, UpdateAccountRepository, LoadAccountByCodeRepository } from '@/data/protocols'
+import { AddAccountRepository, UpdateAccountRepository, UpdatePasswordRepository, LoadAccountByCodeRepository } from '@/data/protocols'
 
 export const mockAddAccountRepositoryStub = (): AddAccountRepository => {
   class AddAccountStubRepository implements AddAccountRepository {
@@ -64,6 +64,15 @@ export const mockUpdateAccountRepository = (): UpdateAccountRepository => {
     }
   }
   return new UpdateAccountRepositoryStub()
+}
+
+export const mockUpdatePasswordRepository = (): UpdatePasswordRepository => {
+  class UpdatePasswordRepositoryStub implements UpdatePasswordRepository {
+    async updatePassword (params: UpdatePasswordRepository.Params): Promise<UpdatePasswordRepository.Result> {
+      return Promise.resolve(true)
+    }
+  }
+  return new UpdatePasswordRepositoryStub()
 }
 
 export const mockLoadAccountByIdRepository = (): LoadAccountByIdRepository => {
