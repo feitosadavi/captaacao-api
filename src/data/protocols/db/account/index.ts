@@ -9,3 +9,4 @@ export * from './load-accounts-repository'
 
 export * from './update-access-token-repository'
 export * from './update-account-repository'
+export * from './update-password-repository'
