@@ -7,7 +7,8 @@ import {
   LoadAccountByTokenRepository,
   LoadAccountsRepository,
   UpdateAccessTokenRepository,
-  UpdateAccountRepository
+  UpdateAccountRepository,
+  UpdatePasswordRepository
 } from '@/data/protocols'
 import { AccountModel } from '@/domain/models'
 import { ObjectID } from 'mongodb'
@@ -20,6 +21,7 @@ export class AccountMongoRepository implements AddAccountRepository,
   LoadAccountByTokenRepository,
   UpdateAccessTokenRepository,
   UpdateAccountRepository,
+  UpdatePasswordRepository,
   LoadAccountByIdRepository,
   DeleteAccountRepository {
   async add (accountData: AddAccountRepository.Params): Promise<boolean> {
@@ -84,6 +86,16 @@ export class AccountMongoRepository implements AddAccountRepository,
     await accountsCollection.updateOne({ _id: params.id },
       {
         $set: { ...params.fields }
+      }
+    )
+    return true
+  }
+
+  async updatePassword ({ id, password }: UpdatePasswordRepository.Params): Promise<UpdatePasswordRepository.Result> {
+    const accountsCollection = await MongoHelper.getCollection('accounts')
+    await accountsCollection.updateOne({ _id: id },
+      {
+        $set: { password }
       }
     )
     return true
