@@ -14,14 +14,14 @@ type SutTypes = {
 
 const mockUpdateParams = (): UpdatePassword.Params => ({
   id: 'any_id',
-  password: 'hashed_password'
+  password: 'any_password'
 })
 
 const makeSut = (): SutTypes => {
   const hasherStub = mockHasher()
   const updatePasswordRepositoryStub = mockUpdatePasswordRepository()
   const loadAccountByIdRepositoryStub = mockLoadAccountByIdRepository()
-  const sut = new DbUpdatePassword(updatePasswordRepositoryStub, loadAccountByIdRepositoryStub)
+  const sut = new DbUpdatePassword(hasherStub, updatePasswordRepositoryStub, loadAccountByIdRepositoryStub)
   return {
     sut,
     hasherStub,
@@ -31,6 +31,13 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbUpdatePassword Usecase', () => {
+  test('Should call Hasher with correct params', async () => {
+    const { sut, hasherStub } = makeSut()
+    const hashSpy = jest.spyOn(hasherStub, 'hash')
+    await sut.update(mockUpdateParams())
+    expect(hashSpy).toHaveBeenCalledWith('any_password')
+  })
+
   test('Should call LoadAccountByIdRepository with correct id', async () => {
     const { sut, loadAccountByIdRepositoryStub } = makeSut()
     const loadSpy = jest.spyOn(loadAccountByIdRepositoryStub, 'loadById')
@@ -55,7 +62,10 @@ describe('DbUpdatePassword Usecase', () => {
   test('Should call UpdatePasswordRepository with correct values', async () => {
     const { sut, updatePasswordRepositoryStub } = makeSut()
     const updateSpy = jest.spyOn(updatePasswordRepositoryStub, 'updatePassword')
-    const params = mockUpdateParams()
+    const params: UpdatePasswordRepository.Params = {
+      id: 'any_id',
+      password: 'hashed_password'
+    }
     await sut.update(params)
     expect(updateSpy).toHaveBeenCalledWith(params)
   })
