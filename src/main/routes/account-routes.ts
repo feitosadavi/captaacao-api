@@ -13,6 +13,7 @@ import {
   makeCheckCodeController
 } from '@/main/factories'
 import { adminAuth, auth } from '@/main/middlewares'
+import { makeUpdatePasswordControllerFactory } from '../factories/controllers/account/update-password-controller-factory'
 
 export default (router: Router): void => {
   router.post('/signup', adaptRoute(makeSignUpController()))
@@ -26,4 +27,5 @@ export default (router: Router): void => {
   router.delete('/accounts/delete/:id', adaptMiddleware(makeAuthMiddleware(null, true)), adaptRoute(makeDeleteAccountsController()))
 
   router.put('/account/update', auth, adaptRoute(makeUpdateAccountControllerFactory()))
+  router.put('/account/update-password/:id', adaptRoute(makeUpdatePasswordControllerFactory()))
 }
