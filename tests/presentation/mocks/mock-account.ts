@@ -8,7 +8,8 @@ import {
   UpdateAccount,
   LoadIdByEmail,
   PasswordRecover,
-  LoadAccountByCode
+  LoadAccountByCode,
+  UpdatePassword
 } from '@/domain/usecases'
 import { AccountModel } from '@/domain/models'
 import { mockAccountModel, mockAccountConfirmationCode } from '@tests/domain/mocks'
@@ -78,6 +79,15 @@ export const mockUpdateAccount = (): UpdateAccount => {
     }
   }
   return new UpdateAccountStub()
+}
+
+export const mockUpdatePassword = (): UpdatePassword => {
+  class UpdatePasswordStub implements UpdatePassword {
+    async update (params: UpdatePassword.Params): Promise<UpdatePassword.Result> {
+      return Promise.resolve(true)
+    }
+  }
+  return new UpdatePasswordStub()
 }
 
 export const mockDeleteAccount = (): DeleteAccount => {
