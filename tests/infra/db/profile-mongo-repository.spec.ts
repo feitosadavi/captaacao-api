@@ -11,7 +11,7 @@ const mockAddParams = (): AddProfileRepository.Params => ({
 })
 
 describe('Profile Mongo Repository', () => {
-  let accountCollection: Collection
+  let profileCollection: Collection
 
   // antes e depois de cada teste de integração, precisamos conectar e desconectar do banco
   beforeAll(async () => {
@@ -26,8 +26,8 @@ describe('Profile Mongo Repository', () => {
 
   // removo todos os registros da tabela antes de cada teste. Para não populuir as tabelas
   beforeEach(async () => {
-    accountCollection = await MongoHelper.getCollection('accounts')
-    await accountCollection.deleteMany({})
+    profileCollection = await MongoHelper.getCollection('profiles')
+    await profileCollection.deleteMany({})
   })
 
   const makeSut = (): ProfileMongoRepository => {
@@ -38,6 +38,22 @@ describe('Profile Mongo Repository', () => {
     test('Should return true on success', async () => {
       const sut = makeSut()
       const result = await sut.add({ ...mockAddParams() })
+      expect(result).toBe(true)
+    })
+  })
+
+  describe('checkByName()', () => {
+    test('Should return true if profile exists', async () => {
+      await profileCollection.insertOne({ ...mockAddParams() })
+      const sut = makeSut()
+      const result = await sut.checkByName({ name: 'any_name' })
+      expect(result).toBe(true)
+    })
+
+    test('Should return false if profile do not exists', async () => {
+      await profileCollection.insertOne({ ...mockAddParams() })
+      const sut = makeSut()
+      const result = await sut.checkByName({ name: 'any_name' })
       expect(result).toBe(true)
     })
   })
