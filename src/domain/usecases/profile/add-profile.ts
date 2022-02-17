@@ -5,6 +5,8 @@ export interface AddProfile {
 export namespace AddProfile {
   export type Params = {
     name: string
+    createdBy: string
+    createdAt: Date
   }
 
   export type Result = boolean

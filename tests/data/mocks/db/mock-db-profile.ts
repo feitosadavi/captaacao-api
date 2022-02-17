@@ -1,4 +1,4 @@
-import { AddProfileRepository, CheckProfileByNameRepository } from '@/data/protocols'
+import { AddProfileRepository, ProfileNameIsInUseRepository } from '@/data/protocols'
 
 export const mockAddProfileRepositoryStub = (): AddProfileRepository => {
   class AddProfileStubRepository implements AddProfileRepository {
@@ -10,11 +10,11 @@ export const mockAddProfileRepositoryStub = (): AddProfileRepository => {
   return new AddProfileStubRepository()
 }
 
-export const mockCheckProfileByNameRepository = (): CheckProfileByNameRepository => {
-  class CheckProfileByNameRepositoryStub implements CheckProfileByNameRepository {
-    async checkByName (params: CheckProfileByNameRepository.Params): Promise<CheckProfileByNameRepository.Result> {
+export const mockProfileNameIsInUseRepository = (): ProfileNameIsInUseRepository => {
+  class ProfileNameIsInUseRepositoryStub implements ProfileNameIsInUseRepository {
+    async nameIsInUse (params: ProfileNameIsInUseRepository.Params): Promise<ProfileNameIsInUseRepository.Result> {
       return Promise.resolve(false)
     }
   }
-  return new CheckProfileByNameRepositoryStub()
+  return new ProfileNameIsInUseRepositoryStub()
 }

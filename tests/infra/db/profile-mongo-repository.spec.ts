@@ -42,18 +42,18 @@ describe('Profile Mongo Repository', () => {
     })
   })
 
-  describe('checkByName()', () => {
+  describe('nameIsInUse()', () => {
     test('Should return true if profile exists', async () => {
       await profileCollection.insertOne({ ...mockAddParams() })
       const sut = makeSut()
-      const result = await sut.checkByName({ name: 'any_name' })
+      const result = await sut.nameIsInUse({ name: 'any_name' })
       expect(result).toBe(true)
     })
 
     test('Should return false if profile do not exists', async () => {
       await profileCollection.insertOne({ ...mockAddParams() })
       const sut = makeSut()
-      const result = await sut.checkByName({ name: 'any_name' })
+      const result = await sut.nameIsInUse({ name: 'any_name' })
       expect(result).toBe(true)
     })
   })

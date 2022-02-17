@@ -2,7 +2,9 @@ import { ProfileModel } from '@/domain/models'
 import { AddProfile } from '@/domain/usecases'
 
 export const mockProfileParams = (): AddProfile.Params => ({
-  name: 'any_name'
+  name: 'any_name',
+  createdBy: 'any_account_id',
+  createdAt: new Date()
 })
 
 export const mockProfileModel = (): ProfileModel => ({

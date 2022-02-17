@@ -1,37 +1,45 @@
-import { CheckProfileByNameRepository, AddProfileRepository } from '@/data/protocols'
+import MockDate from 'mockdate'
+
+import { ProfileNameIsInUseRepository, AddProfileRepository } from '@/data/protocols'
 import { DbAddProfile } from '@/data/usecases'
 
 import { mockProfileParams } from '@tests/domain/mocks'
-import { mockAddProfileRepositoryStub, mockCheckProfileByNameRepository } from '@tests/data/mocks'
+import { mockAddProfileRepositoryStub, mockProfileNameIsInUseRepository } from '@tests/data/mocks'
 
 type SutTypes = {
   sut: DbAddProfile
-  checkProfileByNameRepositoryStub: CheckProfileByNameRepository
+  ProfileNameIsInUseRepositoryStub: ProfileNameIsInUseRepository
   addProfileRepositoryStub: AddProfileRepository
 }
 
 const makeSut = (): SutTypes => {
   const addProfileRepositoryStub = mockAddProfileRepositoryStub()
-  const checkProfileByNameRepositoryStub = mockCheckProfileByNameRepository()
-  const sut = new DbAddProfile(checkProfileByNameRepositoryStub, addProfileRepositoryStub)
+  const ProfileNameIsInUseRepositoryStub = mockProfileNameIsInUseRepository()
+  const sut = new DbAddProfile(ProfileNameIsInUseRepositoryStub, addProfileRepositoryStub)
   return {
     sut,
-    checkProfileByNameRepositoryStub,
+    ProfileNameIsInUseRepositoryStub,
     addProfileRepositoryStub
   }
 }
 
 describe('DbAddProfile Usecase', () => {
-  test('Should call CheckProfileByNameRepository with correct email', async () => {
-    const { sut, checkProfileByNameRepositoryStub } = makeSut()
-    const loadSpy = jest.spyOn(checkProfileByNameRepositoryStub, 'checkByName')
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+  afterAll(() => {
+    MockDate.reset()
+  })
+  test('Should call ProfileNameIsInUseRepository with correct email', async () => {
+    const { sut, ProfileNameIsInUseRepositoryStub } = makeSut()
+    const loadSpy = jest.spyOn(ProfileNameIsInUseRepositoryStub, 'nameIsInUse')
     await sut.add(mockProfileParams())
     expect(loadSpy).toHaveBeenCalledWith({ name: 'any_name' })
   })
 
-  test('Should return false if CheckProfileByNameRepository returns true', async () => {
-    const { sut, checkProfileByNameRepositoryStub } = makeSut()
-    jest.spyOn(checkProfileByNameRepositoryStub, 'checkByName').mockResolvedValueOnce(Promise.resolve(true))
+  test('Should return false if ProfileNameIsInUseRepository returns true', async () => {
+    const { sut, ProfileNameIsInUseRepositoryStub } = makeSut()
+    jest.spyOn(ProfileNameIsInUseRepositoryStub, 'nameIsInUse').mockResolvedValueOnce(Promise.resolve(true))
     const profile = await sut.add(mockProfileParams())
     expect(profile).toBe(false)
   })
