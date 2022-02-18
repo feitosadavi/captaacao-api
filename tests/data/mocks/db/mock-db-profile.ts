@@ -21,7 +21,7 @@ export const mockProfileNameIsInUseRepository = (): ProfileNameIsInUseRepository
 
 export const mockDeleteProfileRepository = (): DeleteProfileRepository => {
   class DeleteProfileRepositoryStub implements DeleteProfileRepository {
-    async delete (params: DeleteProfileRepository.Params): Promise<DeleteProfileRepository.Result> {
+    async deleteProfile (params: DeleteProfileRepository.Params): Promise<DeleteProfileRepository.Result> {
       return Promise.resolve(true)
     }
   }

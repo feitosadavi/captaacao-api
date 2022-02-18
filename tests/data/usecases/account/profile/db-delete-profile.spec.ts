@@ -27,20 +27,20 @@ const makeSut = (): SutTypes => {
 describe('DbDeleteProfile', () => {
   test('Should call deleteProfileRepository with correct values', async () => {
     const { sut, deleteProfileRepositoryStub } = makeSut()
-    const deleteProfileRepositoryStubSpy = jest.spyOn(deleteProfileRepositoryStub, 'delete')
+    const deleteProfileRepositoryStubSpy = jest.spyOn(deleteProfileRepositoryStub, 'deleteProfile')
     await sut.delete(mockParams())
     expect(deleteProfileRepositoryStubSpy).toBeCalledWith(mockParams())
   })
   test('Should throw if deleteProfileRepository throws', async () => {
     const { sut, deleteProfileRepositoryStub } = makeSut()
-    const deleteProfileRepositoryStubSpy = jest.spyOn(deleteProfileRepositoryStub, 'delete')
+    const deleteProfileRepositoryStubSpy = jest.spyOn(deleteProfileRepositoryStub, 'deleteProfile')
     deleteProfileRepositoryStubSpy.mockImplementation(throwError)
     const deletionResult = sut.delete(mockParams())
     await expect(deletionResult).rejects.toThrow()
   })
   test('Should return false if deleteProfileRepository returns false', async () => {
     const { sut, deleteProfileRepositoryStub } = makeSut()
-    const deleteProfileRepositoryStubSpy = jest.spyOn(deleteProfileRepositoryStub, 'delete')
+    const deleteProfileRepositoryStubSpy = jest.spyOn(deleteProfileRepositoryStub, 'deleteProfile')
     deleteProfileRepositoryStubSpy.mockReturnValueOnce(Promise.resolve(false))
     const deletionResult = await sut.delete(mockParams())
     expect(deletionResult).toBe(false)

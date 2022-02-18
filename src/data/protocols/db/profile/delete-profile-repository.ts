@@ -1,7 +1,7 @@
 import { DeleteProfile } from '@/domain/usecases'
 
 export interface DeleteProfileRepository {
-  delete (params: DeleteProfileRepository.Params): Promise<DeleteProfileRepository.Result>
+  deleteProfile (params: DeleteProfileRepository.Params): Promise<DeleteProfileRepository.Result>
 }
 
 export namespace DeleteProfileRepository {

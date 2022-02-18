@@ -7,7 +7,7 @@ export class DbDeleteProfile implements DeleteProfile {
   ) { }
 
   async delete ({ id }: DeleteProfile.Params): Promise<DeleteProfile.Result> {
-    const deleteResult = await this.deleteProfileRepository.delete({ id })
+    const deleteResult = await this.deleteProfileRepository.deleteProfile({ id })
     return deleteResult
   }
 }
