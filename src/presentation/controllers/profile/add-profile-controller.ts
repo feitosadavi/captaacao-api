@@ -1,4 +1,5 @@
 import { AddProfile } from '@/domain/usecases'
+import { NameInUseError } from '@/presentation/errors'
 import { badRequest, noContent, serverError } from '@/presentation/helpers/http/http-helper'
 import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
 
@@ -20,12 +21,12 @@ export class AddProfileController implements Controller {
       const createdAt = new Date()
       createdAt.toLocaleDateString('pt-BR')
 
-      await this.addProfile.add({
+      const result = await this.addProfile.add({
         name: body.name,
         createdBy: accountId,
         createdAt
       })
-      return noContent()
+      return result ? noContent() : badRequest(new NameInUseError())
     } catch (error) {
       return serverError(error)
     }
