@@ -1,5 +1,5 @@
 import { AddProfileRepository, DeleteProfileRepository, LoadProfilesRepository, ProfileNameIsInUseRepository } from '@/data/protocols'
-import { mockProfileModel } from '@tests/domain/mocks'
+import { mockProfileModels } from '@tests/domain/mocks'
 
 export const mockAddProfileRepositoryStub = (): AddProfileRepository => {
   class AddProfileStubRepository implements AddProfileRepository {
@@ -32,7 +32,7 @@ export const mockDeleteProfileRepository = (): DeleteProfileRepository => {
 export const mockLoadProfilesRepository = (): LoadProfilesRepository => {
   class LoadProfilesRepositoryStub implements LoadProfilesRepository {
     async loadProfiles (): Promise<LoadProfilesRepository.Result> {
-      return Promise.resolve([mockProfileModel(), mockProfileModel()])
+      return Promise.resolve(mockProfileModels())
     }
   }
   return new LoadProfilesRepositoryStub()

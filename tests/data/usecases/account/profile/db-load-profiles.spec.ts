@@ -4,7 +4,7 @@ import { DbLoadProfiles } from '@/data/usecases'
 import { LoadProfilesRepository } from '@/data/protocols'
 
 import { mockLoadProfilesRepository } from '@tests/data/mocks'
-import { mockProfileModel, throwError } from '@tests/domain/mocks'
+import { mockProfileModels, throwError } from '@tests/domain/mocks'
 
 type SutTypes = {
   sut: DbLoadProfiles
@@ -46,7 +46,7 @@ describe('DbLoadProfiles', () => {
   test('Should return account array if LoadProfilesRepository return account array', async () => {
     const { sut } = makeSut()
     const accounts = await sut.load()
-    expect(accounts).toEqual([mockProfileModel(), mockProfileModel()])
+    expect(accounts).toEqual(mockProfileModels())
   })
 
   test('Should return null if LoadProfilesRepository return null', async () => {
