@@ -3,6 +3,7 @@ import MockDate from 'mockdate'
 import { Collection } from 'mongodb'
 import { MongoHelper, ProfileMongoRepository } from '@/infra/db/mongodb'
 import { AddProfileRepository } from '@/data/protocols'
+import { mockProfileModels } from '@tests/domain/mocks'
 
 const mockAddParams = (): AddProfileRepository.Params => ({
   name: 'any_name',
@@ -74,6 +75,26 @@ describe('Profile Mongo Repository', () => {
       const sut = makeSut()
       const deletionResult = await sut.deleteProfile({ id: '61539180dd2622353d5e11c8' })
       expect(deletionResult).toBe(false)
+    })
+  })
+
+  describe('loadAccouts()', () => {
+    test('Should return an account array on loadProfiles success', async () => {
+      const sut = makeSut()
+
+      await profileCollection.insertMany(mockProfileModels())
+
+      const profiles = await sut.loadProfiles()
+      expect(profiles).toBeTruthy()
+      expect(profiles.length).toBe(2)
+      expect(profiles[0].id).toBeTruthy()
+      expect(profiles[1].id).toBeTruthy()
+    })
+
+    test('Should return null if loadProfiles fails', async () => {
+      const sut = makeSut()
+      const profile = await sut.loadProfiles()
+      expect(profile).toEqual([])
     })
   })
 })
