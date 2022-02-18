@@ -57,4 +57,23 @@ describe('Profile Mongo Repository', () => {
       expect(result).toBe(true)
     })
   })
+
+  describe('deleteProfile()', () => {
+    test('Should return true on success', async () => {
+      const sut = makeSut()
+
+      const res = await profileCollection.insertOne({
+        ...mockAddParams()
+      })
+      const id = res.ops[0]._id
+
+      const deletionResult = await sut.deleteProfile({ id })
+      expect(deletionResult).toBe(true)
+    })
+    test('Should return false if profile doesnt exists', async () => {
+      const sut = makeSut()
+      const deletionResult = await sut.deleteProfile({ id: '61539180dd2622353d5e11c8' })
+      expect(deletionResult).toBe(false)
+    })
+  })
 })
