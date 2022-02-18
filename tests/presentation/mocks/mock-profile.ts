@@ -1,4 +1,4 @@
-import { AddProfile } from '@/domain/usecases'
+import { AddProfile, DeleteProfile } from '@/domain/usecases'
 
 export const mockAddProfile = (): AddProfile => {
   class AddProfileStub implements AddProfile {
@@ -7,4 +7,13 @@ export const mockAddProfile = (): AddProfile => {
     }
   }
   return new AddProfileStub()
+}
+
+export const mockDeleteProfile = (): DeleteProfile => {
+  class DeleteProfileStub implements DeleteProfile {
+    async delete (): Promise<boolean> {
+      return Promise.resolve(true)
+    }
+  }
+  return new DeleteProfileStub()
 }
