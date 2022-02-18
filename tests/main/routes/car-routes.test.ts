@@ -127,15 +127,6 @@ describe('Car Routes', () => {
         .send()
         .expect(204)
     })
-
-    test('Should return 200 on load car by id success', async () => {
-      await carsCollection.insertOne({ ...mockCarsParams()[0] })
-      await request(app)
-        .get('/api/cars')
-        .query({ id: 'any_car_id' })
-        .send()
-        .expect(200)
-    })
   })
 
   // describe('PUT /cars/:carId/results', () => {
