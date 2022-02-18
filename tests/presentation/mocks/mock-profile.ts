@@ -1,4 +1,6 @@
-import { AddProfile, DeleteProfile } from '@/domain/usecases'
+import { ProfileModel } from '@/domain/models'
+import { AddProfile, DeleteProfile, LoadProfiles } from '@/domain/usecases'
+import { mockProfileModels } from '@tests/domain/mocks'
 
 export const mockAddProfile = (): AddProfile => {
   class AddProfileStub implements AddProfile {
@@ -16,4 +18,13 @@ export const mockDeleteProfile = (): DeleteProfile => {
     }
   }
   return new DeleteProfileStub()
+}
+
+export const mockLoadProfiles = (): LoadProfiles => {
+  class LoadProfilesStub implements LoadProfilesStub {
+    async load (): Promise<ProfileModel[]> {
+      return Promise.resolve(mockProfileModels())
+    }
+  }
+  return new LoadProfilesStub()
 }
