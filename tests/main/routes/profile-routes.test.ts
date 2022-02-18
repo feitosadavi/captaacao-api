@@ -93,4 +93,26 @@ describe('Profile Routes', () => {
         .expect(204)
     })
   })
+
+  describe('DELETE /profile/delete/:id', () => {
+    test('should return 403 if user has no authorization', async () => {
+      await request(app)
+        .delete('/api/profile/delete/:id')
+        .query({ id: 'any_id' })
+        .expect(403)
+    })
+
+    test('should return 200 on success', async () => {
+      const res = await insertAccount()
+      const id = res.ops[0]._id
+      const accessToken = sign({ id }, env.secret)
+      await updateAccountToken(id, accessToken)
+
+      await request(app)
+        .delete('/api/profile/delete/:id')
+        .set('x-access-token', accessToken)
+        .query({ id })
+        .expect(200)
+    })
+  })
 })
