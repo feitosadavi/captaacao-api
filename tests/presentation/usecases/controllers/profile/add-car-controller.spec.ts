@@ -7,6 +7,7 @@ import { mockProfileParams, throwError } from '@tests/domain/mocks'
 import { mockAddProfile, mockValidation } from '@tests/presentation/mocks'
 import { HttpRequest, Validation } from '@/presentation/protocols'
 import { AddProfile } from '@/domain/usecases'
+import { NameInUseError } from '@/presentation/errors'
 
 const mockRequest = (): HttpRequest => ({
   body: {
@@ -61,6 +62,14 @@ describe('AddProfile Controller', () => {
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
     expect(addSpy).toHaveBeenCalledWith(httpRequest.body)
+  })
+
+  test('Should return 400 if AddProfile returns false', async () => {
+    const { sut, addProfileStub } = makeSut()
+    jest.spyOn(addProfileStub, 'add').mockReturnValueOnce(Promise.resolve(false))
+    const httpRequest = mockRequest()
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(badRequest(new NameInUseError()))
   })
 
   test('Should return 500 if AddProfile throws', async () => {
