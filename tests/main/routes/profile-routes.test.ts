@@ -21,7 +21,7 @@ describe('Profile Routes', () => {
   })
 
   beforeEach(async () => {
-    profileCollection = await MongoHelper.getCollection('cars')
+    profileCollection = await MongoHelper.getCollection('profiles')
     accountsCollection = await MongoHelper.getCollection('accounts')
     await profileCollection.deleteMany({})
     await accountsCollection.deleteMany({})
@@ -45,21 +45,6 @@ describe('Profile Routes', () => {
       }
     })
   }
-
-  // const insertProfile = async (): Promise<InsertOneWriteOpResult<any>> => {
-  //   return profilesCollection.insertOne({
-  //     name: 'Panamera',
-  //     price: 400000,
-  //     brand: 'Porsche',
-  //     year: '2021',
-  //     color: 'vermelho',
-  //     vehicleItems: [
-  //       'Vidro automático',
-  //       'Roda liga leve'
-  //     ],
-  //     addDate: new Date()
-  //   })
-  // }
 
   describe('POST /profile', () => {
     test('Should return 403 on post without accessToken ', async () => {
@@ -91,6 +76,24 @@ describe('Profile Routes', () => {
         .set('x-access-token', accessToken)
         .send({ name: 'any_name' })
         .expect(204)
+    })
+  })
+
+  describe('GET /profiles', () => {
+    test('Should return 204 if profiles collection is empty', async () => {
+      await request(app)
+        .get('/api/profiles/all')
+        .send()
+        .expect(204)
+    })
+
+    test('Should return 200 on success', async () => {
+      await profileCollection.insertMany([mockProfileParams()])
+      console.log(await profileCollection.find({}).toArray())
+      await request(app)
+        .get('/api/profiles/all')
+        .send()
+        .expect(200)
     })
   })
 
