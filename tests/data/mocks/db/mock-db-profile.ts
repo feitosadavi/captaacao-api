@@ -1,4 +1,4 @@
-import { AddProfileRepository, ProfileNameIsInUseRepository } from '@/data/protocols'
+import { AddProfileRepository, DeleteProfileRepository, ProfileNameIsInUseRepository } from '@/data/protocols'
 
 export const mockAddProfileRepositoryStub = (): AddProfileRepository => {
   class AddProfileStubRepository implements AddProfileRepository {
@@ -17,4 +17,13 @@ export const mockProfileNameIsInUseRepository = (): ProfileNameIsInUseRepository
     }
   }
   return new ProfileNameIsInUseRepositoryStub()
+}
+
+export const mockDeleteProfileRepository = (): DeleteProfileRepository => {
+  class DeleteProfileRepositoryStub implements DeleteProfileRepository {
+    async delete (params: DeleteProfileRepository.Params): Promise<DeleteProfileRepository.Result> {
+      return Promise.resolve(true)
+    }
+  }
+  return new DeleteProfileRepositoryStub()
 }
