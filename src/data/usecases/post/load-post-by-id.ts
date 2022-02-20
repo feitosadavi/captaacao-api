@@ -1,6 +1,6 @@
-import { LoadCarByIdRepository } from '@/data/protocols/db/car/load-car-by-id-repository'
-import { CarModel } from '@/domain/models/car'
-import { LoadCarById } from '@/domain/usecases/car/load-car-by-id'
+import { LoadCarByIdRepository } from '@/data/protocols'
+import { CarModel } from '@/domain/models/post'
+import { LoadCarById } from '@/domain/usecases'
 
 export class DbLoadCarById implements LoadCarById {
   constructor (private readonly loadCarByIdRepository: LoadCarByIdRepository) { }

@@ -1,8 +1,6 @@
-import { AddCarRepository } from '@/data/protocols/db/car/add-car-repository'
-import { LoadCarByIdRepository } from '@/data/protocols/db/car/load-car-by-id-repository'
-import { LoadCarsRepository } from '@/data/protocols/db/car/load-car-repository'
-import { CarModel } from '@/domain/models/car'
-import { AddCarParams } from '@/domain/usecases/car/add-car'
+import { AddCarRepository, LoadCarByIdRepository, LoadCarsRepository } from '@/data/protocols'
+import { CarModel } from '@/domain/models/post'
+import { AddCarParams } from '@/domain/usecases'
 import { ObjectID } from 'mongodb'
 import { MongoHelper } from './mongo-helper'
 

@@ -1,4 +1,4 @@
 export * from './authentication'
-export * from './car'
+export * from './post'
 export * from './account'
 export * from './profile'

@@ -1,5 +1,5 @@
-import { CarModel } from '../../../src/domain/models/car'
-import { AddCarParams } from '../../../src/domain/usecases/car/add-car'
+import { CarModel } from '../models/post'
+import { AddCarParams } from '@/domain/usecases'
 
 export const mockCarsModel = (): CarModel[] => {
   return [{

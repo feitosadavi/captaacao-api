@@ -1,6 +1,8 @@
-import { AddCarRepository } from '@/data/protocols/db/car/add-car-repository'
-import { LoadCarByIdRepository } from '@/data/protocols/db/car/load-car-by-id-repository'
-import { LoadCarsRepository } from '@/data/protocols/db/car/load-car-repository'
+import {
+  AddCarRepository,
+  LoadCarByIdRepository,
+  LoadCarsRepository
+} from '@/data/protocols'
 import { CarModel } from '@/domain/models'
 import { AddCarParams } from '@/domain/usecases'
 import { mockCarsModel } from '@tests/domain/mocks'

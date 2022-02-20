@@ -1,5 +1,5 @@
 import { LoadCars } from '@/domain/usecases'
-import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
+import { noContent, serverError, serverSuccess } from '@/presentation/helpers'
 import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 
 export class LoadCarsController implements Controller {

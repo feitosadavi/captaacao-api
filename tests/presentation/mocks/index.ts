@@ -1,5 +1,5 @@
 export * from './mock-account'
 export * from './mock-profile'
-export * from './mock-car'
+export * from './mock-post'
 export * from './mock-validation'
 export * from './mock-messaging'
