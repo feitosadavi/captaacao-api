@@ -4,7 +4,7 @@ import { LoadProfilesController } from '@/presentation/controllers'
 import { Controller } from '@/presentation/protocols'
 
 export const makeLoadProfilesController = (): Controller => {
-  const carMongoRepository = new ProfileMongoRepository()
-  const dbLoadProfiles = new DbLoadProfiles(carMongoRepository)
+  const postMongoRepository = new ProfileMongoRepository()
+  const dbLoadProfiles = new DbLoadProfiles(postMongoRepository)
   return new LoadProfilesController(dbLoadProfiles)
 }

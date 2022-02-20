@@ -6,12 +6,12 @@ import { MongoHelper } from '@/infra/db/mongodb'
 import app from '@/main/config/app'
 import env from '@/main/config/env'
 
-import { mockCarsParams } from '@tests/domain/mocks'
+import { mockPostsParams } from '@tests/domain/mocks'
 
-let carsCollection: Collection
+let postsCollection: Collection
 let accountsCollection: Collection
 
-describe('Car Routes', () => {
+describe('Post Routes', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL)
   })
@@ -21,16 +21,16 @@ describe('Car Routes', () => {
   })
 
   beforeEach(async () => {
-    carsCollection = await MongoHelper.getCollection('cars')
+    postsCollection = await MongoHelper.getCollection('posts')
     accountsCollection = await MongoHelper.getCollection('accounts')
-    await carsCollection.deleteMany({})
+    await postsCollection.deleteMany({})
     await accountsCollection.deleteMany({})
   })
 
   const insertAccount = async (): Promise<InsertOneWriteOpResult<any>> => {
     return accountsCollection.insertOne({
-      name: 'Carlos',
-      email: 'carlos@gmail.com',
+      name: 'Postlos',
+      email: 'postlos@gmail.com',
       password: '123',
       role: 'admin'
     })
@@ -46,8 +46,8 @@ describe('Car Routes', () => {
     })
   }
 
-  // const insertCar = async (): Promise<InsertOneWriteOpResult<any>> => {
-  //   return carsCollection.insertOne({
+  // const insertPost = async (): Promise<InsertOneWriteOpResult<any>> => {
+  //   return postsCollection.insertOne({
   //     name: 'Panamera',
   //     price: 400000,
   //     brand: 'Porsche',
@@ -61,85 +61,85 @@ describe('Car Routes', () => {
   //   })
   // }
 
-  describe('POST /cars', () => {
-    test('Should return 403 on add car without accessToken ', async () => {
+  describe('POST /posts', () => {
+    test('Should return 403 on add post without accessToken ', async () => {
       await request(app)
-        .post('/api/cars')
-        .send(mockCarsParams())
+        .post('/api/posts')
+        .send(mockPostsParams())
         .expect(403)
     })
 
-    test('Should return 204 on add car success ', async () => {
+    test('Should return 204 on add post success ', async () => {
       const res = await insertAccount()
       const id = res.ops[0]._id
       const accessToken = sign({ id }, env.secret)
       await updateAccountToken(id, accessToken)
       await request(app)
-        .post('/api/cars')
+        .post('/api/posts')
         .set('x-access-token', accessToken) // na requisição, eu coloco o accessToken nos headers
-        .send(mockCarsParams()[0])
+        .send(mockPostsParams()[0])
         .expect(204)
     })
   })
 
-  describe('GET /cars/:id', () => {
-    test('Should return 204 if no car was found', async () => {
+  describe('GET /posts/:id', () => {
+    test('Should return 204 if no post was found', async () => {
       await request(app)
-        .get('/api/cars')
-        .query({ id: 'any_car_id' })
+        .get('/api/posts')
+        .query({ id: 'any_post_id' })
         .send()
         .expect(204)
     })
 
-    test('Should return 200 on load car by id success', async () => {
-      await carsCollection.insertOne({ ...mockCarsParams()[0] })
+    test('Should return 200 on load post by id success', async () => {
+      await postsCollection.insertOne({ ...mockPostsParams()[0] })
       await request(app)
-        .get('/api/cars')
-        .query({ id: 'any_car_id' })
+        .get('/api/posts')
+        .query({ id: 'any_post_id' })
         .send()
         .expect(200)
     })
   })
 
-  describe('GET /cars', () => {
-    test('Should return 204 if cars collection is empty', async () => {
+  describe('GET /posts', () => {
+    test('Should return 204 if posts collection is empty', async () => {
       await request(app)
-        .get('/api/cars')
+        .get('/api/posts')
         .send()
         .expect(204)
     })
 
-    test('Should return 200 on load car success', async () => {
-      await carsCollection.insertMany([
-        { ...mockCarsParams()[0] },
-        { ...mockCarsParams()[1] }
+    test('Should return 200 on load post success', async () => {
+      await postsCollection.insertMany([
+        { ...mockPostsParams()[0] },
+        { ...mockPostsParams()[1] }
       ])
       await request(app)
-        .get('/api/cars')
+        .get('/api/posts')
         .send()
         .expect(200)
     })
 
-    test('Should return 204 if no car was found', async () => {
+    test('Should return 204 if no post was found', async () => {
       await request(app)
-        .get('/api/cars')
-        .query({ id: 'any_car_id' })
+        .get('/api/posts')
+        .query({ id: 'any_post_id' })
         .send()
         .expect(204)
     })
   })
 
-  // describe('PUT /cars/:carId/results', () => {
-  //   test('should 200 on save car success', async () => {
+  // describe('PUT /posts/:postId/results', () => {
+  //   test('should 200 on save post success', async () => {
   //     const resAccount = await insertAccount()
-  //     const resCar = await insertCar()
+  //     const resPost = await insertPost()
 
   //     const accountId = resAccount.ops[0]._id
   //     const accessToken = sign({ accountId }, env.secret)
 
   //     await updateAccountToken(accountId, accessToken)
   //     await request(app)
-  //       .put(`/api/cars/${resCar.ops[0]._id}/results`)
+  //       .put(`/api/posts/${resPost.ops[0]._id}/results`)
   //       .set('x-access-token', accessToken)
   //       .send({
   //         answer: 'papagaio'

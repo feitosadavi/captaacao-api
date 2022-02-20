@@ -1,7 +1,7 @@
-import { CarModel } from '../models/post'
-import { AddCarParams } from '@/domain/usecases'
+import { PostModel } from '../models/post'
+import { AddPostParams } from '@/domain/usecases'
 
-export const mockCarsModel = (): CarModel[] => {
+export const mockPostsModel = (): PostModel[] => {
   return [{
     id: 'any_id',
     name: 'any_name',
@@ -37,7 +37,7 @@ export const mockCarsModel = (): CarModel[] => {
   ]
 }
 
-export const mockCarsParams = (): AddCarParams[] => {
+export const mockPostsParams = (): AddPostParams[] => {
   return [{
     name: 'any_name',
     price: 100000,

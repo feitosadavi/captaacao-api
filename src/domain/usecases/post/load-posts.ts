@@ -1,5 +1,5 @@
-import { CarModel } from '@/domain/models/post'
+import { PostModel } from '@/domain/models/post'
 
-export interface LoadCars {
-  load (): Promise<CarModel[]>
+export interface LoadPosts {
+  load (): Promise<PostModel[]>
 }

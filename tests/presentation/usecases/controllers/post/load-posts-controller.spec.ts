@@ -1,27 +1,27 @@
 import MockDate from 'mockdate'
 
-import { LoadCars } from '@/domain/usecases'
-import { LoadCarsController } from '@/presentation/controllers'
+import { LoadPosts } from '@/domain/usecases'
+import { LoadPostsController } from '@/presentation/controllers'
 import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
 
-import { mockCarsModel, throwError } from '@tests/domain/mocks'
-import { mockLoadCars } from '@tests/presentation/mocks'
+import { mockPostsModel, throwError } from '@tests/domain/mocks'
+import { mockLoadPosts } from '@tests/presentation/mocks'
 
 type SutTypes = {
-  sut: LoadCarsController
-  loadCarsStub: LoadCars
+  sut: LoadPostsController
+  loadPostsStub: LoadPosts
 }
 
 const makeSut = (): SutTypes => {
-  const loadCarsStub = mockLoadCars()
-  const sut = new LoadCarsController(loadCarsStub)
+  const loadPostsStub = mockLoadPosts()
+  const sut = new LoadPostsController(loadPostsStub)
   return {
     sut,
-    loadCarsStub
+    loadPostsStub
   }
 }
 
-describe('LoadCar Controller', () => {
+describe('LoadPost Controller', () => {
   beforeAll(() => {
     MockDate.set(new Date()) // congela a data com base no valor inserido
   })
@@ -30,29 +30,29 @@ describe('LoadCar Controller', () => {
     MockDate.reset() // congela a data com base no valor inserido
   })
 
-  test('Should call LoadCars', async () => {
-    const { sut, loadCarsStub } = makeSut()
-    const loadCarsSpy = jest.spyOn(loadCarsStub, 'load')
+  test('Should call LoadPosts', async () => {
+    const { sut, loadPostsStub } = makeSut()
+    const loadPostsSpy = jest.spyOn(loadPostsStub, 'load')
     await sut.handle({})
-    expect(loadCarsSpy).toHaveBeenCalled()
+    expect(loadPostsSpy).toHaveBeenCalled()
   })
 
   test('Should 200 on success', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle({})
-    expect(httpResponse).toEqual(serverSuccess(mockCarsModel()))
+    expect(httpResponse).toEqual(serverSuccess(mockPostsModel()))
   })
 
-  test('Should 204 LoadCars returns empty', async () => {
-    const { sut, loadCarsStub } = makeSut()
-    jest.spyOn(loadCarsStub, 'load').mockReturnValueOnce(Promise.resolve([]))
+  test('Should 204 LoadPosts returns empty', async () => {
+    const { sut, loadPostsStub } = makeSut()
+    jest.spyOn(loadPostsStub, 'load').mockReturnValueOnce(Promise.resolve([]))
     const httpResponse = await sut.handle({})
     expect(httpResponse).toEqual(noContent())
   })
 
-  test('Should return 500 if LoadCars throws', async () => {
-    const { sut, loadCarsStub } = makeSut()
-    jest.spyOn(loadCarsStub, 'load').mockImplementationOnce(throwError)
+  test('Should return 500 if LoadPosts throws', async () => {
+    const { sut, loadPostsStub } = makeSut()
+    jest.spyOn(loadPostsStub, 'load').mockImplementationOnce(throwError)
     const httpResponse = await sut.handle({})
     expect(httpResponse).toEqual(serverError(new Error()))
   })

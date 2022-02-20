@@ -1,10 +1,10 @@
-import { DbLoadCars } from '@/data/usecases'
-import { CarMongoRepository } from '@/infra/db/mongodb'
-import { LoadCarsController } from '@/presentation/controllers'
+import { DbLoadPosts } from '@/data/usecases'
+import { PostMongoRepository } from '@/infra/db/mongodb'
+import { LoadPostsController } from '@/presentation/controllers'
 import { Controller } from '@/presentation/protocols'
 
-export const makeLoadCarController = (): Controller => {
-  const carMongoRepository = new CarMongoRepository()
-  const dbLoadCars = new DbLoadCars(carMongoRepository)
-  return new LoadCarsController(dbLoadCars)
+export const makeLoadPostController = (): Controller => {
+  const postMongoRepository = new PostMongoRepository()
+  const dbLoadPosts = new DbLoadPosts(postMongoRepository)
+  return new LoadPostsController(dbLoadPosts)
 }

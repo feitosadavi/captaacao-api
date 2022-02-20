@@ -1,13 +1,13 @@
-import { LoadCarById } from '@/domain/usecases'
+import { LoadPostById } from '@/domain/usecases'
 import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
 import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 
-export class LoadCarByIdController implements Controller {
-  constructor (private readonly loadCarById: LoadCarById) { }
+export class LoadPostByIdController implements Controller {
+  constructor (private readonly loadPostById: LoadPostById) { }
   async handle (httpRequest: HttpRequest<any, any, {id: string}>): Promise<HttpResponse> {
     try {
-      const car = await this.loadCarById.loadById(httpRequest.params.id)
-      return car ? serverSuccess(car) : noContent()
+      const post = await this.loadPostById.loadById(httpRequest.params.id)
+      return post ? serverSuccess(post) : noContent()
     } catch (error) {
       return serverError(error)
     }

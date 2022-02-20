@@ -1,20 +1,20 @@
 import MockDate from 'mockdate'
 
-import { DbAddCar } from '@/data/usecases'
+import { DbAddPost } from '@/data/usecases'
 
-import { mockCarsParams, throwError } from '@tests/domain/mocks'
-import { mockAddCarRepository } from '@tests/data/mocks/db/mock-db-post'
+import { mockPostsParams, throwError } from '@tests/domain/mocks'
+import { mockAddPostRepository } from '@tests/data/mocks/db/mock-db-post'
 
 const makeSut = (): any => {
-  const addCarRepositoryStub = mockAddCarRepository()
-  const sut = new DbAddCar(addCarRepositoryStub)
+  const addPostRepositoryStub = mockAddPostRepository()
+  const sut = new DbAddPost(addPostRepositoryStub)
   return {
     sut,
-    addCarRepositoryStub
+    addPostRepositoryStub
   }
 }
 
-describe('DbAddCar UseCase', () => {
+describe('DbAddPost UseCase', () => {
   beforeAll(() => {
     MockDate.set(new Date()) // congela a data com base no valor inserido
   })
@@ -23,19 +23,19 @@ describe('DbAddCar UseCase', () => {
     MockDate.reset() // congela a data com base no valor inserido
   })
 
-  test('Should call AddCarRepository with correct values', async () => {
-    const { sut, addCarRepositoryStub } = makeSut()
-    const carData = mockCarsParams()
-    const addSpy = jest.spyOn(addCarRepositoryStub, 'add')
-    await sut.add(carData)
-    expect(addSpy).toHaveBeenCalledWith(carData)
+  test('Should call AddPostRepository with correct values', async () => {
+    const { sut, addPostRepositoryStub } = makeSut()
+    const postData = mockPostsParams()
+    const addSpy = jest.spyOn(addPostRepositoryStub, 'add')
+    await sut.add(postData)
+    expect(addSpy).toHaveBeenCalledWith(postData)
   })
 
-  test('Should throw if AddCarRepository throws', async () => {
-    const { sut, addCarRepositoryStub } = makeSut()
-    const carData = mockCarsParams()
-    jest.spyOn(addCarRepositoryStub, 'add').mockImplementationOnce(throwError)
-    const promise = sut.add(carData)
+  test('Should throw if AddPostRepository throws', async () => {
+    const { sut, addPostRepositoryStub } = makeSut()
+    const postData = mockPostsParams()
+    jest.spyOn(addPostRepositoryStub, 'add').mockImplementationOnce(throwError)
+    const promise = sut.add(postData)
     await expect(promise).rejects.toThrow()
   })
 })

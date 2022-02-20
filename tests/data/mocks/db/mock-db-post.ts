@@ -1,35 +1,35 @@
 import {
-  AddCarRepository,
-  LoadCarByIdRepository,
-  LoadCarsRepository
+  AddPostRepository,
+  LoadPostByIdRepository,
+  LoadPostsRepository
 } from '@/data/protocols'
-import { CarModel } from '@/domain/models'
-import { AddCarParams } from '@/domain/usecases'
-import { mockCarsModel } from '@tests/domain/mocks'
+import { PostModel } from '@/domain/models'
+import { AddPostParams } from '@/domain/usecases'
+import { mockPostsModel } from '@tests/domain/mocks'
 
-export const mockAddCarRepository = (): AddCarRepository => {
-  class AddCarRepositoryStub implements AddCarRepository {
-    async add (data: AddCarParams): Promise<void> {
+export const mockAddPostRepository = (): AddPostRepository => {
+  class AddPostRepositoryStub implements AddPostRepository {
+    async add (data: AddPostParams): Promise<void> {
       return Promise.resolve()
     }
   }
-  return new AddCarRepositoryStub()
+  return new AddPostRepositoryStub()
 }
 
-export const mockLoadCarsRepository = (): LoadCarsRepository => {
-  class LoadCarsRepositoryStub implements LoadCarsRepository {
-    async loadAll (): Promise<CarModel[]> {
-      return Promise.resolve(mockCarsModel())
+export const mockLoadPostsRepository = (): LoadPostsRepository => {
+  class LoadPostsRepositoryStub implements LoadPostsRepository {
+    async loadAll (): Promise<PostModel[]> {
+      return Promise.resolve(mockPostsModel())
     }
   }
-  return new LoadCarsRepositoryStub()
+  return new LoadPostsRepositoryStub()
 }
 
-export const mockLoadCarByIdRepository = (): LoadCarByIdRepository => {
-  class LoadCarByIdRepositoryStub implements LoadCarByIdRepository {
-    async loadById (id: string): Promise<CarModel> {
-      return Promise.resolve(mockCarsModel()[0])
+export const mockLoadPostByIdRepository = (): LoadPostByIdRepository => {
+  class LoadPostByIdRepositoryStub implements LoadPostByIdRepository {
+    async loadById (id: string): Promise<PostModel> {
+      return Promise.resolve(mockPostsModel()[0])
     }
   }
-  return new LoadCarByIdRepositoryStub()
+  return new LoadPostByIdRepositoryStub()
 }

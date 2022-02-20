@@ -30,7 +30,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-describe('LoadCar Controller', () => {
+describe('LoadPost Controller', () => {
   beforeAll(() => {
     MockDate.set(new Date()) // congela a data com base no valor inserido
   })

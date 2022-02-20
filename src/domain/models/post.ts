@@ -1,4 +1,4 @@
-export type CarModel = {
+export type PostModel = {
   id: string
   name: string
   price: number

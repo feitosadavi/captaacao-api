@@ -1,9 +1,9 @@
 import { Collection } from 'mongodb'
-import { MongoHelper, CarMongoRepository } from '@/infra/db/mongodb'
-import { mockCarsParams } from '@tests/domain/mocks'
+import { MongoHelper, PostMongoRepository } from '@/infra/db/mongodb'
+import { mockPostsParams } from '@tests/domain/mocks'
 
-describe('CarMongo Repository', () => {
-  let carsCollection: Collection
+describe('PostMongo Repository', () => {
+  let postsCollection: Collection
 
   // antes e depois de cada teste de integração, precisamos conectar e desconectar do banco
   beforeAll(async () => {
@@ -16,50 +16,50 @@ describe('CarMongo Repository', () => {
 
   // removo todos os registros da tabela antes de cada teste. Para não populuir as tabelas
   beforeEach(async () => {
-    carsCollection = await MongoHelper.getCollection('cars')
-    await carsCollection.deleteMany({})
+    postsCollection = await MongoHelper.getCollection('posts')
+    await postsCollection.deleteMany({})
   })
 
-  const makeSut = (): CarMongoRepository => {
-    return new CarMongoRepository()
+  const makeSut = (): PostMongoRepository => {
+    return new PostMongoRepository()
   }
 
   describe('add()', () => {
-    test('Should create a car on add success', async () => {
+    test('Should create a post on add success', async () => {
       const sut = makeSut()
-      await sut.add(mockCarsParams()[0])
-      const car = await carsCollection.findOne({ name: 'any_name' })
-      expect(car).toBeTruthy()
+      await sut.add(mockPostsParams()[0])
+      const post = await postsCollection.findOne({ name: 'any_name' })
+      expect(post).toBeTruthy()
     })
   })
 
   describe('loadAll()', () => {
-    test('Should load all cars on load success', async () => {
+    test('Should load all posts on load success', async () => {
       const sut = makeSut()
-      await carsCollection.insertMany([
-        { ...mockCarsParams()[0] },
-        { ...mockCarsParams()[1] }
+      await postsCollection.insertMany([
+        { ...mockPostsParams()[0] },
+        { ...mockPostsParams()[1] }
       ])
-      const cars = await sut.loadAll()
-      expect(cars.length).toBe(2)
-      expect(cars[0].name).toBe('any_name')
-      expect(cars[1].name).toBe('other_name')
+      const posts = await sut.loadAll()
+      expect(posts.length).toBe(2)
+      expect(posts[0].name).toBe('any_name')
+      expect(posts[1].name).toBe('other_name')
     })
 
-    test('Should load empty list if collection has no cars', async () => {
+    test('Should load empty list if collection has no posts', async () => {
       const sut = makeSut()
-      const cars = await sut.loadAll()
-      expect(cars.length).toBe(0)
+      const posts = await sut.loadAll()
+      expect(posts.length).toBe(0)
     })
   })
 
   describe('loadById()', () => {
-    test('Should return a car on success', async () => {
-      const res = await carsCollection.insertOne({ ...mockCarsParams()[0] })
+    test('Should return a post on success', async () => {
+      const res = await postsCollection.insertOne({ ...mockPostsParams()[0] })
       const sut = makeSut()
-      const car = await sut.loadById(res.ops[0]._id)
-      expect(car).toBeTruthy()
-      expect(car.id).toBeTruthy()
+      const post = await sut.loadById(res.ops[0]._id)
+      expect(post).toBeTruthy()
+      expect(post.id).toBeTruthy()
     })
   })
 })

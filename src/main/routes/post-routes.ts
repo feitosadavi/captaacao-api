@@ -2,16 +2,16 @@
 import { Router } from 'express'
 import { adaptRoute } from '../adapters/express-route-adapter'
 import {
-  makeAddCarController,
-  makeLoadCarByIdController,
-  makeLoadCarController
+  makeAddPostController,
+  makeLoadPostByIdController,
+  makeLoadPostController
 } from '@/main/factories'
 import { adminAuth } from '../middlewares/admin-auth'
 // import { auth } from '../middlewares/auth'
 
 export default (router: Router): void => {
-  router.post('/cars', adminAuth, adaptRoute(makeAddCarController()))
-  router.get('/cars', adaptRoute(makeLoadCarController()))
+  router.post('/posts', adminAuth, adaptRoute(makeAddPostController()))
+  router.get('/posts', adaptRoute(makeLoadPostController()))
 
-  router.get('/cars/:id', adaptRoute(makeLoadCarByIdController()))
+  router.get('/posts/:id', adaptRoute(makeLoadPostByIdController()))
 }

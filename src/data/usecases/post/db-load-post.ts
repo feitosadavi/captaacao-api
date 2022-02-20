@@ -1,12 +1,12 @@
-import { LoadCarsRepository } from '@/data/protocols'
-import { CarModel } from '@/domain/models'
-import { LoadCars } from '@/domain/usecases'
+import { LoadPostsRepository } from '@/data/protocols'
+import { PostModel } from '@/domain/models'
+import { LoadPosts } from '@/domain/usecases'
 
-export class DbLoadCars implements LoadCars {
-  constructor (private readonly loadCarsRepository: LoadCarsRepository) { }
+export class DbLoadPosts implements LoadPosts {
+  constructor (private readonly loadPostsRepository: LoadPostsRepository) { }
 
-  async load (): Promise<CarModel[]> {
-    const cars = await this.loadCarsRepository.loadAll()
-    return cars
+  async load (): Promise<PostModel[]> {
+    const posts = await this.loadPostsRepository.loadAll()
+    return posts
   }
 }

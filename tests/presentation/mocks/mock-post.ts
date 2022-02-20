@@ -1,30 +1,30 @@
-import { CarModel } from '@/domain/models'
-import { AddCar, AddCarParams, LoadCarById, LoadCars } from '@/domain/usecases'
-import { mockCarsModel } from '@tests/domain/mocks'
+import { PostModel } from '@/domain/models'
+import { AddPost, AddPostParams, LoadPostById, LoadPosts } from '@/domain/usecases'
+import { mockPostsModel } from '@tests/domain/mocks'
 
-export const mockAddCar = (): AddCar => {
-  class AddCarStub implements AddCar {
-    async add (data: AddCarParams): Promise<void> {
+export const mockAddPost = (): AddPost => {
+  class AddPostStub implements AddPost {
+    async add (data: AddPostParams): Promise<void> {
       return Promise.resolve()
     }
   }
-  return new AddCarStub()
+  return new AddPostStub()
 }
 
-export const mockLoadCars = (): LoadCars => {
-  class LoadCarsStub implements LoadCarsStub {
-    async load (): Promise<CarModel[]> {
-      return Promise.resolve(mockCarsModel())
+export const mockLoadPosts = (): LoadPosts => {
+  class LoadPostsStub implements LoadPostsStub {
+    async load (): Promise<PostModel[]> {
+      return Promise.resolve(mockPostsModel())
     }
   }
-  return new LoadCarsStub()
+  return new LoadPostsStub()
 }
 
-export const mockLoadCarById = (): LoadCarById => {
-  class LoadCarByIdStub implements LoadCarByIdStub {
-    async loadById (): Promise<CarModel> {
-      return Promise.resolve(mockCarsModel()[0])
+export const mockLoadPostById = (): LoadPostById => {
+  class LoadPostByIdStub implements LoadPostByIdStub {
+    async loadById (): Promise<PostModel> {
+      return Promise.resolve(mockPostsModel()[0])
     }
   }
-  return new LoadCarByIdStub()
+  return new LoadPostByIdStub()
 }

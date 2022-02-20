@@ -1,16 +1,16 @@
 import MockDate from 'mockdate'
 
-import { LoadCarById } from '@/domain/usecases'
-import { LoadCarByIdController } from '@/presentation/controllers'
+import { LoadPostById } from '@/domain/usecases'
+import { LoadPostByIdController } from '@/presentation/controllers'
 import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
 
-import { mockCarsModel, throwError } from '@tests/domain/mocks'
-import { mockLoadCarById } from '@tests/presentation/mocks'
+import { mockPostsModel, throwError } from '@tests/domain/mocks'
+import { mockLoadPostById } from '@tests/presentation/mocks'
 
 type SutTypes = {
-  sut: LoadCarByIdController
-  LoadCarByIdStub: LoadCarById
+  sut: LoadPostByIdController
+  LoadPostByIdStub: LoadPostById
 }
 
 const mockRequest = (): HttpRequest => (
@@ -22,15 +22,15 @@ const mockRequest = (): HttpRequest => (
 )
 
 const makeSut = (): SutTypes => {
-  const LoadCarByIdStub = mockLoadCarById()
-  const sut = new LoadCarByIdController(LoadCarByIdStub)
+  const LoadPostByIdStub = mockLoadPostById()
+  const sut = new LoadPostByIdController(LoadPostByIdStub)
   return {
     sut,
-    LoadCarByIdStub
+    LoadPostByIdStub
   }
 }
 
-describe('LoadCar Controller', () => {
+describe('LoadPost Controller', () => {
   beforeAll(() => {
     MockDate.set(new Date()) // congela a data com base no valor inserido
   })
@@ -39,29 +39,29 @@ describe('LoadCar Controller', () => {
     MockDate.reset() // congela a data com base no valor inserido
   })
 
-  test('Should call LoadCarById with correct id', async () => {
-    const { sut, LoadCarByIdStub } = makeSut()
-    const loadCarByIdSpy = jest.spyOn(LoadCarByIdStub, 'loadById')
+  test('Should call LoadPostById with correct id', async () => {
+    const { sut, LoadPostByIdStub } = makeSut()
+    const loadPostByIdSpy = jest.spyOn(LoadPostByIdStub, 'loadById')
     await sut.handle(mockRequest())
-    expect(loadCarByIdSpy).toHaveBeenCalledWith('any_id')
+    expect(loadPostByIdSpy).toHaveBeenCalledWith('any_id')
   })
 
   test('Should 200 on success', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(mockRequest())// ATENÇÃO
-    expect(httpResponse).toEqual(serverSuccess(mockCarsModel()[0]))
+    expect(httpResponse).toEqual(serverSuccess(mockPostsModel()[0]))
   })
 
-  test('Should 204 LoadCarById returns empty', async () => {
-    const { sut, LoadCarByIdStub } = makeSut()
-    jest.spyOn(LoadCarByIdStub, 'loadById').mockReturnValueOnce(Promise.resolve(null))
+  test('Should 204 LoadPostById returns empty', async () => {
+    const { sut, LoadPostByIdStub } = makeSut()
+    jest.spyOn(LoadPostByIdStub, 'loadById').mockReturnValueOnce(Promise.resolve(null))
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(noContent())
   })
 
-  test('Should return 500 if LoadCarById throws', async () => {
-    const { sut, LoadCarByIdStub } = makeSut()
-    jest.spyOn(LoadCarByIdStub, 'loadById').mockImplementationOnce(throwError)
+  test('Should return 500 if LoadPostById throws', async () => {
+    const { sut, LoadPostByIdStub } = makeSut()
+    jest.spyOn(LoadPostByIdStub, 'loadById').mockImplementationOnce(throwError)
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
   })

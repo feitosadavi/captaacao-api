@@ -1,14 +1,14 @@
-import { AddCar, AddCarParams } from '@/domain/usecases'
+import { AddPost, AddPostParams } from '@/domain/usecases'
 import { badRequest, noContent, serverError } from '@/presentation/helpers/http/http-helper'
 import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
 
-export class AddCarController implements Controller {
+export class AddPostController implements Controller {
   constructor (
     private readonly validation: Validation,
-    private readonly addCar: AddCar
+    private readonly addPost: AddPost
   ) {}
 
-  async handle (httpRequest: HttpRequest<AddCarParams>): Promise<HttpResponse> {
+  async handle (httpRequest: HttpRequest<AddPostParams>): Promise<HttpResponse> {
     try {
       const error = this.validation.validate(httpRequest.body)
       if (error) return badRequest(new Error())
@@ -21,7 +21,7 @@ export class AddCarController implements Controller {
         kmTraveled,
         vehicleItems
       } = httpRequest.body
-      await this.addCar.add({
+      await this.addPost.add({
         name,
         price,
         brand,

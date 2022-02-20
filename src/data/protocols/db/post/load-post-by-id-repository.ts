@@ -1,5 +1,5 @@
-import { CarModel } from '@/domain/models/post'
+import { PostModel } from '@/domain/models/post'
 
-export interface LoadCarByIdRepository {
-  loadById(id: string): Promise<CarModel>
+export interface LoadPostByIdRepository {
+  loadById(id: string): Promise<PostModel>
 }

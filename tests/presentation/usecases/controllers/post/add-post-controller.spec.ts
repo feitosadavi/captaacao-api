@@ -1,36 +1,36 @@
 import MockDate from 'mockdate'
 
-import { AddCarController } from '@/presentation/controllers'
+import { AddPostController } from '@/presentation/controllers'
 import { badRequest, serverError, noContent } from '@/presentation/helpers/http/http-helper'
 
-import { mockCarsParams, throwError } from '@tests/domain/mocks'
-import { mockAddCar, mockValidation } from '@tests/presentation/mocks'
+import { mockPostsParams, throwError } from '@tests/domain/mocks'
+import { mockAddPost, mockValidation } from '@tests/presentation/mocks'
 import { HttpRequest, Validation } from '@/presentation/protocols'
-import { AddCar } from '@/domain/usecases'
+import { AddPost } from '@/domain/usecases'
 
 const mockRequest = (): HttpRequest => ({
   body: {
-    ...mockCarsParams()[0]
+    ...mockPostsParams()[0]
   }
 })
 
 type SutTypes = {
-  sut: AddCarController
+  sut: AddPostController
   validationStub: Validation
-  addCarStub: AddCar
+  addPostStub: AddPost
 }
 
 const makeSut = (): SutTypes => {
   const validationStub = mockValidation()
-  const addCarStub = mockAddCar()
-  const sut = new AddCarController(validationStub, addCarStub)
+  const addPostStub = mockAddPost()
+  const sut = new AddPostController(validationStub, addPostStub)
   return {
     sut,
     validationStub,
-    addCarStub
+    addPostStub
   }
 }
-describe('AddCar Controller', () => {
+describe('AddPost Controller', () => {
   beforeAll(() => {
     MockDate.set(new Date()) // congela a data com base no valor inserido
   })
@@ -54,17 +54,17 @@ describe('AddCar Controller', () => {
     expect(httpResponse).toEqual(badRequest(new Error()))
   })
 
-  test('Should call AddCar with correct values', async () => {
-    const { sut, addCarStub } = makeSut()
-    const addSpy = jest.spyOn(addCarStub, 'add')
+  test('Should call AddPost with correct values', async () => {
+    const { sut, addPostStub } = makeSut()
+    const addSpy = jest.spyOn(addPostStub, 'add')
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
     expect(addSpy).toHaveBeenCalledWith(httpRequest.body)
   })
 
-  test('Should return 500 if AddCar throws', async () => {
-    const { sut, addCarStub } = makeSut()
-    jest.spyOn(addCarStub, 'add').mockImplementationOnce(throwError)
+  test('Should return 500 if AddPost throws', async () => {
+    const { sut, addPostStub } = makeSut()
+    jest.spyOn(addPostStub, 'add').mockImplementationOnce(throwError)
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
   })

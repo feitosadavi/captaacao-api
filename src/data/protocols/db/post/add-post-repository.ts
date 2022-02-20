@@ -1,5 +1,5 @@
-import { AddCarParams } from '@/domain/usecases/car/add-car'
+import { AddPostParams } from '@/domain/usecases'
 
-export interface AddCarRepository {
-  add (carData: AddCarParams): Promise<void>
+export interface AddPostRepository {
+  add (postData: AddPostParams): Promise<void>
 }

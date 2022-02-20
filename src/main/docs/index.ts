@@ -7,7 +7,7 @@ import { LoginParamsSchema } from './schemas/login-params-schemas'
 export default {
   openapi: '3.0.0',
   info: {
-    title: 'Car Pet API',
+    title: 'Post Pet API',
     description: 'Uma API para a criação de enquetes relacionadas à pets',
     version: '1.0.0'
   },

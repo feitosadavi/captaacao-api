@@ -1,5 +1,5 @@
-import { CarModel } from '../../models/post'
+import { PostModel } from '../../models/post'
 
-export interface LoadCarById {
-  loadById (id: string): Promise<CarModel>
+export interface LoadPostById {
+  loadById (id: string): Promise<PostModel>
 }

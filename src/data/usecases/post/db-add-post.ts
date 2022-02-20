@@ -1,12 +1,12 @@
-import { AddCarRepository } from '@/data/protocols'
-import { AddCar, AddCarParams } from '@/domain/usecases'
+import { AddPostRepository } from '@/data/protocols'
+import { AddPost, AddPostParams } from '@/domain/usecases'
 
-export class DbAddCar implements AddCar {
+export class DbAddPost implements AddPost {
   constructor (
-    private readonly addCarRepository: AddCarRepository
+    private readonly addPostRepository: AddPostRepository
   ) {}
 
-  async add (data: AddCarParams): Promise<void> {
-    await this.addCarRepository.add(data)
+  async add (data: AddPostParams): Promise<void> {
+    await this.addPostRepository.add(data)
   }
 }

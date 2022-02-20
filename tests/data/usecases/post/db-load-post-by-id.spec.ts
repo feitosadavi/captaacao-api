@@ -1,26 +1,26 @@
 import MockDate from 'mockdate'
 
-import { LoadCarByIdRepository } from '@/data/protocols'
-import { DbLoadCarById } from '@/data/usecases'
+import { LoadPostByIdRepository } from '@/data/protocols'
+import { DbLoadPostById } from '@/data/usecases'
 
-import { mockCarsModel, throwError } from '@tests/domain/mocks'
-import { mockLoadCarByIdRepository } from '@tests/data/mocks/db/mock-db-post'
+import { mockPostsModel, throwError } from '@tests/domain/mocks'
+import { mockLoadPostByIdRepository } from '@tests/data/mocks/db/mock-db-post'
 
 type SutTypes = {
-  sut: DbLoadCarById
-  loadCarByIdRepositoryStub: LoadCarByIdRepository
+  sut: DbLoadPostById
+  loadPostByIdRepositoryStub: LoadPostByIdRepository
 }
 
 const makeSut = (): SutTypes => {
-  const loadCarByIdRepositoryStub = mockLoadCarByIdRepository()
-  const sut = new DbLoadCarById(loadCarByIdRepositoryStub)
+  const loadPostByIdRepositoryStub = mockLoadPostByIdRepository()
+  const sut = new DbLoadPostById(loadPostByIdRepositoryStub)
   return {
     sut,
-    loadCarByIdRepositoryStub
+    loadPostByIdRepositoryStub
   }
 }
 
-describe('DbLoadCarById', () => {
+describe('DbLoadPostById', () => {
   beforeAll(() => {
     MockDate.set(new Date())
   })
@@ -29,28 +29,28 @@ describe('DbLoadCarById', () => {
   })
 
   test('Should call LoadSurvetByIdRepository with correct values', async () => {
-    const { sut, loadCarByIdRepositoryStub } = makeSut()
-    const loadById = jest.spyOn(loadCarByIdRepositoryStub, 'loadById')
+    const { sut, loadPostByIdRepositoryStub } = makeSut()
+    const loadById = jest.spyOn(loadPostByIdRepositoryStub, 'loadById')
     await sut.loadById('any_id')
     expect(loadById).toHaveBeenCalledWith('any_id')
   })
 
-  test('Should return an car on LoadSurvetByIdRepository success', async () => {
+  test('Should return an post on LoadSurvetByIdRepository success', async () => {
     const { sut } = makeSut()
-    const car = await sut.loadById('any_id')
-    expect(car).toEqual(mockCarsModel()[0])
+    const post = await sut.loadById('any_id')
+    expect(post).toEqual(mockPostsModel()[0])
   })
 
   test('Should return null if LoadSurvetByIdRepository returns null', async () => {
-    const { sut, loadCarByIdRepositoryStub } = makeSut()
-    jest.spyOn(loadCarByIdRepositoryStub, 'loadById').mockReturnValueOnce(null)
-    const car = await sut.loadById('any_id')
-    expect(car).toBeNull()
+    const { sut, loadPostByIdRepositoryStub } = makeSut()
+    jest.spyOn(loadPostByIdRepositoryStub, 'loadById').mockReturnValueOnce(null)
+    const post = await sut.loadById('any_id')
+    expect(post).toBeNull()
   })
 
   test('Should throw if LoadSurvetByIdRepository throws', async () => {
-    const { sut, loadCarByIdRepositoryStub } = makeSut()
-    jest.spyOn(loadCarByIdRepositoryStub, 'loadById').mockImplementationOnce(throwError)
+    const { sut, loadPostByIdRepositoryStub } = makeSut()
+    jest.spyOn(loadPostByIdRepositoryStub, 'loadById').mockImplementationOnce(throwError)
     const promise = sut.loadById('any_id')
     await expect(promise).rejects.toThrow()
   })

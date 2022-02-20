@@ -1,24 +1,24 @@
-import { AddCarRepository, LoadCarByIdRepository, LoadCarsRepository } from '@/data/protocols'
-import { CarModel } from '@/domain/models/post'
-import { AddCarParams } from '@/domain/usecases'
+import { AddPostRepository, LoadPostByIdRepository, LoadPostsRepository } from '@/data/protocols'
+import { PostModel } from '@/domain/models/post'
+import { AddPostParams } from '@/domain/usecases'
 import { ObjectID } from 'mongodb'
 import { MongoHelper } from './mongo-helper'
 
-export class CarMongoRepository implements AddCarRepository, LoadCarsRepository, LoadCarByIdRepository {
-  async add (carData: AddCarParams): Promise<void> {
-    const carsCollection = await MongoHelper.getCollection('cars')
-    await carsCollection.insertOne(carData)
+export class PostMongoRepository implements AddPostRepository, LoadPostsRepository, LoadPostByIdRepository {
+  async add (postData: AddPostParams): Promise<void> {
+    const postsCollection = await MongoHelper.getCollection('posts')
+    await postsCollection.insertOne(postData)
   }
 
-  async loadAll (): Promise<CarModel[]> {
-    const carsCollection = await MongoHelper.getCollection('cars')
-    const cars = await carsCollection.find().toArray()
-    return cars && MongoHelper.mapCollection(cars)
+  async loadAll (): Promise<PostModel[]> {
+    const postsCollection = await MongoHelper.getCollection('posts')
+    const posts = await postsCollection.find().toArray()
+    return posts && MongoHelper.mapCollection(posts)
   }
 
-  async loadById (id: string): Promise<CarModel> {
-    const carsCollection = await MongoHelper.getCollection('cars')
-    const car = await carsCollection.findOne({ _id: new ObjectID(id) })
-    return car && MongoHelper.map(car)
+  async loadById (id: string): Promise<PostModel> {
+    const postsCollection = await MongoHelper.getCollection('posts')
+    const post = await postsCollection.findOne({ _id: new ObjectID(id) })
+    return post && MongoHelper.map(post)
   }
 }

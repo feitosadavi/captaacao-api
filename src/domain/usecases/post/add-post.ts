@@ -1,7 +1,7 @@
-import { CarModel } from '../../models/post'
+import { PostModel } from '../../models/post'
 
-export type AddCarParams = Omit<CarModel, 'id'>
+export type AddPostParams = Omit<PostModel, 'id'>
 
-export interface AddCar {
-  add (carData: AddCarParams): Promise<void>
+export interface AddPost {
+  add (postData: AddPostParams): Promise<void>
 }
