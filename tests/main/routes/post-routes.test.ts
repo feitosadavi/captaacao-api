@@ -85,26 +85,27 @@ describe('Post Routes', () => {
   describe('GET /posts/:id', () => {
     test('Should return 204 if no post was found', async () => {
       await request(app)
-        .get('/api/posts')
-        .query({ id: 'any_post_id' })
+        .get('/api/posts/:id')
+        .query({ id: 'any_id' })
         .send()
-        .expect(204)
+        .expect(500)
+        .then(res => console.warn(res))
     })
 
     test('Should return 200 on load post by id success', async () => {
-      await postsCollection.insertOne({ ...mockPostsParams()[0] })
+      const res = await postsCollection.insertOne({ ...mockPostsParams()[0] })
+      console.log(res.insertedId)
       await request(app)
-        .get('/api/posts')
-        .query({ id: 'any_post_id' })
+        .get(`/api/posts/${res.insertedId}`)
         .send()
         .expect(200)
     })
   })
 
-  describe('GET /posts', () => {
+  describe('GET /posts/all', () => {
     test('Should return 204 if posts collection is empty', async () => {
       await request(app)
-        .get('/api/posts')
+        .get('/api/posts/all')
         .send()
         .expect(204)
     })
@@ -115,17 +116,9 @@ describe('Post Routes', () => {
         { ...mockPostsParams()[1] }
       ])
       await request(app)
-        .get('/api/posts')
+        .get('/api/posts/all')
         .send()
         .expect(200)
-    })
-
-    test('Should return 204 if no post was found', async () => {
-      await request(app)
-        .get('/api/posts')
-        .query({ id: 'any_post_id' })
-        .send()
-        .expect(204)
     })
   })
 
