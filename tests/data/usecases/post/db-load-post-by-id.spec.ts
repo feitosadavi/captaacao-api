@@ -30,28 +30,28 @@ describe('DbLoadPostById', () => {
 
   test('Should call LoadSurvetByIdRepository with correct values', async () => {
     const { sut, loadPostByIdRepositoryStub } = makeSut()
-    const loadById = jest.spyOn(loadPostByIdRepositoryStub, 'loadById')
-    await sut.loadById('any_id')
-    expect(loadById).toHaveBeenCalledWith('any_id')
+    const loadByIdSpy = jest.spyOn(loadPostByIdRepositoryStub, 'loadById')
+    await sut.load({ id: 'any_id' })
+    expect(loadByIdSpy).toHaveBeenCalledWith({ id: 'any_id' })
   })
 
   test('Should return an post on LoadSurvetByIdRepository success', async () => {
     const { sut } = makeSut()
-    const post = await sut.loadById('any_id')
+    const post = await sut.load({ id: 'any_id' })
     expect(post).toEqual(mockPostsModel()[0])
   })
 
   test('Should return null if LoadSurvetByIdRepository returns null', async () => {
     const { sut, loadPostByIdRepositoryStub } = makeSut()
     jest.spyOn(loadPostByIdRepositoryStub, 'loadById').mockReturnValueOnce(null)
-    const post = await sut.loadById('any_id')
+    const post = await sut.load({ id: 'any_id' })
     expect(post).toBeNull()
   })
 
   test('Should throw if LoadSurvetByIdRepository throws', async () => {
     const { sut, loadPostByIdRepositoryStub } = makeSut()
     jest.spyOn(loadPostByIdRepositoryStub, 'loadById').mockImplementationOnce(throwError)
-    const promise = sut.loadById('any_id')
+    const promise = sut.load({ id: 'any_id' })
     await expect(promise).rejects.toThrow()
   })
 })

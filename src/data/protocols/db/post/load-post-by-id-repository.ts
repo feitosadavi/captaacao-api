@@ -1,5 +1,10 @@
-import { PostModel } from '@/domain/models/post'
+import { LoadPostById } from '@/domain/usecases'
 
 export interface LoadPostByIdRepository {
-  loadById(id: string): Promise<PostModel>
+  loadById (params: LoadPostByIdRepository.Params): LoadPostByIdRepository.Result
+}
+
+export namespace LoadPostByIdRepository {
+  export type Params = LoadPostById.Params
+  export type Result = Promise<LoadPostById.Result>
 }

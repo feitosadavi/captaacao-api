@@ -1,20 +1,20 @@
 import MockDate from 'mockdate'
 
-import { LoadPosts } from '@/domain/usecases'
-import { LoadPostsController } from '@/presentation/controllers'
+import { LoadAllPosts } from '@/domain/usecases'
+import { LoadAllPostsController } from '@/presentation/controllers'
 import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
 
 import { mockPostsModel, throwError } from '@tests/domain/mocks'
-import { mockLoadPosts } from '@tests/presentation/mocks'
+import { mockLoadAllPosts } from '@tests/presentation/mocks'
 
 type SutTypes = {
-  sut: LoadPostsController
-  loadPostsStub: LoadPosts
+  sut: LoadAllPostsController
+  loadPostsStub: LoadAllPosts
 }
 
 const makeSut = (): SutTypes => {
-  const loadPostsStub = mockLoadPosts()
-  const sut = new LoadPostsController(loadPostsStub)
+  const loadPostsStub = mockLoadAllPosts()
+  const sut = new LoadAllPostsController(loadPostsStub)
   return {
     sut,
     loadPostsStub
@@ -30,7 +30,7 @@ describe('LoadPost Controller', () => {
     MockDate.reset() // congela a data com base no valor inserido
   })
 
-  test('Should call LoadPosts', async () => {
+  test('Should call LoadAllPosts', async () => {
     const { sut, loadPostsStub } = makeSut()
     const loadPostsSpy = jest.spyOn(loadPostsStub, 'load')
     await sut.handle({})
@@ -43,14 +43,14 @@ describe('LoadPost Controller', () => {
     expect(httpResponse).toEqual(serverSuccess(mockPostsModel()))
   })
 
-  test('Should 204 LoadPosts returns empty', async () => {
+  test('Should 204 LoadAllPosts returns empty', async () => {
     const { sut, loadPostsStub } = makeSut()
     jest.spyOn(loadPostsStub, 'load').mockReturnValueOnce(Promise.resolve([]))
     const httpResponse = await sut.handle({})
     expect(httpResponse).toEqual(noContent())
   })
 
-  test('Should return 500 if LoadPosts throws', async () => {
+  test('Should return 500 if LoadAllPosts throws', async () => {
     const { sut, loadPostsStub } = makeSut()
     jest.spyOn(loadPostsStub, 'load').mockImplementationOnce(throwError)
     const httpResponse = await sut.handle({})

@@ -3,10 +3,12 @@ import { AddPostController } from '@/presentation/controllers'
 import { Controller } from '@/presentation/protocols'
 import { makeAddPostValidation } from '@/main/factories'
 import { LogControllerDecorator } from '@/main/decorators/log-controller-decorator'
+import { DbAddPost } from '@/data/usecases'
 
 export const makeAddPostController = (): Controller => {
   const postMongoRepository = new PostMongoRepository()
-  const addPostController = new AddPostController(makeAddPostValidation(), postMongoRepository)
+  const dbAddPost = new DbAddPost(postMongoRepository)
+  const addPostController = new AddPostController(makeAddPostValidation(), dbAddPost)
   const logMongoRepository = new LogMongoRepository()
   return new LogControllerDecorator(addPostController, logMongoRepository)
 }

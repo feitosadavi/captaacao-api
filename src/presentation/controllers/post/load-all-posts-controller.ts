@@ -1,9 +1,9 @@
-import { LoadPosts } from '@/domain/usecases'
+import { LoadAllPosts } from '@/domain/usecases'
 import { noContent, serverError, serverSuccess } from '@/presentation/helpers'
 import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 
-export class LoadPostsController implements Controller {
-  constructor (private readonly loadPosts: LoadPosts) { }
+export class LoadAllPostsController implements Controller {
+  constructor (private readonly loadPosts: LoadAllPosts) { }
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const posts = await this.loadPosts.load()

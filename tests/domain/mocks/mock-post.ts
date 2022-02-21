@@ -1,5 +1,5 @@
-import { PostModel } from '../models/post'
-import { AddPostParams } from '@/domain/usecases'
+import { PostModel } from '@/domain/models'
+import { AddPost } from '@/domain/usecases'
 
 export const mockPostsModel = (): PostModel[] => {
   return [{
@@ -37,7 +37,7 @@ export const mockPostsModel = (): PostModel[] => {
   ]
 }
 
-export const mockPostsParams = (): AddPostParams[] => {
+export const mockPostsParams = (): AddPost.Params[] => {
   return [{
     name: 'any_name',
     price: 100000,

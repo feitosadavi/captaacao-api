@@ -1,22 +1,20 @@
-import { AddPostRepository, LoadPostByIdRepository, LoadPostsRepository } from '@/data/protocols'
-import { PostModel } from '@/domain/models/post'
-import { AddPostParams } from '@/domain/usecases'
+import { AddPostRepository, LoadPostByIdRepository, LoadAllPostsRepository } from '@/data/protocols'
 import { ObjectID } from 'mongodb'
 import { MongoHelper } from './mongo-helper'
 
-export class PostMongoRepository implements AddPostRepository, LoadPostsRepository, LoadPostByIdRepository {
-  async add (postData: AddPostParams): Promise<void> {
+export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepository, LoadPostByIdRepository {
+  async addPost (params: AddPostRepository.Params): AddPostRepository.Result {
     const postsCollection = await MongoHelper.getCollection('posts')
-    await postsCollection.insertOne(postData)
+    await postsCollection.insertOne(params)
   }
 
-  async loadAll (): Promise<PostModel[]> {
+  async loadAll (): LoadAllPostsRepository.Result {
     const postsCollection = await MongoHelper.getCollection('posts')
     const posts = await postsCollection.find().toArray()
     return posts && MongoHelper.mapCollection(posts)
   }
 
-  async loadById (id: string): Promise<PostModel> {
+  async loadById ({ id }: LoadPostByIdRepository.Params): LoadPostByIdRepository.Result {
     const postsCollection = await MongoHelper.getCollection('posts')
     const post = await postsCollection.findOne({ _id: new ObjectID(id) })
     return post && MongoHelper.map(post)

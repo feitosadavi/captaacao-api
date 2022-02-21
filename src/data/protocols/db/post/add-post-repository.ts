@@ -1,5 +1,10 @@
-import { AddPostParams } from '@/domain/usecases'
+import { AddPost } from '@/domain/usecases'
 
 export interface AddPostRepository {
-  add (postData: AddPostParams): Promise<void>
+  addPost (params: AddPostRepository.Params): AddPostRepository.Result
+}
+
+export namespace AddPostRepository {
+  export type Params = AddPost.Params
+  export type Result = Promise<AddPost.Result>
 }

@@ -1,12 +1,12 @@
 import { AddPostRepository } from '@/data/protocols'
-import { AddPost, AddPostParams } from '@/domain/usecases'
+import { AddPost } from '@/domain/usecases'
 
 export class DbAddPost implements AddPost {
   constructor (
     private readonly addPostRepository: AddPostRepository
   ) {}
 
-  async add (data: AddPostParams): Promise<void> {
-    await this.addPostRepository.add(data)
+  async add (params: AddPost.Params): AddPost.Result {
+    await this.addPostRepository.addPost(params)
   }
 }

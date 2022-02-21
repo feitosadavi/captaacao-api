@@ -2,7 +2,7 @@ import MockDate from 'mockdate'
 
 import { LoadPostById } from '@/domain/usecases'
 import { LoadPostByIdController } from '@/presentation/controllers'
-import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
+import { noContent, serverError, serverSuccess } from '@/presentation/helpers'
 import { HttpRequest } from '@/presentation/protocols'
 
 import { mockPostsModel, throwError } from '@tests/domain/mocks'
@@ -13,7 +13,7 @@ type SutTypes = {
   LoadPostByIdStub: LoadPostById
 }
 
-const mockRequest = (): HttpRequest => (
+const mockRequest = (): HttpRequest<any, any, LoadPostById.Params> => (
   {
     params: {
       id: 'any_id'
@@ -41,9 +41,9 @@ describe('LoadPost Controller', () => {
 
   test('Should call LoadPostById with correct id', async () => {
     const { sut, LoadPostByIdStub } = makeSut()
-    const loadPostByIdSpy = jest.spyOn(LoadPostByIdStub, 'loadById')
+    const loadPostByIdSpy = jest.spyOn(LoadPostByIdStub, 'load')
     await sut.handle(mockRequest())
-    expect(loadPostByIdSpy).toHaveBeenCalledWith('any_id')
+    expect(loadPostByIdSpy).toHaveBeenCalledWith({ id: 'any_id' })
   })
 
   test('Should 200 on success', async () => {
@@ -54,14 +54,14 @@ describe('LoadPost Controller', () => {
 
   test('Should 204 LoadPostById returns empty', async () => {
     const { sut, LoadPostByIdStub } = makeSut()
-    jest.spyOn(LoadPostByIdStub, 'loadById').mockReturnValueOnce(Promise.resolve(null))
+    jest.spyOn(LoadPostByIdStub, 'load').mockReturnValueOnce(Promise.resolve(null))
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(noContent())
   })
 
   test('Should return 500 if LoadPostById throws', async () => {
     const { sut, LoadPostByIdStub } = makeSut()
-    jest.spyOn(LoadPostByIdStub, 'loadById').mockImplementationOnce(throwError)
+    jest.spyOn(LoadPostByIdStub, 'load').mockImplementationOnce(throwError)
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
   })

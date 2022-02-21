@@ -27,7 +27,7 @@ describe('PostMongo Repository', () => {
   describe('add()', () => {
     test('Should create a post on add success', async () => {
       const sut = makeSut()
-      await sut.add(mockPostsParams()[0])
+      await sut.addPost(mockPostsParams()[0])
       const post = await postsCollection.findOne({ name: 'any_name' })
       expect(post).toBeTruthy()
     })

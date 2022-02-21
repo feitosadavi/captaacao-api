@@ -1,5 +1,9 @@
-import { PostModel } from '@/domain/models/post'
+import { LoadAllPosts } from '@/domain/usecases'
 
-export interface LoadPostsRepository {
-  loadAll(): Promise<PostModel[]>
+export interface LoadAllPostsRepository {
+  loadAll (): LoadAllPostsRepository.Result
+}
+
+export namespace LoadAllPostsRepository {
+  export type Result = Promise<LoadAllPosts.Result>
 }

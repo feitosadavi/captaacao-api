@@ -26,7 +26,7 @@ describe('DbAddPost UseCase', () => {
   test('Should call AddPostRepository with correct values', async () => {
     const { sut, addPostRepositoryStub } = makeSut()
     const postData = mockPostsParams()
-    const addSpy = jest.spyOn(addPostRepositoryStub, 'add')
+    const addSpy = jest.spyOn(addPostRepositoryStub, 'addPost')
     await sut.add(postData)
     expect(addSpy).toHaveBeenCalledWith(postData)
   })
@@ -34,7 +34,7 @@ describe('DbAddPost UseCase', () => {
   test('Should throw if AddPostRepository throws', async () => {
     const { sut, addPostRepositoryStub } = makeSut()
     const postData = mockPostsParams()
-    jest.spyOn(addPostRepositoryStub, 'add').mockImplementationOnce(throwError)
+    jest.spyOn(addPostRepositoryStub, 'addPost').mockImplementationOnce(throwError)
     const promise = sut.add(postData)
     await expect(promise).rejects.toThrow()
   })
