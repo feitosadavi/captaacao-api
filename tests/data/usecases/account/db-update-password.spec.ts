@@ -10,7 +10,7 @@ type SutTypes = {
   updatePasswordRepositoryStub: UpdatePasswordRepository
 }
 
-const mockUpdateParams = (): UpdatePassword.Params => ({
+const mockParams = (): UpdatePassword.Params => ({
   id: 'any_id',
   password: 'any_password'
 })
@@ -30,7 +30,7 @@ describe('DbUpdatePassword Usecase', () => {
   test('Should call Hasher with correct params', async () => {
     const { sut, hasherStub } = makeSut()
     const hashSpy = jest.spyOn(hasherStub, 'hash')
-    await sut.update(mockUpdateParams())
+    await sut.update(mockParams())
     expect(hashSpy).toHaveBeenCalledWith('any_password')
   })
 
@@ -48,14 +48,14 @@ describe('DbUpdatePassword Usecase', () => {
   test('Should DbUpdatePassword throw if UpdatePasswordRepository throws', async () => {
     const { sut, updatePasswordRepositoryStub } = makeSut()
     jest.spyOn(updatePasswordRepositoryStub, 'updatePassword').mockReturnValueOnce(Promise.reject(new Error()))
-    const params = mockUpdateParams()
+    const params = mockParams()
     const promise = sut.update(params)
     await expect(promise).rejects.toThrow()
   })
 
   test('Should return true on success', async () => {
     const { sut } = makeSut()
-    const result = await sut.update(mockUpdateParams())
+    const result = await sut.update(mockParams())
     expect(result).toEqual(true)
   })
 })

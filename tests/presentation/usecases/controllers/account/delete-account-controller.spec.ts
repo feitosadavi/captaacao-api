@@ -27,7 +27,7 @@ describe('DeleteAccount Controller', () => {
     const { sut, deleteAccountStub } = makeSut()
     const deleteAccountStubSpy = jest.spyOn(deleteAccountStub, 'delete')
     await sut.handle(mockRequest())
-    expect(deleteAccountStubSpy).toHaveBeenCalledWith('any_id')
+    expect(deleteAccountStubSpy).toHaveBeenCalledWith(mockRequest())
   })
 
   test('Should return 500 if deleteAccount throws', async () => {

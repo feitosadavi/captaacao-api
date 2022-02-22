@@ -68,7 +68,7 @@ describe('Auth Middleware', () => {
     const { sut, loadAccountByTokenStub } = makeSut(role)
     const loadSpy = jest.spyOn(loadAccountByTokenStub, 'load')
     await sut.handle(mockRequest())
-    expect(loadSpy).toHaveBeenCalledWith('any_token', role)
+    expect(loadSpy).toHaveBeenCalledWith({ accessToken: 'any_token', role })
   })
 
   test('Should return 403 if LoadAccountByToken returns null ', async () => {

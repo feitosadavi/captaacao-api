@@ -1,26 +1,26 @@
 import MockDate from 'mockdate'
 
-import { LoadAccounts } from '@/domain/usecases'
-import { LoadAccountsController } from '@/presentation/controllers'
+import { LoadAllAccounts } from '@/domain/usecases'
+import { LoadAllAccountsController } from '@/presentation/controllers'
 import { noContent, serverError, serverSuccess } from '@/presentation/helpers'
 
-import { mockLoadAccounts } from '@tests/presentation/mocks'
+import { mockLoadAllAccounts } from '@tests/presentation/mocks'
 import { mockAccountModel, throwError } from '@tests/domain/mocks'
 
 type SutTypes = {
-  sut: LoadAccountsController
-  loadAccountsStub: LoadAccounts
+  sut: LoadAllAccountsController
+  loadAccountsStub: LoadAllAccounts
 }
 
 const makeSut = (): SutTypes => {
-  const loadAccountsStub = mockLoadAccounts()
-  const sut = new LoadAccountsController(loadAccountsStub)
+  const loadAccountsStub = mockLoadAllAccounts()
+  const sut = new LoadAllAccountsController(loadAccountsStub)
   return {
     sut,
     loadAccountsStub
   }
 }
-const mockRequest = (): LoadAccountsController.Request => ({
+const mockRequest = (): LoadAllAccountsController.Request => ({
   headers: {
     'x-access-token': 'any_acess_token'
   }

@@ -1,14 +1,13 @@
-import { LoadAccountsRepository } from '@/data/protocols'
-import { LoadAccounts } from '@/domain/usecases'
-import { AccountModel } from '@/domain/models'
+import { LoadAllAccountsRepository } from '@/data/protocols'
+import { LoadAllAccounts } from '@/domain/usecases'
 
-export class DbLoadAccounts implements LoadAccounts {
+export class DbLoadAllAccounts implements LoadAllAccounts {
   constructor (
-    private readonly loadAccountsRepository: LoadAccountsRepository
+    private readonly loadAccountsRepository: LoadAllAccountsRepository
   ) {}
 
-  async load (): Promise<AccountModel[]> {
-    const accounts = await this.loadAccountsRepository.loadAccounts()
+  async load (): LoadAllAccounts.Result {
+    const accounts = await this.loadAccountsRepository.loadAll()
     return accounts
   }
 }

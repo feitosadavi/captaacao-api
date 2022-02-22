@@ -7,7 +7,7 @@ export class DbUpdatePassword implements UpdatePassword {
     private readonly updatePasswordRepository: UpdatePasswordRepository
   ) { }
 
-  async update ({ id, password }: UpdatePassword.Params): Promise<boolean> {
+  async update ({ id, password }: UpdatePassword.Params): UpdatePassword.Result {
     const hashedPassword = await this.hasher.hash(password)
     const result = await this.updatePasswordRepository.updatePassword({ password: hashedPassword, id })
     return result

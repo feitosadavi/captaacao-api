@@ -1,11 +1,11 @@
-import { DbLoadAccounts } from '@/data/usecases'
+import { DbLoadAllAccounts } from '@/data/usecases'
 import { AccountMongoRepository } from '@/infra/db/mongodb'
-import { LoadAccountsController } from '@/presentation/controllers'
+import { LoadAllAccountsController } from '@/presentation/controllers'
 import { Controller } from '@/presentation/protocols'
 
-export const makeLoadAccountsController = (): Controller => {
+export const makeLoadAllAccountsController = (): Controller => {
   const accountMongoRepository = new AccountMongoRepository()
-  const loadAccounts = new DbLoadAccounts(accountMongoRepository)
+  const loadAccounts = new DbLoadAllAccounts(accountMongoRepository)
 
-  return new LoadAccountsController(loadAccounts)
+  return new LoadAllAccountsController(loadAccounts)
 }

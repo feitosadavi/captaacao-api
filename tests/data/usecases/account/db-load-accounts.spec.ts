@@ -1,26 +1,26 @@
 import MockDate from 'mockdate'
 
-import { DbLoadAccounts } from '@/data/usecases'
-import { LoadAccountsRepository } from '@/data/protocols'
+import { DbLoadAllAccounts } from '@/data/usecases'
+import { LoadAllAccountsRepository } from '@/data/protocols'
 
-import { mockLoadAccountsRepository } from '@tests/data/mocks'
+import { mockLoadAllAccountsRepository } from '@tests/data/mocks'
 import { mockAccountsModel, throwError } from '@tests/domain/mocks'
 
 type SutTypes = {
-  sut: DbLoadAccounts
-  loadAccountsRepositoryStub: LoadAccountsRepository
+  sut: DbLoadAllAccounts
+  loadAccountsRepositoryStub: LoadAllAccountsRepository
 }
 
 const makeSut = (): SutTypes => {
-  const loadAccountsRepositoryStub = mockLoadAccountsRepository()
-  const sut = new DbLoadAccounts(loadAccountsRepositoryStub)
+  const loadAccountsRepositoryStub = mockLoadAllAccountsRepository()
+  const sut = new DbLoadAllAccounts(loadAccountsRepositoryStub)
   return {
     sut,
     loadAccountsRepositoryStub
   }
 }
 
-describe('DbLoadAccounts', () => {
+describe('DbLoadAllAccounts', () => {
   beforeAll(() => {
     MockDate.set(new Date())
   })
@@ -28,30 +28,30 @@ describe('DbLoadAccounts', () => {
     MockDate.reset()
   })
 
-  test('Should call LoadAccountsRepository', async () => {
+  test('Should call LoadAllAccountsRepository', async () => {
     const { sut, loadAccountsRepositoryStub } = makeSut()
-    const loadAccountsRepositoryStubSpy = jest.spyOn(loadAccountsRepositoryStub, 'loadAccounts')
+    const loadAccountsRepositoryStubSpy = jest.spyOn(loadAccountsRepositoryStub, 'loadAll')
     await sut.load()
     expect(loadAccountsRepositoryStubSpy).toHaveBeenCalled()
   })
 
-  test('Should throw if LoadAccountsRepository throws', async () => {
+  test('Should throw if LoadAllAccountsRepository throws', async () => {
     const { sut, loadAccountsRepositoryStub } = makeSut()
-    const loadAccountsRepositoryStubSpy = jest.spyOn(loadAccountsRepositoryStub, 'loadAccounts')
+    const loadAccountsRepositoryStubSpy = jest.spyOn(loadAccountsRepositoryStub, 'loadAll')
     loadAccountsRepositoryStubSpy.mockImplementationOnce(throwError)
     const promise = sut.load()
     await expect(promise).rejects.toThrow()
   })
 
-  test('Should return account array if LoadAccountsRepository return account array', async () => {
+  test('Should return account array if LoadAllAccountsRepository return account array', async () => {
     const { sut } = makeSut()
     const accounts = await sut.load()
     expect(accounts).toEqual(mockAccountsModel())
   })
 
-  test('Should return null if LoadAccountsRepository return null', async () => {
+  test('Should return null if LoadAllAccountsRepository return null', async () => {
     const { sut, loadAccountsRepositoryStub } = makeSut()
-    const loadAccountsRepositoryStubSpy = jest.spyOn(loadAccountsRepositoryStub, 'loadAccounts')
+    const loadAccountsRepositoryStubSpy = jest.spyOn(loadAccountsRepositoryStub, 'loadAll')
     loadAccountsRepositoryStubSpy.mockReturnValueOnce(Promise.resolve(null))
     const accounts = await sut.load()
     expect(accounts).toBeNull()

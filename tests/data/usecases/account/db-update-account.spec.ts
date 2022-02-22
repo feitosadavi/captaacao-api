@@ -12,7 +12,7 @@ type SutTypes = {
   loadAccountByIdRepositoryStub: LoadAccountByIdRepository
 }
 
-const mockUpdateParams = (): UpdateAccount.Params => ({
+const mockParams = (): UpdateAccount.Params => ({
   id: 'any_id',
   fields: { any_field: 'any_value' }
 })
@@ -34,28 +34,28 @@ describe('DbUpdateAccount Usecase', () => {
   test('Should call LoadAccountByIdRepository with correct id', async () => {
     const { sut, loadAccountByIdRepositoryStub } = makeSut()
     const loadSpy = jest.spyOn(loadAccountByIdRepositoryStub, 'loadById')
-    await sut.update(mockUpdateParams())
-    expect(loadSpy).toHaveBeenCalledWith('any_id')
+    await sut.update(mockParams())
+    expect(loadSpy).toHaveBeenCalledWith({ id: 'any_id' })
   })
 
   test('Should return false if LoadAccountByIdRepository returns null', async () => {
     const { sut, loadAccountByIdRepositoryStub } = makeSut()
     jest.spyOn(loadAccountByIdRepositoryStub, 'loadById').mockResolvedValueOnce(Promise.resolve(null))
-    const account = await sut.update(mockUpdateParams())
+    const account = await sut.update(mockParams())
     expect(account).toBe(false)
   })
 
   test('Should return true if LoadAccountByIdRepository returns an account', async () => {
     const { sut, loadAccountByIdRepositoryStub } = makeSut()
     jest.spyOn(loadAccountByIdRepositoryStub, 'loadById').mockResolvedValueOnce(Promise.resolve(mockAccountModel()))
-    const reuslt = await sut.update(mockUpdateParams())
+    const reuslt = await sut.update(mockParams())
     expect(reuslt).toBe(true)
   })
 
   test('Should call UpdateAccountRepository with correct values', async () => {
     const { sut, updateAccountRepositoryStub } = makeSut()
     const updateSpy = jest.spyOn(updateAccountRepositoryStub, 'updateAccount')
-    const params = mockUpdateParams()
+    const params = mockParams()
     await sut.update(params)
     expect(updateSpy).toHaveBeenCalledWith(params)
   })
@@ -63,14 +63,14 @@ describe('DbUpdateAccount Usecase', () => {
   test('Should DbUpdateAccount throw if UpdateAccountRepository throws', async () => {
     const { sut, updateAccountRepositoryStub } = makeSut()
     jest.spyOn(updateAccountRepositoryStub, 'updateAccount').mockReturnValueOnce(Promise.reject(new Error()))
-    const params = mockUpdateParams()
+    const params = mockParams()
     const promise = sut.update(params)
     await expect(promise).rejects.toThrow()
   })
 
   test('Should return true on success', async () => {
     const { sut } = makeSut()
-    const result = await sut.update(mockUpdateParams())
+    const result = await sut.update(mockParams())
     expect(result).toEqual(true)
   })
 })

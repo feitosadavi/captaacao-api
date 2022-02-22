@@ -7,8 +7,8 @@ export class DbUpdateAccount implements UpdateAccount {
     private readonly loadAccountByIdRepository: LoadAccountByIdRepository
   ) { }
 
-  async update (params: UpdateAccount.Params): Promise<boolean> {
-    const account = await this.loadAccountByIdRepository.loadById(params.id)
+  async update (params: UpdateAccount.Params): UpdateAccount.Result {
+    const account = await this.loadAccountByIdRepository.loadById({ id: params.id })
     let result = false
     if (account?.id) {
       result = await this.updateAccountRepository.updateAccount(params)

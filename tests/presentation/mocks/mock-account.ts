@@ -1,17 +1,16 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   AddAccount,
   LoadAccountByToken,
-  LoadAccounts,
+  LoadAllAccounts,
   LoadAccountById,
   DeleteAccount,
   UpdateAccount,
   LoadIdByEmail,
   PasswordRecover,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   LoadAccountByCode,
   UpdatePassword
 } from '@/domain/usecases'
-import { AccountModel } from '@/domain/models'
 import { Authentication, AuthenticationParams } from '@/domain/usecases/authentication'
 
 import { mockAccountModel, mockAccountConfirmationCode } from '@tests/domain/mocks'
@@ -28,7 +27,7 @@ export const mockAddAccountStub = (): AddAccount => {
 
 export const mockLoadAccountByToken = (): LoadAccountByToken => {
   class LoadAccountByTokenStub implements LoadAccountByToken {
-    async load (accessToken: string): Promise<AccountModel> {
+    async load (params: LoadAccountByToken.Params): LoadAccountByToken.Result {
       return Promise.resolve(mockAccountModel())
     }
   }
@@ -36,19 +35,19 @@ export const mockLoadAccountByToken = (): LoadAccountByToken => {
   return new LoadAccountByTokenStub()
 }
 
-export const mockLoadAccounts = (): LoadAccounts => {
-  class LoadAccountsStub implements LoadAccounts {
-    async load (): Promise<AccountModel[]> {
+export const mockLoadAllAccounts = (): LoadAllAccounts => {
+  class LoadAllAccountsStub implements LoadAllAccounts {
+    async load (): LoadAllAccounts.Result {
       return Promise.resolve([mockAccountModel()])
     }
   }
 
-  return new LoadAccountsStub()
+  return new LoadAllAccountsStub()
 }
 
 export const mockLoadAccountById = (): LoadAccountById => {
   class LoadAccountByIdStub implements LoadAccountByIdStub {
-    async loadById (): Promise<AccountModel> {
+    async load (params: LoadAccountById.Params): LoadAccountById.Result {
       return Promise.resolve(mockAccountModel())
     }
   }
@@ -57,7 +56,7 @@ export const mockLoadAccountById = (): LoadAccountById => {
 
 export const mockLoadIdByEmail = (): LoadIdByEmail => {
   class LoadIdByEmailStub implements LoadIdByEmailStub {
-    async load (params: LoadIdByEmail.Params): Promise<LoadIdByEmail.Result> {
+    async load (params: LoadIdByEmail.Params): LoadIdByEmail.Result {
       return Promise.resolve(mockAccountModel().id)
     }
   }
@@ -66,7 +65,7 @@ export const mockLoadIdByEmail = (): LoadIdByEmail => {
 
 export const mockLoadAccountByCode = (): LoadAccountByCode => {
   class LoadAccountByCode implements LoadAccountByCode {
-    async load (params: LoadAccountByCode.Params): Promise<LoadAccountByCode.Result> {
+    async load (params: LoadAccountByCode.Params): LoadAccountByCode.Result {
       return Promise.resolve({ ...mockAccountModel(), code: { ...mockAccountConfirmationCode() } })
     }
   }
@@ -75,7 +74,7 @@ export const mockLoadAccountByCode = (): LoadAccountByCode => {
 
 export const mockUpdateAccount = (): UpdateAccount => {
   class UpdateAccountStub implements UpdateAccount {
-    async update (params: UpdateAccount.Params): Promise<UpdateAccount.Result> {
+    async update (params: UpdateAccount.Params): UpdateAccount.Result {
       return Promise.resolve(true)
     }
   }
@@ -84,7 +83,7 @@ export const mockUpdateAccount = (): UpdateAccount => {
 
 export const mockUpdatePassword = (): UpdatePassword => {
   class UpdatePasswordStub implements UpdatePassword {
-    async update (params: UpdatePassword.Params): Promise<UpdatePassword.Result> {
+    async update (params: UpdatePassword.Params): UpdatePassword.Result {
       return Promise.resolve(true)
     }
   }
@@ -93,7 +92,7 @@ export const mockUpdatePassword = (): UpdatePassword => {
 
 export const mockDeleteAccount = (): DeleteAccount => {
   class DeleteAccountStub implements DeleteAccount {
-    async delete (): Promise<boolean> {
+    async delete (params: DeleteAccount.Params): DeleteAccount.Result {
       return Promise.resolve(true)
     }
   }
@@ -102,7 +101,7 @@ export const mockDeleteAccount = (): DeleteAccount => {
 
 export const mockPasswordRecover = (): PasswordRecover => {
   class PasswordRecoverStub implements PasswordRecover {
-    async recover (params: PasswordRecover.Params): Promise<PasswordRecover.Result> {
+    async recover (params: PasswordRecover.Params): PasswordRecover.Result {
       return Promise.resolve(true)
     }
   }

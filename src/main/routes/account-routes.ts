@@ -3,7 +3,7 @@ import { Router } from 'express'
 import { adaptRoute, adaptMiddleware } from '@/main/adapters'
 import {
   makeDeleteAccountsController,
-  makeLoadAccountsController,
+  makeLoadAllAccountsController,
   makeLoginController,
   makeSignUpController,
   makeAuthMiddleware,
@@ -20,8 +20,8 @@ export default (router: Router): void => {
   router.post('/account/password-recover', adaptRoute(makePasswordRecoverController()))
   router.post('/account/check-code', adaptRoute(makeCheckCodeController()))
 
-  router.get('/accounts', adminAuth, adaptRoute(makeLoadAccountsController()))
-  router.get('/accounts/:id', adminAuth, adaptRoute(makeLoadAccountsController()))
+  router.get('/accounts', adminAuth, adaptRoute(makeLoadAllAccountsController()))
+  router.get('/accounts/:id', adminAuth, adaptRoute(makeLoadAllAccountsController()))
 
   router.delete('/accounts/delete/:id', adaptMiddleware(makeAuthMiddleware(null, true)), adaptRoute(makeDeleteAccountsController()))
 

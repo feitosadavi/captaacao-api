@@ -9,13 +9,13 @@ import {
   LoadAccountByEmailRepository,
   LoadAccountByIdRepository,
   LoadAccountByTokenRepository,
-  LoadAccountsRepository,
+  LoadAllAccountsRepository,
   UpdateAccessTokenRepository
 } from '@/data/protocols'
 
 export const mockAddAccountRepositoryStub = (): AddAccountRepository => {
   class AddAccountStubRepository implements AddAccountRepository {
-    async add (params: AddAccountRepository.Params): Promise<boolean> {
+    async addAccount (params: AddAccountRepository.Params): AddAccountRepository.Result {
       return Promise.resolve(true)
     }
   }
@@ -24,7 +24,7 @@ export const mockAddAccountRepositoryStub = (): AddAccountRepository => {
 
 export const mockLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
-    async loadByEmail (email: string): Promise<AccountModel> {
+    async loadByEmail (params: LoadAccountByEmailRepository.Params): LoadAccountByEmailRepository.Result {
       const account: AccountModel = mockAccountModel()
       return Promise.resolve(account)
     }
@@ -35,25 +35,25 @@ export const mockLoadAccountByEmailRepository = (): LoadAccountByEmailRepository
 
 export const mockLoadAccountByTokenRepository = (): LoadAccountByTokenRepository => {
   class LoadAccountByTokenRepositoryStub implements LoadAccountByTokenRepository {
-    async loadByToken (token: string, role?: string): Promise<AccountModel> {
+    async loadByToken (params: LoadAccountByTokenRepository.Params): LoadAccountByTokenRepository.Result {
       return Promise.resolve(mockAccountModel())
     }
   }
   return new LoadAccountByTokenRepositoryStub()
 }
 
-export const mockLoadAccountsRepository = (): LoadAccountsRepository => {
-  class LoadAccountsRepositoryStub implements LoadAccountsRepository {
-    async loadAccounts (): Promise<AccountModel[]> {
+export const mockLoadAllAccountsRepository = (): LoadAllAccountsRepository => {
+  class LoadAllAccountsRepositoryStub implements LoadAllAccountsRepository {
+    async loadAll (): LoadAllAccountsRepository.Result {
       return Promise.resolve(mockAccountsModel())
     }
   }
-  return new LoadAccountsRepositoryStub()
+  return new LoadAllAccountsRepositoryStub()
 }
 
 export const mockUpdateAccessTokenRepository = (): UpdateAccessTokenRepository => {
   class UpdateAccessTokenRepositoryStub implements UpdateAccessTokenRepository {
-    async updateAccessToken (id: string, token: string): Promise<void> {
+    async updateAccessToken (params: UpdateAccessTokenRepository.Params): UpdateAccessTokenRepository.Result {
       return Promise.resolve()
     }
   }
@@ -62,7 +62,7 @@ export const mockUpdateAccessTokenRepository = (): UpdateAccessTokenRepository =
 
 export const mockUpdateAccountRepository = (): UpdateAccountRepository => {
   class UpdateAccountRepositoryStub implements UpdateAccountRepository {
-    async updateAccount (params: UpdateAccountRepository.Params): Promise<UpdateAccountRepository.Result> {
+    async updateAccount (params: UpdateAccountRepository.Params): UpdateAccountRepository.Result {
       return Promise.resolve(true)
     }
   }
@@ -71,7 +71,7 @@ export const mockUpdateAccountRepository = (): UpdateAccountRepository => {
 
 export const mockUpdatePasswordRepository = (): UpdatePasswordRepository => {
   class UpdatePasswordRepositoryStub implements UpdatePasswordRepository {
-    async updatePassword (params: UpdatePasswordRepository.Params): Promise<UpdatePasswordRepository.Result> {
+    async updatePassword (params: UpdatePasswordRepository.Params): UpdatePasswordRepository.Result {
       return Promise.resolve(true)
     }
   }
@@ -80,7 +80,7 @@ export const mockUpdatePasswordRepository = (): UpdatePasswordRepository => {
 
 export const mockLoadAccountByIdRepository = (): LoadAccountByIdRepository => {
   class LoadAccountByIdRepositoryStub implements LoadAccountByIdRepository {
-    async loadById (id: string): Promise<AccountModel> {
+    async loadById (params: LoadAccountByIdRepository.Params): LoadAccountByIdRepository.Result {
       return Promise.resolve(mockAccountModel())
     }
   }
@@ -89,7 +89,7 @@ export const mockLoadAccountByIdRepository = (): LoadAccountByIdRepository => {
 
 export const mockLoadAccountByCodeRepository = (): LoadAccountByCodeRepository => {
   class LoadAccountByCodeRepositoryStub implements LoadAccountByCodeRepository {
-    async loadByCode (params: LoadAccountByCodeRepository.Params): Promise<LoadAccountByCodeRepository.Result> {
+    async loadByCode (params: LoadAccountByCodeRepository.Params): LoadAccountByCodeRepository.Result {
       return Promise.resolve(mockAccountModel())
     }
   }
@@ -98,7 +98,7 @@ export const mockLoadAccountByCodeRepository = (): LoadAccountByCodeRepository =
 
 export const mockDeleteAccountRepository = (): DeleteAccountRepository => {
   class DeleteAccountRepositoryStub implements DeleteAccountRepository {
-    async deleteAccount (id: string): Promise<boolean> {
+    async deleteAccount (params: DeleteAccountRepository.Params): DeleteAccountRepository.Result {
       return Promise.resolve(true)
     }
   }

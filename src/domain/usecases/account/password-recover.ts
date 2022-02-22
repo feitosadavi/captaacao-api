@@ -1,5 +1,5 @@
 export interface PasswordRecover {
-  recover (params: PasswordRecover.Params): Promise<PasswordRecover.Result>
+  recover (params: PasswordRecover.Params): PasswordRecover.Result
 }
 
 export namespace PasswordRecover {
@@ -8,5 +8,5 @@ export namespace PasswordRecover {
     email: string
   }
 
-  export type Result = boolean
+  export type Result = Promise<boolean>
 }

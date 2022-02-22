@@ -1,5 +1,5 @@
 export interface UpdateAccount {
-  update (params: UpdateAccount.Params): Promise<UpdateAccount.Result>
+  update (params: UpdateAccount.Params): UpdateAccount.Result
 }
 
 export namespace UpdateAccount {
@@ -7,5 +7,5 @@ export namespace UpdateAccount {
     id: string
     fields: Record<string, any>
   }
-  export type Result = boolean
+  export type Result = Promise<boolean>
 }

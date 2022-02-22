@@ -16,7 +16,7 @@ export class DbPasswordRecover implements PasswordRecover {
     private readonly setupEmail: SetupEmailRepository// TESTAR O SETUP EMAIL
   ) { }
 
-  async recover ({ id, email }: PasswordRecover.Params): Promise<PasswordRecover.Result> {
+  async recover ({ id, email }: PasswordRecover.Params): PasswordRecover.Result {
     const code = this.generatePassRecoverInfo.generate()
     const isUpdated = await this.updateAccountRepository.updateAccount({ id, fields: { code } })
     if (isUpdated) {

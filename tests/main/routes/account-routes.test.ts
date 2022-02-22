@@ -233,8 +233,7 @@ describe('Account Routes', () => {
   describe('DELETE /accounts/delete/:id', () => {
     test('should return 403 if user has no authorization', async () => {
       await request(app)
-        .delete('/api/accounts/delete/:id')
-        .query({ id: 'any_id' })
+        .delete('/api/accounts/delete/any_id')
         .expect(403)
     })
 
@@ -245,9 +244,8 @@ describe('Account Routes', () => {
       await updateAccountToken(id, accessToken)
 
       await request(app)
-        .delete('/api/accounts/delete/:id')
+        .delete(`/api/accounts/delete/${id}`)
         .set('x-access-token', accessToken)
-        .query({ id })
         .expect(200)
     })
   })

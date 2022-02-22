@@ -1,13 +1,13 @@
-import { LoadAccounts } from '@/domain/usecases'
+import { LoadAllAccounts } from '@/domain/usecases'
 import { noContent, serverError, serverSuccess } from '@/presentation/helpers'
 import { Controller, HttpResponse } from '@/presentation/protocols'
 
-export class LoadAccountsController implements Controller<LoadAccountsController.Request> {
+export class LoadAllAccountsController implements Controller<LoadAllAccountsController.Request> {
   constructor (
-    private readonly loadAccounts: LoadAccounts
+    private readonly loadAccounts: LoadAllAccounts
   ) { }
 
-  async handle (request: LoadAccountsController.Request): Promise<HttpResponse> {
+  async handle (request: LoadAllAccountsController.Request): Promise<HttpResponse> {
     try {
       const account = await this.loadAccounts.load()
       return account.length >= 1 ? serverSuccess(account) : noContent()
@@ -17,6 +17,6 @@ export class LoadAccountsController implements Controller<LoadAccountsController
   }
 }
 
-export namespace LoadAccountsController {
+export namespace LoadAllAccountsController {
   export type Request = any
 }

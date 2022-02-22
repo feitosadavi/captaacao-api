@@ -7,7 +7,7 @@ export class LoadAccountByIdController implements Controller<LoadAccountByIdCont
   async handle (request: LoadAccountByIdController.Request): Promise<HttpResponse> {
     try {
       const { id } = request
-      const account = await this.loadAccountById.loadById(id)
+      const account = await this.loadAccountById.load({ id })
       return serverSuccess(account)
     } catch (error) {
       return serverError(error)

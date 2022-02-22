@@ -1,5 +1,5 @@
 export interface AddAccount {
-  add (account: AddAccount.Params): Promise<AddAccount.Result>
+  add (account: AddAccount.Params): AddAccount.Result
 }
 
 export namespace AddAccount {
@@ -23,5 +23,5 @@ export namespace AddAccount {
     role: string
   }
 
-  export type Result = boolean
+  export type Result = Promise<boolean>
 }

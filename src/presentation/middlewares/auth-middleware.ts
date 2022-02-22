@@ -15,7 +15,7 @@ export class AuthMiddleware implements Middleware {
       const accessToken = httpRequest.headers?.['x-access-token'] // pega o accessToken que eu coloquei nos headers
 
       if (accessToken) {
-        const account = await this.loadAccountByToken.load(accessToken, this.role)
+        const account = await this.loadAccountByToken.load({ accessToken, role: this.role })
         if (account) {
           if (this.checkId) {
             const accountIdToDelete = httpRequest.params.id

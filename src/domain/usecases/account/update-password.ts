@@ -1,5 +1,5 @@
 export interface UpdatePassword {
-  update (params: UpdatePassword.Params): Promise<UpdatePassword.Result>
+  update (params: UpdatePassword.Params): UpdatePassword.Result
 }
 
 export namespace UpdatePassword {
@@ -7,5 +7,5 @@ export namespace UpdatePassword {
     id: string
     password: string
   }
-  export type Result = boolean
+  export type Result = Promise<boolean>
 }

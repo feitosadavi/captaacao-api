@@ -33,7 +33,7 @@ describe('Account Mongo Repository', () => {
   describe('add()', () => {
     test('Should return true success', async () => {
       const sut = makeSut()
-      const result = await sut.add({ ...mockAccountParams() })
+      const result = await sut.addAccount({ ...mockAccountParams() })
       expect(result).toBe(true)
       // eu espero que tenha retornado algum valor do "add"
       // expect(account.id).toBeTruthy() // espero que a account tenha algum id
@@ -57,7 +57,7 @@ describe('Account Mongo Repository', () => {
         ...mockAccountParams()
       }])
 
-      const accounts = await sut.loadAccounts()
+      const accounts = await sut.loadAll()
       expect(accounts).toBeTruthy()
       expect(accounts.length).toBe(2)
       expect(accounts[0].id).toBeTruthy()
@@ -67,7 +67,7 @@ describe('Account Mongo Repository', () => {
 
     test('Should return null if loadByEmail fails', async () => {
       const sut = makeSut()
-      const account = await sut.loadAccounts()
+      const account = await sut.loadAll()
       expect(account).toEqual([])
     })
   })
@@ -94,7 +94,7 @@ describe('Account Mongo Repository', () => {
         ...mockAccountParams()
       })
 
-      const account = await sut.loadByEmail('any_email@mail.com')
+      const account = await sut.loadByEmail({ email: 'any_email@mail.com' })
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
       expect(account.name).toBe('any_name')
@@ -103,7 +103,7 @@ describe('Account Mongo Repository', () => {
     test('Should return null if loadByEmail fails', async () => {
       // não criei uma fake account, induzindo o método a falhar
       const sut = makeSut()
-      const account = await sut.loadByEmail('any_email@mail.com')
+      const account = await sut.loadByEmail({ email: 'any_email@mail.com' })
       expect(account).toBeFalsy()
     })
   })
@@ -125,7 +125,7 @@ describe('Account Mongo Repository', () => {
     test('Should return null if loadByCode fails', async () => {
       // não criei uma fake account, induzindo o método a falhar
       const sut = makeSut()
-      const account = await sut.loadByEmail('any_email@mail.com')
+      const account = await sut.loadByEmail({ email: 'any_email@mail.com' })
       expect(account).toBeFalsy()
     })
   })
@@ -139,7 +139,7 @@ describe('Account Mongo Repository', () => {
         accessToken: 'any_token'
       })
 
-      const account = await sut.loadByToken('any_token')
+      const account = await sut.loadByToken({ accessToken: 'any_token' })
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
       expect(account.name).toBe('any_name')
@@ -154,7 +154,7 @@ describe('Account Mongo Repository', () => {
         accessToken: 'any_token'
       })
 
-      const account = await sut.loadByToken('any_token', 'admin')
+      const account = await sut.loadByToken({ accessToken: 'any_token', role: 'admin' })
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
       expect(account.name).toBe('any_name')
@@ -168,7 +168,7 @@ describe('Account Mongo Repository', () => {
         accessToken: 'any_token'
       })
 
-      const account = await sut.loadByToken('any_token', 'admin')
+      const account = await sut.loadByToken({ accessToken: 'any_token', role: 'admin' })
       expect(account).toBeFalsy()
     })
 
@@ -180,7 +180,7 @@ describe('Account Mongo Repository', () => {
         accessToken: 'any_token'
       })
 
-      const account = await sut.loadByToken('any_token')
+      const account = await sut.loadByToken({ accessToken: 'any_token' })
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
       expect(account.name).toBe('any_name')
@@ -188,7 +188,7 @@ describe('Account Mongo Repository', () => {
 
     test('Should return null if loadByToken fails', async () => {
       const sut = makeSut()
-      const account = await sut.loadByToken('any_token', 'admin')
+      const account = await sut.loadByToken({ accessToken: 'any_token', role: 'admin' })
       expect(account).toBeFalsy()
     })
   })
@@ -202,7 +202,7 @@ describe('Account Mongo Repository', () => {
       })
       const fakeAccount = res.ops[0]
       expect(fakeAccount.accessToken).toBeFalsy() // espero que primeiro não tenha accessToken
-      await sut.updateAccessToken(fakeAccount._id, 'any_token')
+      await sut.updateAccessToken({ id: fakeAccount._id, accessToken: 'any_token' })
       const account = await accountCollection.findOne({ _id: fakeAccount._id })
       expect(account).toBeTruthy()
       expect(account.accessToken).toBe('any_token')
@@ -256,7 +256,7 @@ describe('Account Mongo Repository', () => {
     })
     test('Should return false if account doesnt exists', async () => {
       const sut = makeSut()
-      const deletionResult = await sut.deleteAccount('61539180dd2622353d5e11c8')
+      const deletionResult = await sut.deleteAccount({ id: '61539180dd2622353d5e11c8' })
       expect(deletionResult).toBe(false)
     })
   })

@@ -30,28 +30,28 @@ describe('DbLoadAccountById', () => {
 
   test('Should call LoadSurvetByIdRepository with correct values', async () => {
     const { sut, loadAccountByIdRepositoryStub } = makeSut()
-    const loadById = jest.spyOn(loadAccountByIdRepositoryStub, 'loadById')
-    await sut.loadById('any_id')
-    expect(loadById).toHaveBeenCalledWith('any_id')
+    const loadByIdSpy = jest.spyOn(loadAccountByIdRepositoryStub, 'loadById')
+    await sut.load({ id: 'any_id' })
+    expect(loadByIdSpy).toHaveBeenCalledWith({ id: 'any_id' })
   })
 
   test('Should return an account on LoadSurvetByIdRepository success', async () => {
     const { sut } = makeSut()
-    const account = await sut.loadById('any_id')
+    const account = await sut.load({ id: 'any_id' })
     expect(account).toEqual(mockAccountModel())
   })
 
   test('Should return null if LoadSurvetByIdRepository returns null', async () => {
     const { sut, loadAccountByIdRepositoryStub } = makeSut()
     jest.spyOn(loadAccountByIdRepositoryStub, 'loadById').mockReturnValueOnce(null)
-    const account = await sut.loadById('any_id')
+    const account = await sut.load({ id: 'any_id' })
     expect(account).toBeNull()
   })
 
   test('Should throw if LoadSurvetByIdRepository throws', async () => {
     const { sut, loadAccountByIdRepositoryStub } = makeSut()
     jest.spyOn(loadAccountByIdRepositoryStub, 'loadById').mockImplementationOnce(throwError)
-    const promise = sut.loadById('any_id')
+    const promise = sut.load({ id: 'any_id' })
     await expect(promise).rejects.toThrow()
   })
 })

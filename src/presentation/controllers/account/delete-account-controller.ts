@@ -10,7 +10,7 @@ export class DeleteAccountController implements Controller<DeleteAccountControll
   async handle (request: DeleteAccountController.Request): Promise<HttpResponse> {
     try {
       const { id } = request
-      const result = await this.deleteAccount.delete(id)
+      const result = await this.deleteAccount.delete({ id })
       return serverSuccess(result)
     } catch (e) {
       return serverError(e)

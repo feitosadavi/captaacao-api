@@ -33,9 +33,9 @@ describe('LoadPost Controller', () => {
 
   test('Should call LoadAccountById with correct id', async () => {
     const { sut, LoadAccountByIdStub } = makeSut()
-    const loadAccountByIdSpy = jest.spyOn(LoadAccountByIdStub, 'loadById')
+    const loadAccountByIdSpy = jest.spyOn(LoadAccountByIdStub, 'load')
     await sut.handle(mockRequest())
-    expect(loadAccountByIdSpy).toHaveBeenCalledWith('any_id')
+    expect(loadAccountByIdSpy).toHaveBeenCalledWith({ id: 'any_id' })
   })
 
   test('Should return 200 on success', async () => {
@@ -46,7 +46,7 @@ describe('LoadPost Controller', () => {
 
   test('Should return 500 if LoadAccountById throws', async () => {
     const { sut, LoadAccountByIdStub } = makeSut()
-    jest.spyOn(LoadAccountByIdStub, 'loadById').mockImplementationOnce(throwError)
+    jest.spyOn(LoadAccountByIdStub, 'load').mockImplementationOnce(throwError)
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
   })
