@@ -1,34 +1,41 @@
 import { AddProfile } from '@/domain/usecases'
 import { NameInUseError } from '@/presentation/errors'
 import { badRequest, noContent, serverError } from '@/presentation/helpers/http/http-helper'
-import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
+import { Controller, HttpResponse, Validation } from '@/presentation/protocols'
 
-export class AddProfileController implements Controller {
+export class AddProfileController implements Controller<AddProfileController.Request> {
   constructor (
     private readonly validation: Validation,
     private readonly addProfile: AddProfile
   ) {}
 
-  async handle (httpRequest: HttpRequest<AddProfile.Params>): Promise<HttpResponse> {
+  async handle (request: AddProfileController.Request): Promise<HttpResponse> {
     try {
-      const error = this.validation.validate(httpRequest.body)
+      const error = this.validation.validate(request)
       if (error) return badRequest(error)
       const {
-        body,
-        accountId
-      } = httpRequest
+        name,
+        createdBy
+      } = request
 
       const createdAt = new Date()
       createdAt.toLocaleDateString('pt-BR')
 
       const result = await this.addProfile.add({
-        name: body.name,
-        createdBy: accountId,
+        name,
+        createdBy,
         createdAt
       })
       return result ? noContent() : badRequest(new NameInUseError())
     } catch (error) {
       return serverError(error)
     }
+  }
+}
+
+export namespace AddProfileController {
+  export type Request = {
+    name: string
+    createdBy: string
   }
 }

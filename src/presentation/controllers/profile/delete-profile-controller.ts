@@ -1,19 +1,25 @@
 import { DeleteProfile } from '@/domain/usecases'
 import { serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
-import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
+import { Controller, HttpResponse } from '@/presentation/protocols'
 
-export class DeleteProfileController implements Controller {
+export class DeleteProfileController implements Controller<DeleteProfileController.Request> {
   constructor (
     private readonly deleteProfile: DeleteProfile
   ) { }
 
-  async handle (httpRequest: HttpRequest<any, any, {id: string}>): Promise<HttpResponse> {
+  async handle (request: DeleteProfileController.Request): Promise<HttpResponse> {
     try {
-      const profileIdToDelete = httpRequest.params.id
-      const result = await this.deleteProfile.delete({ id: profileIdToDelete })
+      const { id } = request
+      const result = await this.deleteProfile.delete({ id })
       return serverSuccess(result)
     } catch (e) {
       return serverError(e)
     }
+  }
+}
+
+export namespace DeleteProfileController {
+  export type Request = {
+    id: string
   }
 }

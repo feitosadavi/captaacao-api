@@ -3,7 +3,6 @@ import { serverError, serverSuccess } from '@/presentation/helpers/http/http-hel
 import { DeleteProfileController } from '@/presentation/controllers'
 
 import { mockDeleteProfile } from '@tests/presentation/mocks'
-import { HttpRequest } from '@/presentation/protocols'
 
 type SutTypes = {
   sut: DeleteProfileController
@@ -19,12 +18,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-const mockRequest = (): HttpRequest<any, any, {id: string}> => ({
-  params: { id: 'any_id' },
-  headers: {
-    'x-access-token': 'any_access_token'
-  }
-})
+const mockRequest = (): DeleteProfileController.Request => ({ id: 'any_id' })
 
 describe('DeleteProfileController', () => {
   test('Should call deleteProfile with correct params', async () => {

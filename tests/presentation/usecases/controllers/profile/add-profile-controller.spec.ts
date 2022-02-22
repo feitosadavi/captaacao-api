@@ -5,16 +5,9 @@ import { badRequest, serverError, noContent } from '@/presentation/helpers/http/
 
 import { mockProfileParams, throwError } from '@tests/domain/mocks'
 import { mockAddProfile, mockValidation } from '@tests/presentation/mocks'
-import { HttpRequest, Validation } from '@/presentation/protocols'
+import { Validation } from '@/presentation/protocols'
 import { AddProfile } from '@/domain/usecases'
 import { NameInUseError } from '@/presentation/errors'
-
-const mockRequest = (): HttpRequest => ({
-  body: {
-    ...mockProfileParams()
-  },
-  accountId: 'any_account_id'
-})
 
 type SutTypes = {
   sut: AddProfileController
@@ -32,6 +25,9 @@ const makeSut = (): SutTypes => {
     addProfileStub
   }
 }
+
+const mockRequest = (): AddProfileController.Request => ({ ...mockProfileParams() })
+
 describe('AddProfile Controller', () => {
   beforeAll(() => {
     MockDate.set(new Date()) // congela a data com base no valor inserido
@@ -46,7 +42,7 @@ describe('AddProfile Controller', () => {
     const validateSpy = jest.spyOn(validationStub, 'validate')
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
-    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
+    expect(validateSpy).toHaveBeenCalledWith(httpRequest)
   })
 
   test('Should return 400 if validation fails', async () => {
@@ -61,7 +57,7 @@ describe('AddProfile Controller', () => {
     const addSpy = jest.spyOn(addProfileStub, 'add')
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
-    expect(addSpy).toHaveBeenCalledWith(httpRequest.body)
+    expect(addSpy).toHaveBeenCalledWith(httpRequest)
   })
 
   test('Should return 400 if AddProfile returns false', async () => {
