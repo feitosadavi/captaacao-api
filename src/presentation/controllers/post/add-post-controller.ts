@@ -1,16 +1,16 @@
 import { AddPost } from '@/domain/usecases'
 import { badRequest, noContent, serverError } from '@/presentation/helpers/http/http-helper'
-import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
+import { Controller, HttpResponse, Validation } from '@/presentation/protocols'
 
-export class AddPostController implements Controller {
+export class AddPostController implements Controller<AddPostController.Request> {
   constructor (
     private readonly validation: Validation,
     private readonly addPost: AddPost
   ) {}
 
-  async handle (httpRequest: HttpRequest<AddPost.Params>): Promise<HttpResponse> {
+  async handle (request: AddPostController.Request): Promise<HttpResponse> {
     try {
-      const error = this.validation.validate(httpRequest.body)
+      const error = this.validation.validate(request)
       if (error) return badRequest(new Error())
       const {
         name,
@@ -20,7 +20,7 @@ export class AddPostController implements Controller {
         color,
         kmTraveled,
         vehicleItems
-      } = httpRequest.body
+      } = request
       await this.addPost.add({
         name,
         price,
@@ -36,4 +36,8 @@ export class AddPostController implements Controller {
       return serverError(error)
     }
   }
+}
+
+export namespace AddPostController {
+  export type Request = AddPost.Params
 }

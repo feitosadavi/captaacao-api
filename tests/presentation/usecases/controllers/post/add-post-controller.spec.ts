@@ -5,13 +5,11 @@ import { badRequest, serverError, noContent } from '@/presentation/helpers/http/
 
 import { mockPostsParams, throwError } from '@tests/domain/mocks'
 import { mockAddPost, mockValidation } from '@tests/presentation/mocks'
-import { HttpRequest, Validation } from '@/presentation/protocols'
+import { Validation } from '@/presentation/protocols'
 import { AddPost } from '@/domain/usecases'
 
-const mockRequest = (): HttpRequest => ({
-  body: {
-    ...mockPostsParams()[0]
-  }
+const mockRequest = (): AddPostController.Request => ({
+  ...mockPostsParams()[0]
 })
 
 type SutTypes = {
@@ -42,9 +40,9 @@ describe('AddPost Controller', () => {
   test('Should call validation with correct values', async () => {
     const { sut, validationStub } = makeSut()
     const validateSpy = jest.spyOn(validationStub, 'validate')
-    const httpRequest = mockRequest()
-    await sut.handle(httpRequest)
-    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
+    const request = mockRequest()
+    await sut.handle(request)
+    expect(validateSpy).toHaveBeenCalledWith(request)
   })
 
   test('Should return 400 if validation fails', async () => {
@@ -57,9 +55,9 @@ describe('AddPost Controller', () => {
   test('Should call AddPost with correct values', async () => {
     const { sut, addPostStub } = makeSut()
     const addSpy = jest.spyOn(addPostStub, 'add')
-    const httpRequest = mockRequest()
-    await sut.handle(httpRequest)
-    expect(addSpy).toHaveBeenCalledWith(httpRequest.body)
+    const request = mockRequest()
+    await sut.handle(request)
+    expect(addSpy).toHaveBeenCalledWith(request)
   })
 
   test('Should return 500 if AddPost throws', async () => {

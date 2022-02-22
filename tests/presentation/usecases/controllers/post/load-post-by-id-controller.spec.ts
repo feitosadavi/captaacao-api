@@ -3,7 +3,6 @@ import MockDate from 'mockdate'
 import { LoadPostById } from '@/domain/usecases'
 import { LoadPostByIdController } from '@/presentation/controllers'
 import { noContent, serverError, serverSuccess } from '@/presentation/helpers'
-import { HttpRequest } from '@/presentation/protocols'
 
 import { mockPostsModel, throwError } from '@tests/domain/mocks'
 import { mockLoadPostById } from '@tests/presentation/mocks'
@@ -13,13 +12,7 @@ type SutTypes = {
   LoadPostByIdStub: LoadPostById
 }
 
-const mockRequest = (): HttpRequest<any, any, LoadPostById.Params> => (
-  {
-    params: {
-      id: 'any_id'
-    }
-  }
-)
+const mockRequest = (): LoadPostByIdController.Request => ({ id: 'any_id' })
 
 const makeSut = (): SutTypes => {
   const LoadPostByIdStub = mockLoadPostById()
