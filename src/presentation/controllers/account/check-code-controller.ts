@@ -1,11 +1,10 @@
 import { LoadAccountByCode } from '@/domain/usecases'
 import { InvalidCodeError } from '@/presentation/errors'
 import { badRequest, serverError, serverSuccess } from '@/presentation/helpers'
-import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
+import { Controller, HttpResponse, Validation } from '@/presentation/protocols'
 import { CodeMatches, CodeExpiration } from '@/validation/protocols'
 
-type Body = { code: number }
-export class CheckCodeController implements Controller {
+export class CheckCodeController implements Controller<CheckCodeController.Request> {
   constructor (
     private readonly validation: Validation,
     private readonly loadAccountByCode: LoadAccountByCode,
@@ -13,12 +12,12 @@ export class CheckCodeController implements Controller {
     private readonly codeExpiration: CodeExpiration
   ) {}
 
-  async handle (httpRequest: HttpRequest<Body>): Promise<HttpResponse> {
+  async handle (request: CheckCodeController.Request): Promise<HttpResponse> {
     try {
-      const error = this.validation.validate(httpRequest.body)
+      const error = this.validation.validate(request)
       if (error) return badRequest(error)
 
-      const { code: requestCode } = httpRequest.body
+      const { code: requestCode } = request
       const account = await this.loadAccountByCode.load({ code: requestCode })
       if (account?.code) {
         const { code } = account
@@ -31,5 +30,11 @@ export class CheckCodeController implements Controller {
     } catch (error) {
       return serverError(error)
     }
+  }
+}
+
+export namespace CheckCodeController {
+  export type Request = {
+    code: number
   }
 }

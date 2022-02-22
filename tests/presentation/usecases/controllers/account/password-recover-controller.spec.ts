@@ -2,7 +2,7 @@ import { LoadIdByEmail, PasswordRecover } from '@/domain/usecases'
 import { PasswordRecoverController } from '@/presentation/controllers/account/password-recover-controller'
 import { NotFoundAccountError } from '@/presentation/errors/not-found-account'
 import { badRequest, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
-import { HttpRequest, Validation } from '@/presentation/protocols'
+import { Validation } from '@/presentation/protocols'
 import { UnknownError } from '@/presentation/errors/unknown-error'
 
 import { throwError } from '@tests/domain/mocks'
@@ -15,13 +15,7 @@ type SutTypes = {
   passwordRecoverStub: PasswordRecover
 }
 
-const mockRequest = (): HttpRequest => (
-  {
-    body: {
-      email: 'any_email@mail.com'
-    }
-  }
-)
+const mockRequest = (): PasswordRecoverController.Request => ({ email: 'any_email@mail.com' })
 
 const makeSut = (): SutTypes => {
   const validationStub = mockValidation()
@@ -45,7 +39,7 @@ describe('PasswordRecover Controller', () => {
     const { sut, validationStub } = makeSut()
     const validateSpy = jest.spyOn(validationStub, 'validate')
     await sut.handle(mockRequest())
-    expect(validateSpy).toHaveBeenCalledWith(mockRequest().body)
+    expect(validateSpy).toHaveBeenCalledWith(mockRequest())
   })
 
   test('Should return 400 Validation returns an error', async () => {
@@ -59,7 +53,7 @@ describe('PasswordRecover Controller', () => {
     const { sut, loadIdByEmailStub } = makeSut()
     const loadSpy = jest.spyOn(loadIdByEmailStub, 'load')
     await sut.handle(mockRequest())
-    expect(loadSpy).toHaveBeenCalledWith({ email: mockRequest().body.email })
+    expect(loadSpy).toHaveBeenCalledWith({ email: mockRequest().email })
   })
 
   test('Should return 400 if LoadIdByEmail dont find any account', async () => {

@@ -3,7 +3,6 @@ import MockDate from 'mockdate'
 import { LoadAccounts } from '@/domain/usecases'
 import { LoadAccountsController } from '@/presentation/controllers'
 import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
-import { HttpRequest } from '@/presentation/protocols'
 
 import { mockLoadAccounts } from '@tests/presentation/mocks'
 import { mockAccountModel, throwError } from '@tests/domain/mocks'
@@ -21,7 +20,7 @@ const makeSut = (): SutTypes => {
     loadAccountsStub
   }
 }
-const mockRequest = (): HttpRequest => ({
+const mockRequest = (): LoadAccountsController.Request => ({
   headers: {
     'x-access-token': 'any_acess_token'
   }

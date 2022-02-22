@@ -3,8 +3,6 @@ import MockDate from 'mockdate'
 import { LoadAccountById } from '@/domain/usecases/account/load-account-by-id'
 import { LoadAccountByIdController } from '@/presentation/controllers'
 import { serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
-import { HttpRequest } from '@/presentation/protocols'
-
 import { mockAccountModel, throwError } from '@tests/domain/mocks'
 import { mockLoadAccountById } from '@tests/presentation/mocks'
 
@@ -12,14 +10,6 @@ type SutTypes = {
   sut: LoadAccountByIdController
   LoadAccountByIdStub: LoadAccountById
 }
-
-const mockRequest = (): HttpRequest => (
-  {
-    params: {
-      id: 'any_id'
-    }
-  }
-)
 
 const makeSut = (): SutTypes => {
   const LoadAccountByIdStub = mockLoadAccountById()
@@ -29,6 +19,7 @@ const makeSut = (): SutTypes => {
     LoadAccountByIdStub
   }
 }
+const mockRequest = (): LoadAccountByIdController.Request => ({ id: 'any_id' })
 
 describe('LoadPost Controller', () => {
   beforeAll(() => {

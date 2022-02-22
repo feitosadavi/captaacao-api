@@ -2,18 +2,12 @@ import MockDate from 'mockdate'
 
 import { AddAccount, Authentication } from '@/domain/usecases'
 import { SignUpController } from '@/presentation/controllers/account'
-import { MissingParamError, ServerError, EmailInUseError } from '@/presentation/errors'
+import { MissingParamError, EmailInUseError } from '@/presentation/errors'
 import { badRequest, serverError, serverSuccess, forbidden } from '@/presentation/helpers/http/http-helper'
-import { HttpRequest, Validation } from '@/presentation/protocols'
+import { Validation } from '@/presentation/protocols'
 
 import { mockAccountParams, throwError } from '@tests/domain/mocks'
 import { mockAddAccountStub, mockAuthentication, mockValidation } from '@tests/presentation/mocks'
-
-const mockRequest = (): HttpRequest => {
-  return {
-    body: mockAccountParams()
-  }
-}
 
 type SutTypes = {
   sut: SignUpController
@@ -35,6 +29,8 @@ const makeSut = (): SutTypes => {
   }
 }
 
+const mockRequest = (): SignUpController.Request => ({ ...mockAccountParams() })
+
 describe('SignUp Controller', () => {
   beforeAll(() => {
     MockDate.set(new Date()) // congela a data com base no valor inserido
@@ -46,21 +42,17 @@ describe('SignUp Controller', () => {
 
   test('Should return 500 if AddAccount throws', async () => {
     const { sut, addAccountStub } = makeSut()
-    jest.spyOn(addAccountStub, 'add').mockImplementationOnce(async () => {
-      return Promise.reject(new Error())
-    })
+    jest.spyOn(addAccountStub, 'add').mockImplementationOnce(throwError)
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new ServerError(httpResponse.body.stack))
+    expect(httpResponse).toEqual(serverError(new Error()))
   })
 
   test('Should call AddAccount with correct values', async () => {
     const { sut, addAccountStub } = makeSut()
     const addSpy = jest.spyOn(addAccountStub, 'add')
     await sut.handle(mockRequest())
-    expect(addSpy).toHaveBeenCalledWith({
-      ...mockAccountParams()
-    })
+    expect(addSpy).toHaveBeenCalledWith(mockAccountParams())
   })
 
   test('Should return 200 and accessToken if valid data is provided', async () => {
@@ -82,9 +74,7 @@ describe('SignUp Controller', () => {
     const validateSpy = jest.spyOn(validationStub, 'validate')
     const httpRequest = mockRequest()
     await sut.handle(mockRequest())
-
-    // espero que o validate seja chamado com o body pois trata-se de um post
-    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
+    expect(validateSpy).toHaveBeenCalledWith(httpRequest)
   })
 
   test('Should return 400 if Validation returns an error ', async () => {

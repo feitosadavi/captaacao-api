@@ -1,19 +1,25 @@
 import { DeleteAccount } from '@/domain/usecases/account/delete-account'
 import { serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
-import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
+import { Controller, HttpResponse } from '@/presentation/protocols'
 
-export class DeleteAccountController implements Controller {
+export class DeleteAccountController implements Controller<DeleteAccountController.Request> {
   constructor (
     private readonly deleteAccount: DeleteAccount
   ) { }
 
-  async handle (httpRequest: HttpRequest<any, any, {id: string}>): Promise<HttpResponse> {
+  async handle (request: DeleteAccountController.Request): Promise<HttpResponse> {
     try {
-      const accountIdToDelete = httpRequest.params.id
-      const result = await this.deleteAccount.delete(accountIdToDelete)
+      const { id } = request
+      const result = await this.deleteAccount.delete(id)
       return serverSuccess(result)
     } catch (e) {
       return serverError(e)
     }
+  }
+}
+
+export namespace DeleteAccountController {
+  export type Request = {
+    id: string
   }
 }

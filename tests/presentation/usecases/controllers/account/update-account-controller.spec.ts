@@ -1,7 +1,7 @@
 import { UpdateAccount } from '@/domain/usecases'
 import { UpdateAccountController } from '@/presentation/controllers'
 import { serverSuccess, badRequest, serverError } from '@/presentation/helpers/http/http-helper'
-import { HttpRequest, Validation } from '@/presentation/protocols'
+import { Validation } from '@/presentation/protocols'
 import { throwError } from '@tests/domain/mocks'
 import { mockUpdateAccount, mockValidation } from '@tests/presentation/mocks'
 
@@ -20,10 +20,10 @@ const makeSut = (): SutTypes => {
     updateAccountStub
   }
 }
-const mockRequest = (): HttpRequest => ({
-  body: {
-    email: 'other_email@mail.com',
-    name: 'other_name'
+const mockRequest = (): UpdateAccountController.Request => ({
+  id: 'any_id',
+  fields: {
+    field: 'new_value'
   }
 })
 describe('UpdateAccount Controller', () => {
@@ -40,7 +40,7 @@ describe('UpdateAccount Controller', () => {
     const request = mockRequest()
     const updateSpy = jest.spyOn(updateAccountStub, 'update')
     await sut.handle(request)
-    expect(updateSpy).toHaveBeenCalledWith(request.body)
+    expect(updateSpy).toHaveBeenCalledWith(request)
   })
 
   test('Should call updateAccount with correct values', async () => {

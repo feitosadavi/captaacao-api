@@ -2,7 +2,7 @@ import MockDate from 'mockdate'
 import { LoadAccountByCode } from '@/domain/usecases'
 import { CheckCodeController } from '@/presentation/controllers'
 import { badRequest, serverError, serverSuccess } from '@/presentation/helpers'
-import { HttpRequest, Validation } from '@/presentation/protocols'
+import { Validation } from '@/presentation/protocols'
 import { mockLoadAccountByCode, mockValidation } from '@tests/presentation/mocks'
 import { InvalidCodeError } from '@/presentation/errors'
 import { mockCodeExpiration, mockCodeMatches } from '@tests/presentation/mocks/mock-confirmation-code-validator'
@@ -31,14 +31,8 @@ const makeSut = (): SutTypes => {
   }
 }
 
-type Body = { code: number }
-const mockRequest = (): HttpRequest<Body> => ({
-  body: {
-    code: 999999
-  },
-  params: {
-    id: 'any_id'
-  }
+const mockRequest = (): CheckCodeController.Request => ({
+  code: 999999
 })
 
 describe('UpdateAccount Controller', () => {
@@ -54,8 +48,9 @@ describe('UpdateAccount Controller', () => {
   test('Should call Validation with correct values', async () => {
     const { sut, validationStub } = makeSut()
     const validateSpy = jest.spyOn(validationStub, 'validate')
-    await sut.handle(mockRequest())
-    expect(validateSpy).toHaveBeenCalledWith(mockRequest().body)
+    const request = mockRequest()
+    await sut.handle(request)
+    expect(validateSpy).toHaveBeenCalledWith(request)
   })
 
   test('Should return 400 if Validation returns an error', async () => {
@@ -68,8 +63,9 @@ describe('UpdateAccount Controller', () => {
   test('Should call loadByCode with with correct values', async () => {
     const { sut, loadByCode } = makeSut()
     const loadByPasCodeSpy = jest.spyOn(loadByCode, 'load')
-    await sut.handle(mockRequest())
-    const { code } = mockRequest().body
+    const request = mockRequest()
+    await sut.handle(request)
+    const { code } = request
     expect(loadByPasCodeSpy).toHaveBeenCalledWith({ code })
   })
 

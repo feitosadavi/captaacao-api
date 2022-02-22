@@ -18,16 +18,15 @@ const makeSut = (): SutTypes => {
   }
 }
 
+const mockRequest = (): DeleteAccountController.Request => ({
+  id: 'any_id'
+})
+
 describe('DeleteAccount Controller', () => {
   test('Should call deleteAccount with correct params', async () => {
     const { sut, deleteAccountStub } = makeSut()
     const deleteAccountStubSpy = jest.spyOn(deleteAccountStub, 'delete')
-    await sut.handle({
-      params: { id: 'any_id' }, // id igual, por isso irá passar ;)
-      headers: {
-        'x-access-token': 'any_access_token'
-      }
-    })
+    await sut.handle(mockRequest())
     expect(deleteAccountStubSpy).toHaveBeenCalledWith('any_id')
   })
 
@@ -35,23 +34,13 @@ describe('DeleteAccount Controller', () => {
     const { sut, deleteAccountStub } = makeSut()
     const deleteAccountStubSpy = jest.spyOn(deleteAccountStub, 'delete')
     deleteAccountStubSpy.mockReturnValueOnce(Promise.reject(new Error()))
-    const response = await sut.handle({
-      params: { id: 'any_id' },
-      headers: {
-        'x-access-token': 'any_access_token'
-      }
-    })
+    const response = await sut.handle(mockRequest())
     expect(response).toEqual(serverError(new Error()))
   })
 
   test('Should return 200 on success', async () => {
     const { sut } = makeSut()
-    const response = await sut.handle({
-      params: { id: 'any_id' }, // id igual, por isso irá passar ;)
-      headers: {
-        'x-access-token': 'any_access_token'
-      }
-    })
+    const response = await sut.handle(mockRequest())
     expect(response).toEqual(serverSuccess(true))
   })
 })

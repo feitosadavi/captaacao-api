@@ -1,21 +1,21 @@
 import { LoadIdByEmail, PasswordRecover } from '@/domain/usecases'
-import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
+import { Controller, HttpResponse, Validation } from '@/presentation/protocols'
 import { NotFoundAccountError, UnknownError } from '@/presentation/errors'
 import { badRequest, serverError, serverSuccess } from '@/presentation/helpers'
 
-export class PasswordRecoverController implements Controller {
+export class PasswordRecoverController implements Controller<PasswordRecoverController.Request> {
   constructor (
     private readonly validation: Validation,
     private readonly loadIdByEmail: LoadIdByEmail,
     private readonly passwordRecover: PasswordRecover
   ) { }
 
-  async handle (httpRequest: HttpRequest<any, any, { email: string }>): Promise<HttpResponse> {
+  async handle (request: PasswordRecoverController.Request): Promise<HttpResponse> {
     try {
-      const error = this.validation.validate(httpRequest.body)
+      const error = this.validation.validate(request)
       if (error) return badRequest(error)
 
-      const email = httpRequest.body.email
+      const { email } = request
       const id = await this.loadIdByEmail.load({ email })
       if (id) {
         const ok = await this.passwordRecover.recover({ id, email })
@@ -24,5 +24,11 @@ export class PasswordRecoverController implements Controller {
     } catch (error) {
       return serverError(error)
     }
+  }
+}
+
+export namespace PasswordRecoverController {
+  export type Request = {
+    email: string
   }
 }

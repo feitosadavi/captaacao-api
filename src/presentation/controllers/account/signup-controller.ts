@@ -6,18 +6,18 @@ import {
   serverSuccess
 } from '@/presentation/helpers/http/http-helper'
 import { EmailInUseError } from '@/presentation/errors/email-in-use-error'
-import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
+import { Controller, HttpResponse, Validation } from '@/presentation/protocols'
 
-export class SignUpController implements Controller {
+export class SignUpController implements Controller<SignUpController.Request> {
   constructor (
     private readonly addAccount: AddAccount,
     private readonly validation: Validation,
     private readonly authentication: Authentication
   ) { }
 
-  async handle (httpRequest: HttpRequest<AddAccount.Params>): Promise<HttpResponse> {
+  async handle (request: SignUpController.Request): Promise<HttpResponse> {
     try {
-      const error = this.validation.validate(httpRequest.body)
+      const error = this.validation.validate(request)
       if (error) {
         return badRequest(error)
       }
@@ -32,7 +32,7 @@ export class SignUpController implements Controller {
         phone,
         role,
         adress
-      } = httpRequest.body
+      } = request
 
       const account = await this.addAccount.add({
         name,
@@ -58,4 +58,8 @@ export class SignUpController implements Controller {
       return serverError(error)
     }
   }
+}
+
+export namespace SignUpController {
+  export type Request = AddAccount.Params
 }

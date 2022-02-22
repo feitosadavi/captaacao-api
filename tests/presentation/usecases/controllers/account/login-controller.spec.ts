@@ -1,7 +1,7 @@
 import { LoginController } from '@/presentation/controllers'
 import { Authentication } from '@/domain/usecases'
 import { serverError, unauthorized, serverSuccess, badRequest } from '@/presentation/helpers/http/http-helper'
-import { HttpRequest, Validation } from '@/presentation/protocols'
+import { Validation } from '@/presentation/protocols'
 import { mockAuthentication, mockValidation } from '@tests/presentation/mocks'
 
 import { throwError } from '@tests/domain/mocks'
@@ -21,11 +21,9 @@ const makeSut = (): SutTypes => {
     authenticationStub
   }
 }
-const mockRequest = (): HttpRequest => ({
-  body: {
-    email: 'any_email@mail.com',
-    password: 'any_password'
-  }
+const mockRequest = (): LoginController.Request => ({
+  email: 'any_email@mail.com',
+  password: 'any_password'
 })
 describe('Login Controller', () => {
   test('Should call Authentication with correct values', async () => {

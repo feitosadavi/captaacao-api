@@ -1,15 +1,22 @@
 import { LoadAccountById } from '@/domain/usecases'
 import { serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
-import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
+import { Controller, HttpResponse } from '@/presentation/protocols'
 
-export class LoadAccountByIdController implements Controller {
+export class LoadAccountByIdController implements Controller<LoadAccountByIdController.Request> {
   constructor (private readonly loadAccountById: LoadAccountById) { }
-  async handle (httpRequest: HttpRequest<any, any, {id: string}>): Promise<HttpResponse> {
+  async handle (request: LoadAccountByIdController.Request): Promise<HttpResponse> {
     try {
-      const account = await this.loadAccountById.loadById(httpRequest.params.id)
+      const { id } = request
+      const account = await this.loadAccountById.loadById(id)
       return serverSuccess(account)
     } catch (error) {
       return serverError(error)
     }
+  }
+}
+
+export namespace LoadAccountByIdController {
+  export type Request = {
+    id: string
   }
 }
