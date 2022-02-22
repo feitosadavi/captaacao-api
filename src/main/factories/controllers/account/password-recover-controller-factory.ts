@@ -4,7 +4,7 @@ import { CodeGenerator } from '@/infra/others'
 import { NodemailerAdapter } from '@/infra/messaging'
 import { PasswordRecoverController } from '@/presentation/controllers'
 import { Controller } from '@/presentation/protocols'
-import { LogControllerDecorator } from '@/main/decorators/log-controller-decorator'
+import { LogControllerDecorator } from '@/main/decorators'
 import { makePasswordRecoverValidation } from './password-recover-validation-factory'
 
 export const makePasswordRecoverController = (): Controller => {

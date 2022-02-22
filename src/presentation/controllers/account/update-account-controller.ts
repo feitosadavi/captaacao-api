@@ -1,5 +1,5 @@
 import { UpdateAccount } from '@/domain/usecases'
-import { badRequest, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
+import { badRequest, serverError, serverSuccess } from '@/presentation/helpers'
 import { Controller, HttpResponse, Validation } from '@/presentation/protocols'
 
 export class UpdateAccountController implements Controller<UpdateAccountController.Request> {

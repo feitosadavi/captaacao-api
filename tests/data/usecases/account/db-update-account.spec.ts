@@ -1,8 +1,8 @@
+import { UpdateAccount } from '@/domain/usecases'
 import { LoadAccountByIdRepository, UpdateAccountRepository, Hasher } from '@/data/protocols'
 import { DbUpdateAccount } from '@/data/usecases'
 
 import { mockUpdateAccountRepository, mockLoadAccountByIdRepository, mockHasher } from '@tests/data/mocks'
-import { UpdateAccount } from '@/domain/usecases'
 import { mockAccountModel } from '@tests/domain/mocks'
 
 type SutTypes = {

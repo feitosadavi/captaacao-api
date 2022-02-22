@@ -1,5 +1,5 @@
-import { OptionalFieldValidation, ValidationComposite } from '@/validation/validators'
 import { Validation } from '@/presentation/protocols/validation'
+import { OptionalFieldValidation, ValidationComposite } from '@/validation/validators'
 
 // este factory foi criado para que possamos testar apenas o validation de forma isolada
 export const makeUpdateAccountValidationFactory = (): ValidationComposite => {

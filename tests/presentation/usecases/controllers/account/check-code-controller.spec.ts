@@ -3,11 +3,12 @@ import { LoadAccountByCode } from '@/domain/usecases'
 import { CheckCodeController } from '@/presentation/controllers'
 import { badRequest, serverError, serverSuccess } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols'
-import { mockLoadAccountByCode, mockValidation } from '@tests/presentation/mocks'
 import { InvalidCodeError } from '@/presentation/errors'
-import { mockCodeExpiration, mockCodeMatches } from '@tests/presentation/mocks/mock-confirmation-code-validator'
 import { CodeExpiration, CodeMatches } from '@/validation/protocols'
+
+import { mockCodeExpiration, mockCodeMatches } from '@tests/presentation/mocks/mock-confirmation-code-validator'
 import { mockAccountModel, throwError } from '@tests/domain/mocks'
+import { mockLoadAccountByCode, mockValidation } from '@tests/presentation/mocks'
 
 type SutTypes = {
   sut: CheckCodeController

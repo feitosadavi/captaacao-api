@@ -1,5 +1,6 @@
 import { PostModel } from '@/domain/models'
 import { AddPost, LoadPostById, LoadAllPosts } from '@/domain/usecases'
+
 import { mockPostsModel } from '@tests/domain/mocks'
 
 export const mockAddPost = (): AddPost => {

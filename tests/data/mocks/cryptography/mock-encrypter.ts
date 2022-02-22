@@ -1,5 +1,4 @@
-import { Decrypter } from '@/data/protocols/criptography/decrypter'
-import { Encrypter } from '@/data/protocols/criptography/encrypter'
+import { Decrypter, Encrypter } from '@/data/protocols'
 
 export const mockEncrypter = (): Encrypter => {
   class EncrypterStub implements Encrypter {

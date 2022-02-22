@@ -1,9 +1,9 @@
+import { DeleteProfile } from '@/domain/usecases'
 import { DeleteProfileRepository } from '@/data/protocols'
 import { DbDeleteProfile } from '@/data/usecases'
 
 import { throwError } from '@tests/domain/mocks'
 import { mockDeleteProfileRepository } from '@tests/data/mocks'
-import { DeleteProfile } from '@/domain/usecases'
 
 type SutTypes = {
   sut: DbDeleteProfile

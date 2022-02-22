@@ -1,5 +1,5 @@
 import { SixDigitCodeError } from '@/presentation/errors'
-import { Validation } from '@/presentation/protocols/validation'
+import { Validation } from '@/presentation/protocols'
 
 export class SixDigitCodeValidation implements Validation {
   validate (input: {code: number}): Error {

@@ -1,9 +1,9 @@
-import { Controller } from '@/presentation/protocols'
-import { UpdatePasswordController } from '@/presentation/controllers'
 import { DbUpdatePassword } from '@/data/usecases'
 import { AccountMongoRepository } from '@/infra/db/mongodb'
-import { makeUpdatePasswordValidation } from '.'
 import { BcryptAdapter } from '@/infra/cryptography'
+import { Controller } from '@/presentation/protocols'
+import { UpdatePasswordController } from '@/presentation/controllers'
+import { makeUpdatePasswordValidation } from '.'
 
 export const makeUpdatePasswordControllerFactory = (): Controller => {
   const salt = 12

@@ -1,13 +1,13 @@
 import MockDate from 'mockdate'
 
+import { AddProfile } from '@/domain/usecases'
 import { AddProfileController } from '@/presentation/controllers'
 import { badRequest, serverError, noContent } from '@/presentation/helpers/http/http-helper'
+import { Validation } from '@/presentation/protocols'
+import { NameInUseError } from '@/presentation/errors'
 
 import { mockProfileParams, throwError } from '@tests/domain/mocks'
 import { mockAddProfile, mockValidation } from '@tests/presentation/mocks'
-import { Validation } from '@/presentation/protocols'
-import { AddProfile } from '@/domain/usecases'
-import { NameInUseError } from '@/presentation/errors'
 
 type SutTypes = {
   sut: AddProfileController

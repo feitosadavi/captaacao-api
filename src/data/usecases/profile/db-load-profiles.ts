@@ -1,5 +1,5 @@
-import { LoadProfilesRepository } from '@/data/protocols'
 import { LoadProfiles } from '@/domain/usecases'
+import { LoadProfilesRepository } from '@/data/protocols'
 
 export class DbLoadProfiles implements LoadProfiles {
   constructor (

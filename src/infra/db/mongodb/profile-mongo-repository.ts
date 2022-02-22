@@ -1,5 +1,5 @@
 import { AddProfileRepository, DeleteProfileRepository, LoadProfilesRepository, ProfileNameIsInUseRepository } from '@/data/protocols'
-import { MongoHelper } from '.'
+import { MongoHelper } from '@/infra/db/mongodb'
 
 export class ProfileMongoRepository implements AddProfileRepository, ProfileNameIsInUseRepository, DeleteProfileRepository, LoadProfilesRepository {
   async add (params: AddProfileRepository.Params): Promise<AddProfileRepository.Result> {

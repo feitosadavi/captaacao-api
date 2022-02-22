@@ -1,5 +1,5 @@
 import { DeleteProfile } from '@/domain/usecases'
-import { serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
+import { serverError, serverSuccess } from '@/presentation/helpers'
 import { Controller, HttpResponse } from '@/presentation/protocols'
 
 export class DeleteProfileController implements Controller<DeleteProfileController.Request> {

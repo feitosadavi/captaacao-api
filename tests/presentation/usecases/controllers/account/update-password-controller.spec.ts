@@ -1,7 +1,7 @@
 import { UpdatePassword } from '@/domain/usecases'
 import { UpdatePasswordController } from '@/presentation/controllers'
 import { UnknownError } from '@/presentation/errors'
-import { serverSuccess, badRequest, serverError } from '@/presentation/helpers/http/http-helper'
+import { serverSuccess, badRequest, serverError } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols'
 import { throwError } from '@tests/domain/mocks'
 import { mockUpdatePassword, mockValidation } from '@tests/presentation/mocks'

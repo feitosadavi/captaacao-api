@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router } from 'express'
-import { adaptRoute } from '../adapters/express-route-adapter'
+import { adaptRoute, adaptMiddleware } from '@/main/adapters'
 import {
   makeAddProfileController,
   makeLoadProfilesController,
   makeDeleteProfileController,
   makeAuthMiddleware
 } from '@/main/factories'
-import { adminAuth } from '../middlewares/admin-auth'
-import { adaptMiddleware } from '../adapters/express-middleware-adapter'
+import { adminAuth } from '@/main/middlewares'
 
 export default (router: Router): void => {
   router.post('/profile', adminAuth, adaptRoute(makeAddProfileController()))

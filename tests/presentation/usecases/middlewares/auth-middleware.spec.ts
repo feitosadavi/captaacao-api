@@ -1,13 +1,13 @@
 import MockDate from 'mockdate'
 
+import { LoadAccountByToken } from '@/domain/usecases'
 import { AccessDeniedError } from '@/presentation/errors'
-import { forbidden, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
+import { forbidden, serverError, serverSuccess } from '@/presentation/helpers'
 import { AuthMiddleware } from '@/presentation/middlewares'
-
 import { HttpRequest } from '@/presentation/protocols'
+
 import { mockAccountModel, throwError } from '@tests/domain/mocks'
 import { mockLoadAccountByToken } from '@tests/presentation/mocks'
-import { LoadAccountByToken } from '@/domain/usecases'
 
 const mockRequest = (): HttpRequest => {
   return {

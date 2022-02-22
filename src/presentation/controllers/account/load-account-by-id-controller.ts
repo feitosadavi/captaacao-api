@@ -1,5 +1,5 @@
 import { LoadAccountById } from '@/domain/usecases'
-import { serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
+import { serverError, serverSuccess } from '@/presentation/helpers'
 import { Controller, HttpResponse } from '@/presentation/protocols'
 
 export class LoadAccountByIdController implements Controller<LoadAccountByIdController.Request> {

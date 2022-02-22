@@ -1,9 +1,10 @@
 import MockDate from 'mockdate'
+import { Collection } from 'mongodb'
+
+import { AccountModel } from '@/domain/models'
+import { MongoHelper, AccountMongoRepository } from '@/infra/db/mongodb'
 
 import { mockAccountParams, mockAccountConfirmationCode } from '@tests/domain/mocks'
-import { Collection } from 'mongodb'
-import { MongoHelper, AccountMongoRepository } from '@/infra/db/mongodb'
-import { AccountModel } from '@/domain/models'
 
 describe('Account Mongo Repository', () => {
   let accountCollection: Collection

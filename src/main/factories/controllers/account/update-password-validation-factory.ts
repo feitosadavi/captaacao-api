@@ -1,5 +1,5 @@
-import { RequiredFieldValidation, ValidationComposite } from '@/validation/validators'
 import { Validation } from '@/presentation/protocols/validation'
+import { RequiredFieldValidation, ValidationComposite } from '@/validation/validators'
 
 // este factory foi criado para que possamos testar apenas o validation de forma isolada
 export const makeUpdatePasswordValidation = (): ValidationComposite => {

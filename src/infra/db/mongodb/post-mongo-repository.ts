@@ -1,6 +1,7 @@
-import { AddPostRepository, LoadPostByIdRepository, LoadAllPostsRepository } from '@/data/protocols'
 import { ObjectID } from 'mongodb'
-import { MongoHelper } from './mongo-helper'
+
+import { AddPostRepository, LoadPostByIdRepository, LoadAllPostsRepository } from '@/data/protocols'
+import { MongoHelper } from '@/infra/db/mongodb'
 
 export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepository, LoadPostByIdRepository {
   async addPost (params: AddPostRepository.Params): AddPostRepository.Result {

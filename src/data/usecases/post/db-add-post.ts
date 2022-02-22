@@ -1,5 +1,5 @@
-import { AddPostRepository } from '@/data/protocols'
 import { AddPost } from '@/domain/usecases'
+import { AddPostRepository } from '@/data/protocols'
 
 export class DbAddPost implements AddPost {
   constructor (

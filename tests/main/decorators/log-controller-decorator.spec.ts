@@ -1,8 +1,9 @@
-import { LogErrorRepository } from '@/data/protocols/db/log/log-error-repository'
-import { mockLogErrorRepositoryStub } from '@tests/data/mocks'
+import { LogErrorRepository } from '@/data/protocols'
 import { serverError } from '@/presentation/helpers/http/http-helper'
 import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 import { LogControllerDecorator } from '@/main/decorators'
+
+import { mockLogErrorRepositoryStub } from '@tests/data/mocks'
 
 type SutTypes = {
   sut: LogControllerDecorator

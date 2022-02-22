@@ -1,5 +1,5 @@
-import { AddProfileRepository, ProfileNameIsInUseRepository } from '@/data/protocols'
 import { AddProfile } from '@/domain/usecases'
+import { AddProfileRepository, ProfileNameIsInUseRepository } from '@/data/protocols'
 
 export class DbAddProfile implements AddProfile {
   constructor (

@@ -1,6 +1,6 @@
 import { AddProfile } from '@/domain/usecases'
 import { NameInUseError } from '@/presentation/errors'
-import { badRequest, noContent, serverError } from '@/presentation/helpers/http/http-helper'
+import { badRequest, noContent, serverError } from '@/presentation/helpers'
 import { Controller, HttpResponse, Validation } from '@/presentation/protocols'
 
 export class AddProfileController implements Controller<AddProfileController.Request> {

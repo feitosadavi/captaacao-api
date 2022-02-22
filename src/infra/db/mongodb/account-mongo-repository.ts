@@ -1,3 +1,7 @@
+import { ObjectID } from 'mongodb'
+import { MongoHelper } from './mongo-helper'
+
+import { AccountModel } from '@/domain/models'
 import {
   AddAccountRepository,
   DeleteAccountRepository,
@@ -10,9 +14,6 @@ import {
   UpdateAccountRepository,
   UpdatePasswordRepository
 } from '@/data/protocols'
-import { AccountModel } from '@/domain/models'
-import { ObjectID } from 'mongodb'
-import { MongoHelper } from './mongo-helper'
 
 export class AccountMongoRepository implements AddAccountRepository,
   LoadAccountsRepository,

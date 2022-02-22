@@ -1,5 +1,5 @@
-import { DeleteAccount } from '@/domain/usecases/account/delete-account'
-import { serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
+import { DeleteAccount } from '@/domain/usecases'
+import { serverError, serverSuccess } from '@/presentation/helpers'
 import { Controller, HttpResponse } from '@/presentation/protocols'
 
 export class DeleteAccountController implements Controller<DeleteAccountController.Request> {

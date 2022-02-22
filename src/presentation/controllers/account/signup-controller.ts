@@ -4,8 +4,8 @@ import {
   forbidden,
   serverError,
   serverSuccess
-} from '@/presentation/helpers/http/http-helper'
-import { EmailInUseError } from '@/presentation/errors/email-in-use-error'
+} from '@/presentation/helpers'
+import { EmailInUseError } from '@/presentation/errors'
 import { Controller, HttpResponse, Validation } from '@/presentation/protocols'
 
 export class SignUpController implements Controller<SignUpController.Request> {

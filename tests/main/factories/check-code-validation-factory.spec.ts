@@ -1,7 +1,7 @@
-import { ValidationComposite } from '@/validation/validators'
 import { Validation } from '@/presentation/protocols/validation'
-import { makeCheckCodeValidation } from '@/main/factories'
 import { SixDigitCodeValidation } from '@/presentation/validators'
+import { makeCheckCodeValidation } from '@/main/factories'
+import { ValidationComposite } from '@/validation/validators'
 
 // quando eu mocko um módulo, ele passa a não ter mais o comportamento default dele
 jest.mock('@/validation/validators/validation-composite')

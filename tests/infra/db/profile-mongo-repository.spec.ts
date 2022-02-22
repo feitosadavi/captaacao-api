@@ -1,8 +1,9 @@
 import MockDate from 'mockdate'
-
 import { Collection } from 'mongodb'
-import { MongoHelper, ProfileMongoRepository } from '@/infra/db/mongodb'
+
 import { AddProfileRepository } from '@/data/protocols'
+import { MongoHelper, ProfileMongoRepository } from '@/infra/db/mongodb'
+
 import { mockProfileModels } from '@tests/domain/mocks'
 
 const mockAddParams = (): AddProfileRepository.Params => ({

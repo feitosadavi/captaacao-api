@@ -1,4 +1,5 @@
 import { Collection } from 'mongodb'
+
 import { LogErrorRepository } from '@/data/protocols/db/log/log-error-repository'
 import { LogMongoRepository, MongoHelper } from '@/infra/db/mongodb'
 

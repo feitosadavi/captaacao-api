@@ -1,8 +1,7 @@
 import { createTransport, Transporter } from 'nodemailer'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
 
-import { SendEmailRepository } from '@/data/protocols'
-import { SetupEmailRepository } from '@/data/protocols/messaging/setup-email'
+import { SendEmailRepository, SetupEmailRepository } from '@/data/protocols'
 
 export class NodemailerAdapter implements SetupEmailRepository, SendEmailRepository {
   private transporter: Transporter<SMTPTransport.SentMessageInfo>

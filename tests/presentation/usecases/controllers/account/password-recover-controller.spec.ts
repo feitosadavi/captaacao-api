@@ -1,7 +1,7 @@
 import { LoadIdByEmail, PasswordRecover } from '@/domain/usecases'
-import { PasswordRecoverController } from '@/presentation/controllers/account/password-recover-controller'
-import { NotFoundAccountError } from '@/presentation/errors/not-found-account'
-import { badRequest, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
+import { PasswordRecoverController } from '@/presentation/controllers'
+import { NotFoundAccountError } from '@/presentation/errors'
+import { badRequest, serverError, serverSuccess } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols'
 import { UnknownError } from '@/presentation/errors/unknown-error'
 

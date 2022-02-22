@@ -1,12 +1,12 @@
 import MockDate from 'mockdate'
 
+import { AddPost } from '@/domain/usecases'
+import { Validation } from '@/presentation/protocols'
 import { AddPostController } from '@/presentation/controllers'
-import { badRequest, serverError, noContent } from '@/presentation/helpers/http/http-helper'
+import { badRequest, serverError, noContent } from '@/presentation/helpers'
 
 import { mockPostsParams, throwError } from '@tests/domain/mocks'
 import { mockAddPost, mockValidation } from '@tests/presentation/mocks'
-import { Validation } from '@/presentation/protocols'
-import { AddPost } from '@/domain/usecases'
 
 const mockRequest = (): AddPostController.Request => ({
   ...mockPostsParams()[0]

@@ -1,9 +1,12 @@
-import env from '@/main/config/env'
-import { SendEmailRepository, UpdateAccountRepository } from '@/data/protocols'
-import { GeneratePassRecoverInfo } from '@/data/protocols/others'
 import { PasswordRecover } from '@/domain/usecases'
+import {
+  SendEmailRepository,
+  UpdateAccountRepository,
+  SetupEmailRepository,
+  GeneratePassRecoverInfo
+} from '@/data/protocols'
 import { makePasswordRecoverMail } from '@/data/helpers'
-import { SetupEmailRepository } from '@/data/protocols/messaging/setup-email'
+import env from '@/main/config/env'
 
 export class DbPasswordRecover implements PasswordRecover {
   constructor (

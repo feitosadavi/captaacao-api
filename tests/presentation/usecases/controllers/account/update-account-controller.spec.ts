@@ -1,6 +1,6 @@
 import { UpdateAccount } from '@/domain/usecases'
 import { UpdateAccountController } from '@/presentation/controllers'
-import { serverSuccess, badRequest, serverError } from '@/presentation/helpers/http/http-helper'
+import { serverSuccess, badRequest, serverError } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols'
 import { throwError } from '@tests/domain/mocks'
 import { mockUpdateAccount, mockValidation } from '@tests/presentation/mocks'

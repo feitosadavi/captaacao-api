@@ -1,5 +1,5 @@
-import { LoadPostByIdRepository } from '@/data/protocols'
 import { LoadPostById } from '@/domain/usecases'
+import { LoadPostByIdRepository } from '@/data/protocols'
 
 export class DbLoadPostById implements LoadPostById {
   constructor (private readonly loadPostByIdRepository: LoadPostByIdRepository) { }

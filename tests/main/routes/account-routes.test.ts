@@ -2,8 +2,8 @@ import { Collection, InsertOneWriteOpResult } from 'mongodb'
 import request from 'supertest'
 import { hash } from 'bcrypt'
 import { sign } from 'jsonwebtoken'
-import { MongoHelper } from '@/infra/db/mongodb'
 
+import { MongoHelper } from '@/infra/db/mongodb'
 import app from '@/main/config/app'
 import env from '@/main/config/env'
 

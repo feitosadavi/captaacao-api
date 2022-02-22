@@ -1,5 +1,7 @@
 import { Collection } from 'mongodb'
+
 import { MongoHelper, PostMongoRepository } from '@/infra/db/mongodb'
+
 import { mockPostsParams } from '@tests/domain/mocks'
 
 describe('PostMongo Repository', () => {

@@ -1,8 +1,9 @@
 import MockDate from 'mockdate'
 
-import { LoadAccountById } from '@/domain/usecases/account/load-account-by-id'
+import { LoadAccountById } from '@/domain/usecases'
 import { LoadAccountByIdController } from '@/presentation/controllers'
-import { serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
+import { serverError, serverSuccess } from '@/presentation/helpers'
+
 import { mockAccountModel, throwError } from '@tests/domain/mocks'
 import { mockLoadAccountById } from '@tests/presentation/mocks'
 

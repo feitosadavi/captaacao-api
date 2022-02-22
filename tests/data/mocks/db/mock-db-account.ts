@@ -1,17 +1,20 @@
-import { DeleteAccountRepository } from '@/data/protocols/db/account/delete-account-repository'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { LoadAccountByEmailRepository } from '@/data/protocols/db/account/load-account-by-email-repository'
-import { LoadAccountByIdRepository } from '@/data/protocols/db/account/load-account-by-id-repository'
-import { LoadAccountByTokenRepository } from '@/data/protocols/db/account/load-account-by-token-repository'
-import { LoadAccountsRepository } from '@/data/protocols/db/account/load-accounts-repository'
-import { UpdateAccessTokenRepository } from '@/data/protocols/db/account/update-access-token-repository'
-import { AccountModel } from '@/domain/models/account'
+import { AccountModel } from '@/domain/models'
 import { mockAccountModel, mockAccountsModel } from '@tests/domain/mocks'
-import { AddAccountRepository, UpdateAccountRepository, UpdatePasswordRepository, LoadAccountByCodeRepository } from '@/data/protocols'
+import {
+  AddAccountRepository,
+  UpdateAccountRepository,
+  UpdatePasswordRepository,
+  LoadAccountByCodeRepository,
+  DeleteAccountRepository,
+  LoadAccountByEmailRepository,
+  LoadAccountByIdRepository,
+  LoadAccountByTokenRepository,
+  LoadAccountsRepository,
+  UpdateAccessTokenRepository
+} from '@/data/protocols'
 
 export const mockAddAccountRepositoryStub = (): AddAccountRepository => {
   class AddAccountStubRepository implements AddAccountRepository {
-    // eslint-disable-next-line @typescript-eslint/require-await
     async add (params: AddAccountRepository.Params): Promise<boolean> {
       return Promise.resolve(true)
     }

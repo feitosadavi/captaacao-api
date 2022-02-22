@@ -12,8 +12,9 @@ import {
   UpdatePassword
 } from '@/domain/usecases'
 import { AccountModel } from '@/domain/models'
-import { mockAccountModel, mockAccountConfirmationCode } from '@tests/domain/mocks'
 import { Authentication, AuthenticationParams } from '@/domain/usecases/authentication'
+
+import { mockAccountModel, mockAccountConfirmationCode } from '@tests/domain/mocks'
 
 export const mockAddAccountStub = (): AddAccount => {
   class AddAccountStub implements AddAccount {

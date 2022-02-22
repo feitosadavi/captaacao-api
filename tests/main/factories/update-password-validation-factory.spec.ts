@@ -1,5 +1,5 @@
-import { RequiredFieldValidation, ValidationComposite } from '@/validation/validators'
 import { Validation } from '@/presentation/protocols/validation'
+import { RequiredFieldValidation, ValidationComposite } from '@/validation/validators'
 import { makeUpdatePasswordValidation } from '@/main/factories'
 
 // quando eu mocko um módulo, ele passa a não ter mais o comportamento default dele

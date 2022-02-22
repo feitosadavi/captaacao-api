@@ -1,5 +1,6 @@
-import { CodeGenerator } from '@/infra/others'
 import MockDate from 'mockdate'
+
+import { CodeGenerator } from '@/infra/others'
 
 const makeSut = (): CodeGenerator => {
   const sut = new CodeGenerator()

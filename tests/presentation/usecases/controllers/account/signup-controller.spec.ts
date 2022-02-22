@@ -3,7 +3,7 @@ import MockDate from 'mockdate'
 import { AddAccount, Authentication } from '@/domain/usecases'
 import { SignUpController } from '@/presentation/controllers/account'
 import { MissingParamError, EmailInUseError } from '@/presentation/errors'
-import { badRequest, serverError, serverSuccess, forbidden } from '@/presentation/helpers/http/http-helper'
+import { badRequest, serverError, serverSuccess, forbidden } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols'
 
 import { mockAccountParams, throwError } from '@tests/domain/mocks'

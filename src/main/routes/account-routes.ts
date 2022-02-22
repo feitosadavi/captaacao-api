@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router } from 'express'
-import { adaptMiddleware } from '../adapters/express-middleware-adapter'
-import { adaptRoute } from '../adapters/express-route-adapter'
+import { adaptRoute, adaptMiddleware } from '@/main/adapters'
 import {
   makeDeleteAccountsController,
   makeLoadAccountsController,

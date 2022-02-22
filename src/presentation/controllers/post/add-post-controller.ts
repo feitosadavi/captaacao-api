@@ -1,5 +1,5 @@
 import { AddPost } from '@/domain/usecases'
-import { badRequest, noContent, serverError } from '@/presentation/helpers/http/http-helper'
+import { badRequest, noContent, serverError } from '@/presentation/helpers'
 import { Controller, HttpResponse, Validation } from '@/presentation/protocols'
 
 export class AddPostController implements Controller<AddPostController.Request> {

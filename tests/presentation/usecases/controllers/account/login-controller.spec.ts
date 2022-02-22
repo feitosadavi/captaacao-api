@@ -1,6 +1,6 @@
 import { LoginController } from '@/presentation/controllers'
 import { Authentication } from '@/domain/usecases'
-import { serverError, unauthorized, serverSuccess, badRequest } from '@/presentation/helpers/http/http-helper'
+import { serverError, unauthorized, serverSuccess, badRequest } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols'
 import { mockAuthentication, mockValidation } from '@tests/presentation/mocks'
 

@@ -2,7 +2,7 @@ import { LogMongoRepository, ProfileMongoRepository } from '@/infra/db/mongodb'
 import { AddProfileController } from '@/presentation/controllers'
 import { Controller } from '@/presentation/protocols'
 import { makeAddProfileValidation } from '@/main/factories'
-import { LogControllerDecorator } from '@/main/decorators/log-controller-decorator'
+import { LogControllerDecorator } from '@/main/decorators'
 
 export const makeAddProfileController = (): Controller => {
   const profileMongoRepository = new ProfileMongoRepository()

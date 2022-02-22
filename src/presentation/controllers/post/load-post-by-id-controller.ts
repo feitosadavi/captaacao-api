@@ -1,5 +1,5 @@
 import { LoadPostById } from '@/domain/usecases'
-import { noContent, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
+import { noContent, serverError, serverSuccess } from '@/presentation/helpers'
 import { Controller, HttpResponse } from '@/presentation/protocols'
 
 export class LoadPostByIdController implements Controller<LoadPostByIdController.Request> {

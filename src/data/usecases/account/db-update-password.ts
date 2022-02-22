@@ -1,5 +1,5 @@
-import { Hasher, UpdatePasswordRepository } from '@/data/protocols'
 import { UpdatePassword } from '@/domain/usecases'
+import { Hasher, UpdatePasswordRepository } from '@/data/protocols'
 
 export class DbUpdatePassword implements UpdatePassword {
   constructor (

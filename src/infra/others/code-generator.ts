@@ -1,5 +1,5 @@
-import { GeneratePassRecoverInfo } from '@/data/protocols/others'
 import { AccountModel } from '@/domain/models'
+import { GeneratePassRecoverInfo } from '@/data/protocols/others'
 
 export class CodeGenerator implements GeneratePassRecoverInfo {
   public code: number

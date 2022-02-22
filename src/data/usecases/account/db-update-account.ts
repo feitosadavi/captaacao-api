@@ -1,5 +1,5 @@
-import { LoadAccountByIdRepository, UpdateAccountRepository } from '@/data/protocols'
 import { UpdateAccount } from '@/domain/usecases'
+import { LoadAccountByIdRepository, UpdateAccountRepository } from '@/data/protocols'
 
 export class DbUpdateAccount implements UpdateAccount {
   constructor (

@@ -1,8 +1,8 @@
+import { UpdatePassword } from '@/domain/usecases'
 import { UpdatePasswordRepository, Hasher } from '@/data/protocols'
 import { DbUpdatePassword } from '@/data/usecases'
 
 import { mockUpdatePasswordRepository, mockHasher } from '@tests/data/mocks'
-import { UpdatePassword } from '@/domain/usecases'
 
 type SutTypes = {
   sut: DbUpdatePassword

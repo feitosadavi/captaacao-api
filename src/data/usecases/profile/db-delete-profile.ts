@@ -1,5 +1,5 @@
-import { DeleteProfileRepository } from '@/data/protocols'
 import { DeleteProfile } from '@/domain/usecases'
+import { DeleteProfileRepository } from '@/data/protocols'
 
 export class DbDeleteProfile implements DeleteProfile {
   constructor (

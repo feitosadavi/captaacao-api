@@ -1,6 +1,6 @@
 import { UpdatePassword } from '@/domain/usecases'
 import { UnknownError } from '@/presentation/errors'
-import { badRequest, serverError, serverSuccess } from '@/presentation/helpers/http/http-helper'
+import { badRequest, serverError, serverSuccess } from '@/presentation/helpers'
 import { Controller, HttpResponse, Validation } from '@/presentation/protocols'
 
 export class UpdatePasswordController implements Controller<UpdatePasswordController.Request> {
