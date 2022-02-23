@@ -13,23 +13,28 @@ export class AddPostController implements Controller<AddPostController.Request> 
       const error = this.validation.validate(request)
       if (error) return badRequest(new Error())
       const {
-        name,
-        price,
-        brand,
-        year,
-        color,
-        kmTraveled,
-        vehicleItems
+        title,
+        photos,
+        description,
+        postedBy,
+        carBeingSold
       } = request
+
+      const createdAt = new Date()
+      const modifiedAt = new Date()
+      createdAt.toLocaleString('pt-BR')
+      modifiedAt.toLocaleString('pt-BR')
+
       await this.addPost.add({
-        name,
-        price,
-        brand,
-        year,
-        color,
-        kmTraveled,
-        vehicleItems,
-        addDate: new Date()
+        title,
+        photos,
+        description,
+        createdAt,
+        modifiedAt,
+        postedBy,
+        status: true,
+        views: 0,
+        carBeingSold
       })
       return noContent()
     } catch (error) {
@@ -39,5 +44,10 @@ export class AddPostController implements Controller<AddPostController.Request> 
 }
 
 export namespace AddPostController {
-  export type Request = AddPost.Params
+  export type Request = Omit<AddPost.Params,
+  'status' |
+  'views' |
+  'createdAt' |
+  'modifiedAt'
+  >
 }

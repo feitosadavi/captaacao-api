@@ -1,11 +1,37 @@
 export type PostModel = {
   id: string
-  name: string
-  price: number
-  brand: string
-  year: string
-  color: string
-  vehicleItems: string[] // airbag, alarme, etc
-  kmTraveled: 100000
-  addDate: Date
+  title: string
+  photos: string[]
+  description: string
+
+  createdAt: Date
+  modifiedAt: Date
+  postedBy: string
+  status: boolean
+
+  views: number
+
+  carBeingSold: PostModel.CarBeingSold
+}
+
+export namespace PostModel {
+  export type CarBeingSold = {
+    thumb: string // a link to a pic
+    price: number
+    fipePrice: number
+
+    brand: string
+    model: string
+    year: string
+    color: string
+    doors: number
+    steering: string
+
+    carItems: string[] // airbag, alarme, etc
+    kmTraveled: number
+
+    licensePlate: string
+    sold: boolean
+    fastSale: boolean
+  }
 }

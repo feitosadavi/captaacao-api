@@ -3,13 +3,14 @@ import { RequiredFieldValidation, ValidationComposite } from '@/validation/valid
 
 export const makeAddPostValidation = (): ValidationComposite => {
   const validations: Validation[] = []
-  for (const field of ['name',
-    'price',
-    'brand',
-    'year',
-    'color',
-    'kmTraveled',
-    'vehicleItems']) {
+
+  for (const field of [
+    'title',
+    'photos',
+    'description',
+    'postedBy',
+    'carBeingSold'
+  ]) {
     validations.push(new RequiredFieldValidation(field))
   }
   return new ValidationComposite(validations)
