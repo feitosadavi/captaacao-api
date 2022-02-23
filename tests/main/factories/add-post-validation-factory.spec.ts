@@ -9,13 +9,13 @@ describe('AddPost Factory', () => {
   test('Should call ValidationComposite with all validations', () => {
     makeAddPostValidation()
     const validations: Validation[] = []
-    for (const field of ['name',
-      'price',
-      'brand',
-      'year',
-      'color',
-      'kmTraveled',
-      'vehicleItems']) {
+    for (const field of [
+      'title',
+      'photos',
+      'description',
+      'postedBy',
+      'carBeingSold'
+    ]) {
       validations.push(new RequiredFieldValidation(field))
     }
 

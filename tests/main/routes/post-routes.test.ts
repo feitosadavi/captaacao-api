@@ -73,11 +73,12 @@ describe('Post Routes', () => {
       const res = await insertAccount()
       const id = res.ops[0]._id
       const accessToken = sign({ id }, env.secret)
+      const { status, createdAt, modifiedAt, views, ...requestParams } = mockPostsParams()[0]
       await updateAccountToken(id, accessToken)
       await request(app)
         .post('/api/posts')
         .set('x-access-token', accessToken) // na requisição, eu coloco o accessToken nos headers
-        .send(mockPostsParams()[0])
+        .send(requestParams)
         .expect(204)
     })
   })

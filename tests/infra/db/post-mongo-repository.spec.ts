@@ -30,7 +30,7 @@ describe('PostMongo Repository', () => {
     test('Should create a post on add success', async () => {
       const sut = makeSut()
       await sut.addPost(mockPostsParams()[0])
-      const post = await postsCollection.findOne({ name: 'any_name' })
+      const post = await postsCollection.findOne({ title: 'any_title' })
       expect(post).toBeTruthy()
     })
   })
@@ -44,8 +44,8 @@ describe('PostMongo Repository', () => {
       ])
       const posts = await sut.loadAll()
       expect(posts.length).toBe(2)
-      expect(posts[0].name).toBe('any_name')
-      expect(posts[1].name).toBe('other_name')
+      expect(posts[0].title).toBe('any_title')
+      expect(posts[1].title).toBe('other_title')
     })
 
     test('Should load empty list if collection has no posts', async () => {

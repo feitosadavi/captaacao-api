@@ -8,9 +8,10 @@ import { badRequest, serverError, noContent } from '@/presentation/helpers'
 import { mockPostsParams, throwError } from '@tests/domain/mocks'
 import { mockAddPost, mockValidation } from '@tests/presentation/mocks'
 
-const mockRequest = (): AddPostController.Request => ({
-  ...mockPostsParams()[0]
-})
+const mockRequest = (): AddPostController.Request => {
+  const { status, views, createdAt, modifiedAt, ...request } = mockPostsParams()[0]
+  return request
+}
 
 type SutTypes = {
   sut: AddPostController
@@ -55,9 +56,8 @@ describe('AddPost Controller', () => {
   test('Should call AddPost with correct values', async () => {
     const { sut, addPostStub } = makeSut()
     const addSpy = jest.spyOn(addPostStub, 'add')
-    const request = mockRequest()
-    await sut.handle(request)
-    expect(addSpy).toHaveBeenCalledWith(request)
+    await sut.handle(mockRequest())
+    expect(addSpy).toHaveBeenCalledWith(mockPostsParams()[0])
   })
 
   test('Should return 500 if AddPost throws', async () => {
