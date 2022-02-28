@@ -15,7 +15,7 @@ export default (app: Express): void => {
      * o dirname eu uso a referência local do arquivo para importar o arquivo que eu quiser, dessa forma não terei problemas em produção
      */
   readdirSync(`${__dirname}/../routes/`).map(async (file) => {
-    if (!file.includes('.test.')) {
+    if (!file.includes('.test.') && !file.endsWith('.map')) {
       (await import(`../routes/${file}`)).default(router) // pego o arquivo e depois o seu default
     }
   })
