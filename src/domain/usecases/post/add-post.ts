@@ -14,6 +14,7 @@ export namespace AddPost {
     modifiedAt: Date
     postedBy: string
     status: boolean
+    active: boolean
 
     views: number
 

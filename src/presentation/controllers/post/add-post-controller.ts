@@ -33,6 +33,7 @@ export class AddPostController implements Controller<AddPostController.Request> 
         modifiedAt,
         postedBy,
         status: true,
+        active: true,
         views: 0,
         carBeingSold
       })
@@ -46,6 +47,7 @@ export class AddPostController implements Controller<AddPostController.Request> 
 export namespace AddPostController {
   export type Request = Omit<AddPost.Params,
   'status' |
+  'active' |
   'views' |
   'createdAt' |
   'modifiedAt'

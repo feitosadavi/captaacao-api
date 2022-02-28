@@ -11,6 +11,7 @@ export const mockPostsModel = (): PostModel[] => {
     modifiedAt: new Date(),
     postedBy: 'any_account_id',
     status: true,
+    active: true,
     views: 0,
     carBeingSold: {
       price: 999999,
@@ -43,6 +44,7 @@ export const mockPostsModel = (): PostModel[] => {
     modifiedAt: new Date(),
     postedBy: 'other_account_id',
     status: true,
+    active: true,
     views: 0,
     carBeingSold: {
       price: 999999,
@@ -77,6 +79,7 @@ export const mockPostsParams = (): AddPost.Params[] => {
     modifiedAt: new Date(),
     postedBy: 'any_account_id',
     status: true,
+    active: true,
     views: 0,
     carBeingSold: {
       price: 999999,
@@ -108,6 +111,7 @@ export const mockPostsParams = (): AddPost.Params[] => {
     modifiedAt: new Date(),
     postedBy: 'other_account_id',
     status: true,
+    active: true,
     views: 0,
     carBeingSold: {
       price: 999999,

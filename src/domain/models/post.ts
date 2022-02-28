@@ -8,6 +8,7 @@ export type PostModel = {
   modifiedAt: Date
   postedBy: string
   status: boolean
+  active: boolean
 
   views: number
 
