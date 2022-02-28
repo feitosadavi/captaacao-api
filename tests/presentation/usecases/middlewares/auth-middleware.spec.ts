@@ -4,19 +4,14 @@ import { LoadAccountByToken } from '@/domain/usecases'
 import { AccessDeniedError } from '@/presentation/errors'
 import { forbidden, serverError, serverSuccess } from '@/presentation/helpers'
 import { AuthMiddleware } from '@/presentation/middlewares'
-import { HttpRequest } from '@/presentation/protocols'
 
 import { mockAccountModel, throwError } from '@tests/domain/mocks'
 import { mockLoadAccountByToken } from '@tests/presentation/mocks'
 
-const mockRequest = (): HttpRequest => {
+const mockRequest = (): AuthMiddleware.Request => {
   return {
-    headers: {
-      'x-access-token': 'any_token'
-    },
-    params: {
-      id: 'any_id'
-    }
+    accessToken: 'any_token',
+    id: 'any_id'
   }
 }
 
@@ -47,12 +42,8 @@ describe('Auth Middleware', () => {
     const role = 'any_role'
     const { sut } = makeSut(role, true)
     const response = await sut.handle({
-      headers: {
-        'x-access-token': 'any_token'
-      },
-      params: {
-        id: 'other_id'
-      }
+      accessToken: 'any_token',
+      id: 'other_id'
     })
     expect(response).toEqual(forbidden(new AccessDeniedError()))
   })
