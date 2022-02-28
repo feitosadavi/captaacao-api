@@ -58,12 +58,12 @@ describe('SignUp Controller', () => {
   test('Should return 200 and accessToken if valid data is provided', async () => {
     const { sut } = makeSut()
     const accountWithToken = await sut.handle(mockRequest())
-    expect(accountWithToken).toEqual(serverSuccess({ accessToken: 'any_token' }))
+    expect(accountWithToken).toEqual(serverSuccess({ accessToken: 'any_token', name: 'any_name' }))
   })
 
   test('Should return 403 if an email already in use is provided', async () => {
     const { sut, addAccountStub } = makeSut()
-    jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(Promise.resolve(null))
+    jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(Promise.resolve(null)) // mockar para retornar false
     const accountWithToken = await sut.handle(mockRequest())
 
     expect(accountWithToken).toEqual(forbidden(new EmailInUseError()))

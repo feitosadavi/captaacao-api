@@ -34,7 +34,7 @@ export class SignUpController implements Controller<SignUpController.Request> {
         adress
       } = request
 
-      const account = await this.addAccount.add({
+      const isValid = await this.addAccount.add({
         name,
         profileType,
         profilePhoto,
@@ -46,13 +46,13 @@ export class SignUpController implements Controller<SignUpController.Request> {
         role,
         adress
       })
-      if (account === null) return forbidden(new EmailInUseError())
-      const accessToken = await this.authentication.auth({
+      if (!isValid) return forbidden(new EmailInUseError())
+      const authenticationModel = await this.authentication.auth({
         email,
         password
       })
 
-      return serverSuccess({ accessToken })
+      return serverSuccess(authenticationModel)
     } catch (error) {
       console.error(error)
       return serverError(error)

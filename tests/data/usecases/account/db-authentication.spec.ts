@@ -1,4 +1,4 @@
-import { AuthenticationParams } from '@/domain/usecases'
+import { Authentication } from '@/domain/usecases'
 import { DbAuthentication } from '@/data/usecases'
 import {
   HashComparer, Encrypter,
@@ -7,7 +7,7 @@ import {
 
 import { mockEncrypter, mockHashComparer, mockLoadAccountByEmailRepository, mockUpdateAccessTokenRepository } from '@tests/data/mocks'
 
-const mockCredentials = (): AuthenticationParams => {
+const mockCredentials = (): Authentication.Params => {
   return {
     email: 'any_email@mail.com',
     password: 'any_password'
@@ -102,7 +102,7 @@ describe('DbAuthentication usecase', () => {
   test('Should return accessToken if Encrypter succeed', async () => {
     const { sut } = makeSut()
     const accessToken = await sut.auth(mockCredentials())
-    expect(accessToken).toBe('any_token')
+    expect(accessToken).toEqual({ accessToken: 'any_token', name: 'any_name' })
   })
 
   test('Should call UpdateAccessTokenRepository with correct values', async () => {

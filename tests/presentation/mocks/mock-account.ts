@@ -11,7 +11,7 @@ import {
   LoadAccountByCode,
   UpdatePassword
 } from '@/domain/usecases'
-import { Authentication, AuthenticationParams } from '@/domain/usecases/authentication'
+import { Authentication } from '@/domain/usecases/authentication'
 
 import { mockAccountModel, mockAccountConfirmationCode } from '@tests/domain/mocks'
 
@@ -110,8 +110,8 @@ export const mockPasswordRecover = (): PasswordRecover => {
 
 export const mockAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth (authentication: AuthenticationParams): Promise<string> {
-      return Promise.resolve('any_token')
+    async auth (params: Authentication.Params): Authentication.Result {
+      return Promise.resolve({ accessToken: 'any_token', name: 'any_name' })
     }
   }
 
