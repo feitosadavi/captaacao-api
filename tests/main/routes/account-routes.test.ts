@@ -4,8 +4,9 @@ import { hash } from 'bcrypt'
 import { sign } from 'jsonwebtoken'
 
 import { MongoHelper } from '@/infra/db/mongodb'
-import app from '@/main/config/app'
+import { setupApp } from '@/main/config/app'
 import env from '@/main/config/env'
+import { Express } from 'express'
 
 let accountsCollection: Collection
 
@@ -32,8 +33,10 @@ const updateAccountToken = async (id: string, accessToken: string): Promise<void
 }
 
 describe('Account Routes', () => {
+  let app: Express
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL)
+    app = await setupApp()
   })
 
   afterAll(async () => {

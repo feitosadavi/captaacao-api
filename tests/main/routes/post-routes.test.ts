@@ -3,17 +3,20 @@ import request from 'supertest'
 import { sign } from 'jsonwebtoken'
 
 import { MongoHelper } from '@/infra/db/mongodb'
-import app from '@/main/config/app'
+import { setupApp } from '@/main/config/app'
 import env from '@/main/config/env'
 
 import { mockPostsParams } from '@tests/domain/mocks'
+import { Express } from 'express'
 
 let postsCollection: Collection
 let accountsCollection: Collection
 
 describe('Post Routes', () => {
+  let app: Express
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL)
+    app = await setupApp()
   })
 
   afterAll(async () => {

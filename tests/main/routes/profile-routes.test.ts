@@ -2,18 +2,21 @@ import { Collection, InsertOneWriteOpResult } from 'mongodb'
 import request from 'supertest'
 import { sign } from 'jsonwebtoken'
 
-import app from '@/main/config/app'
+import { setupApp } from '@/main/config/app'
 import env from '@/main/config/env'
 import { MongoHelper } from '@/infra/db/mongodb'
 
 import { mockProfileParams } from '@tests/domain/mocks'
+import { Express } from 'express'
 
 let profileCollection: Collection
 let accountsCollection: Collection
 
 describe('Profile Routes', () => {
+  let app: Express
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL)
+    app = await setupApp()
   })
 
   afterAll(async () => {
