@@ -15,9 +15,9 @@ const insertAccount = async (): Promise<InsertOneWriteOpResult<any>> => {
     name: 'Anderson Moreira Santos',
     email: 'andersantos@gmail.com',
     password: '789456123',
-    cpf: '58978963252',
+    doc: '58978963252',
     birthDate: '05/10/1970',
-    phoneNumber: '5563982266580',
+    phone: '5563982266580',
     role: 'admin'
   })
 }
@@ -57,9 +57,9 @@ describe('Account Routes', () => {
           email: 'andersantos@gmail.com',
           password: '789456123',
           passwordConfirmation: '789456123',
-          cpf: '58978963252',
+          doc: '58978963252',
           birthDate: '05/10/1970',
-          phoneNumber: '5563982266580',
+          phone: '5563982266580',
           role: 'admin'
         })
         .expect(200)
