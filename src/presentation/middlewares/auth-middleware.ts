@@ -6,7 +6,7 @@ import { HttpResponse, Middleware } from '@/presentation/protocols'
 export class AuthMiddleware implements Middleware {
   constructor (
     private readonly loadAccountByToken: LoadAccountByToken,
-    private readonly profile: string,
+    private readonly profiles: string[],
     private readonly checkId?: boolean
   ) {}
 
@@ -15,7 +15,7 @@ export class AuthMiddleware implements Middleware {
       const { accessToken, id } = request // pega o accessToken que eu coloquei nos headers
 
       if (accessToken) {
-        const account = await this.loadAccountByToken.load({ accessToken, profile: this.profile })
+        const account = await this.loadAccountByToken.load({ accessToken, profiles: this.profiles })
         if (account) {
           if (this.checkId) {
             if (account.profile === 'admin' || account.id === id) {

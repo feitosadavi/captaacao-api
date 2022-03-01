@@ -55,20 +55,16 @@ export class AccountMongoRepository implements AddAccountRepository,
     return account && MongoHelper.map(account)
   }
 
-  async loadByToken (params: LoadAccountByTokenRepository.Params): LoadAccountByTokenRepository.Result {
+  async loadByToken ({ accessToken, profiles }: LoadAccountByTokenRepository.Params): LoadAccountByTokenRepository.Result {
     const accountsCollection = await MongoHelper.getCollection('accounts')
     let account: AccountModel
-    if (params.profile) {
+    if (profiles?.length > 0) {
       account = await accountsCollection.findOne({
-        accessToken: params.accessToken,
-        $or: [{ // só aceita o profile nulo ou o profile admin
-          params: params.profile
-        }, {
-          profile: 'admin'
-        }]
+        accessToken: accessToken,
+        profile: { $in: profiles }
       })
     } else {
-      account = await accountsCollection.findOne({ accessToken: params.accessToken })
+      account = await accountsCollection.findOne({ accessToken: accessToken })
     }
     return account && MongoHelper.map(account)
   }
