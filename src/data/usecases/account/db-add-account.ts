@@ -9,11 +9,29 @@ export class DbAddAccount implements AddAccount {
   ) { }
 
   async add (params: AddAccount.Params): AddAccount.Result {
+    const {
+      cep,
+      endereco,
+      complemento,
+      uf,
+      cidade,
+      bairro,
+      ...otherParams
+    } = params
+    const adress = {
+      cep,
+      endereco,
+      complemento,
+      uf,
+      cidade,
+      bairro
+    }
+    const addParams = { adress, ...otherParams }
     const account = await this.loadAccountByEmailRepository.loadByEmail({ email: params.email })
     let isValid = false
     if (!account) {
       const hashedPassword = await this.hasher.hash(params.password)
-      isValid = await this.addAccountRepository.addAccount({ ...params, password: hashedPassword })
+      isValid = await this.addAccountRepository.addAccount({ ...addParams, password: hashedPassword })
     }
     return isValid
   }

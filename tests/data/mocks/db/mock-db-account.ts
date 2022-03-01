@@ -104,3 +104,24 @@ export const mockDeleteAccountRepository = (): DeleteAccountRepository => {
   }
   return new DeleteAccountRepositoryStub()
 }
+
+// repo params are diff thant db params, so we need to use a diff mock
+export const mockAccountRepositoryParams = (): AddAccountRepository.Params => ({
+  name: 'any_name',
+  email: 'any_email@mail.com',
+  password: 'any_password',
+  doc: 'cpf_or_cnpj',
+  birthDate: '00/00/0000',
+  phone: 'any_phone',
+  role: 'any_role',
+  profileType: '1',
+  profilePhoto: 'any_photo_link',
+  adress: {
+    cep: 'any_cep',
+    endereco: 'any_endereco',
+    complemento: 'any_complemento',
+    uf: 'any_uf',
+    cidade: 'any_cidade',
+    bairro: 'any_bairro'
+  }
+})

@@ -12,7 +12,6 @@ export const mockAccountParams = (): AddAccount.Params => ({
   profileType: '1',
   profilePhoto: 'any_photo_link',
   ...adressParams
-
 })
 
 const adressParams: AccountModel.Adress = {

@@ -2,7 +2,7 @@ import { LoadAccountByEmailRepository, AddAccountRepository, Hasher } from '@/da
 import { DbAddAccount } from '@/data/usecases'
 
 import { mockAccountModel, mockAccountParams } from '@tests/domain/mocks'
-import { mockAddAccountRepositoryStub, mockHasher } from '@tests/data/mocks'
+import { mockAccountRepositoryParams, mockAddAccountRepositoryStub, mockHasher } from '@tests/data/mocks'
 
 const mockLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepository implements LoadAccountByEmailRepository {
@@ -56,7 +56,7 @@ describe('DbAddAccount Usecase', () => {
     const addSpy = jest.spyOn(addAccountRepositoryStub, 'addAccount')
     const params = { ...mockAccountParams(), password: 'hashed_password' }
     await sut.add(params)
-    expect(addSpy).toHaveBeenCalledWith(params)
+    expect(addSpy).toHaveBeenCalledWith({ ...mockAccountRepositoryParams(), password: 'hashed_password' })
   })
 
   test('Should DbAddAccount throw if AddAccountRepository throws', async () => {

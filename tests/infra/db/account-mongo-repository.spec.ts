@@ -5,6 +5,7 @@ import { AccountModel } from '@/domain/models'
 import { MongoHelper, AccountMongoRepository } from '@/infra/db/mongodb'
 
 import { mockAccountParams, mockAccountConfirmationCode } from '@tests/domain/mocks'
+import { mockAccountRepositoryParams } from '@tests/data/mocks'
 
 describe('Account Mongo Repository', () => {
   let accountCollection: Collection
@@ -33,7 +34,7 @@ describe('Account Mongo Repository', () => {
   describe('add()', () => {
     test('Should return true success', async () => {
       const sut = makeSut()
-      const result = await sut.addAccount({ ...mockAccountParams() })
+      const result = await sut.addAccount({ ...mockAccountRepositoryParams() })
       expect(result).toBe(true)
       // eu espero que tenha retornado algum valor do "add"
       // expect(account.id).toBeTruthy() // espero que a account tenha algum id
