@@ -131,7 +131,7 @@ describe('Account Mongo Repository', () => {
     })
   })
 
-  describe('loadByToken', () => {
+  describe('loadByToken()', () => {
     test('Should return an account on loadByToken success without profile', async () => {
       const sut = makeSut()
 
@@ -155,13 +155,13 @@ describe('Account Mongo Repository', () => {
         accessToken: 'any_token'
       })
 
-      const account = await sut.loadByToken({ accessToken: 'any_token', profile: 'admin' })
+      const account = await sut.loadByToken({ accessToken: 'any_token', profiles: ['admin', 'girafa'] })
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
       expect(account.name).toBe('any_name')
     })
 
-    test('Should return null on loadByToken with invalid profile', async () => {
+    test('Should return null on loadByToken if it was loaded with a profile that doesnt belongs to its account', async () => {
       const sut = makeSut()
 
       await accountCollection.insertOne({
@@ -169,7 +169,7 @@ describe('Account Mongo Repository', () => {
         accessToken: 'any_token'
       })
 
-      const account = await sut.loadByToken({ accessToken: 'any_token', profile: 'admin' })
+      const account = await sut.loadByToken({ accessToken: 'any_token', profiles: ['admin', 'girafakkkk'] })
       expect(account).toBeFalsy()
     })
 
@@ -189,7 +189,7 @@ describe('Account Mongo Repository', () => {
 
     test('Should return null if loadByToken fails', async () => {
       const sut = makeSut()
-      const account = await sut.loadByToken({ accessToken: 'any_token', profile: 'admin' })
+      const account = await sut.loadByToken({ accessToken: 'any_token', profiles: ['admin'] })
       expect(account).toBeFalsy()
     })
   })
