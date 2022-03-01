@@ -9,7 +9,7 @@ import request from 'supertest'
 let accountCollection: Collection
 let app: Express
 
-describe('Login GraphQL', () => {
+describe('Account GraphQL', () => {
   beforeAll(async () => {
     app = await setupApp()
     await MongoHelper.connect(process.env.MONGO_URL)

@@ -1,4 +1,4 @@
 import base from './base'
-import login from './login'
+import account from './account'
 
-export default [base, login]
+export default [base, account]
