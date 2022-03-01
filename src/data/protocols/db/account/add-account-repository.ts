@@ -9,7 +9,7 @@ export namespace AddAccountRepository {
   export type Params = {
     name: string
     profilePhoto: string
-    profile: string
+    profiles: string[]
     doc: string
     birthDate: string
     password: string

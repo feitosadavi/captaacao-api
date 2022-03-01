@@ -59,9 +59,14 @@ export class AccountMongoRepository implements AddAccountRepository,
     const accountsCollection = await MongoHelper.getCollection('accounts')
     let account: AccountModel
     if (profiles?.length > 0) {
+      /**
+       * An account can have various profiles, so a needed a way to check if its some profile from account
+       * could match with profiles from loadByToken params, so a had to build this 'orQuery' in a very 'gambiarra' way :)
+      */
+      const orQuery = profiles.map(profile => ({ profile: { $in: [profile] } }))
       account = await accountsCollection.findOne({
         accessToken: accessToken,
-        profile: { $in: profiles }
+        $or: orQuery
       })
     } else {
       account = await accountsCollection.findOne({ accessToken: accessToken })

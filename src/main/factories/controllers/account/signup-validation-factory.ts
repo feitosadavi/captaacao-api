@@ -13,7 +13,7 @@ export const makeSignUpValidation = (): ValidationComposite => {
     'doc',
     'birthDate',
     'phone',
-    'profile',
+    'profiles',
     'cep',
     'endereco',
     'complemento',

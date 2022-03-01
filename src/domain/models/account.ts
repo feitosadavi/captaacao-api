@@ -1,7 +1,7 @@
 export type AccountModel = {
   id: string
   name: string
-  profile: string
+  profiles: string[]
   profilePhoto?: string
   doc: string
   birthDate: string

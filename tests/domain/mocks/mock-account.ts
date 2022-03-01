@@ -8,7 +8,7 @@ export const mockAccountParams = (): AddAccount.Params => ({
   doc: 'cpf_or_cnpj',
   birthDate: '00/00/0000',
   phone: 'any_phone',
-  profile: 'any_profile',
+  profiles: ['any_profile', 'other_profile'],
   profilePhoto: 'any_photo_link',
   ...adressParams
 })
@@ -29,7 +29,7 @@ export const mockAccountModel = (): AccountModel => ({
   password: 'hashed_password',
   birthDate: '00/00/0000',
   phone: '9999999999999',
-  profile: 'any_profile',
+  profiles: ['any_profile'],
   profilePhoto: 'any_photo_link',
   doc: 'cpf_or_cnpj',
 
@@ -58,7 +58,7 @@ export const mockAccountModel = (): AccountModel => ({
       password: 'hashed_password',
       birthDate: '00/00/0000',
       phone: '9999999999999',
-      profile: 'any_profile',
+      profiles: ['any_profile'],
       profilePhoto: 'any_photo_link',
       doc: 'cpf_or_cnpj',
       adress: {

@@ -23,7 +23,7 @@ export class SignUpController implements Controller<SignUpController.Request> {
       }
       const {
         name,
-        profile,
+        profiles,
         profilePhoto,
         doc,
         birthDate,
@@ -40,7 +40,7 @@ export class SignUpController implements Controller<SignUpController.Request> {
 
       const isValid = await this.addAccount.add({
         name,
-        profile,
+        profiles,
         profilePhoto,
         doc,
         birthDate,
