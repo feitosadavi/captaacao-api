@@ -19,7 +19,7 @@ const insertAccount = async (): Promise<InsertOneWriteOpResult<any>> => {
     doc: '58978963252',
     birthDate: '05/10/1970',
     phone: '5563982266580',
-    role: 'admin'
+    profile: 'admin'
   })
 }
 

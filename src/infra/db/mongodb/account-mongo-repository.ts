@@ -58,13 +58,13 @@ export class AccountMongoRepository implements AddAccountRepository,
   async loadByToken (params: LoadAccountByTokenRepository.Params): LoadAccountByTokenRepository.Result {
     const accountsCollection = await MongoHelper.getCollection('accounts')
     let account: AccountModel
-    if (params.role) {
+    if (params.profile) {
       account = await accountsCollection.findOne({
         accessToken: params.accessToken,
-        $or: [{ // só aceita o role nulo ou o role admin
-          params: params.role
+        $or: [{ // só aceita o profile nulo ou o profile admin
+          params: params.profile
         }, {
-          role: 'admin'
+          profile: 'admin'
         }]
       })
     } else {

@@ -26,7 +26,7 @@ const makeSut = (): SutTypes => {
 
 const mockParams = (): LoadAccountByToken.Params => ({
   accessToken: 'any_token',
-  role: 'any_role'
+  profile: 'any_profile'
 })
 
 describe('DbLoadAccountByToken', () => {

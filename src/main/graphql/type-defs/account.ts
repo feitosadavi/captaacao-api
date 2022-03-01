@@ -11,13 +11,12 @@ export default gql`
       name: String!
       password: String!
       passwordConfirmation: String!
-      profileType: String!
+      profile: String!
       profilePhoto: String!
       doc: String!
       birthDate: String!
       email: String!
       phone: String!
-      role: String!
 
       # Adress
       cep: String!
@@ -32,13 +31,12 @@ export default gql`
   type Account {
     id: ID
     name: String
-    profileType: String
+    profile: String
     profilePhoto: String
     doc: String
     birthDate: String
     email: String
     phone: String
-    role: String
     adress: Adress
 
     accessToken: String

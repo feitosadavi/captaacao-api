@@ -1,14 +1,13 @@
 export type AccountModel = {
   id: string
   name: string
-  profileType: string
+  profile: string
   profilePhoto?: string
   doc: string
   birthDate: string
   password: string
   email: string
   phone: string
-  role: string
   adress: AccountModel.Adress
 
   notifications?: AccountModel.Notification[]

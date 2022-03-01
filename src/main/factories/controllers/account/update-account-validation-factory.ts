@@ -6,14 +6,14 @@ export const makeUpdateAccountValidationFactory = (): ValidationComposite => {
   // para cada campo que eu tiver, vou adicionar uma validação
   const validations: Validation[] = []
   const allowedFields = ['name',
-    'profileType',
+    'profile',
     'profilePhoto',
     'doc',
     'birthDate',
     'password',
     'email',
     'phone',
-    'role',
+    'profile',
     'adress'
   ]
   const adressOptions = [

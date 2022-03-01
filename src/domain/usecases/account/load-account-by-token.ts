@@ -7,7 +7,7 @@ export interface LoadAccountByToken {
 export namespace LoadAccountByToken {
   export type Params = {
     accessToken: string
-    role?: string
+    profile?: string
   }
   export type Result = Promise<AccountModel>
 }

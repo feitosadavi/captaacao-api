@@ -113,8 +113,7 @@ export const mockAccountRepositoryParams = (): AddAccountRepository.Params => ({
   doc: 'cpf_or_cnpj',
   birthDate: '00/00/0000',
   phone: 'any_phone',
-  role: 'any_role',
-  profileType: '1',
+  profile: 'any_profile',
   profilePhoto: 'any_photo_link',
   adress: {
     cep: 'any_cep',

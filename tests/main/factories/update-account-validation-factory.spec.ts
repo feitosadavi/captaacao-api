@@ -11,14 +11,14 @@ describe('UpdateAccountValidation Factory', () => {
     makeUpdateAccountValidationFactory()
     const validations: Validation[] = []
     const allowedFields = ['name',
-      'profileType',
+      'profile',
       'profilePhoto',
       'doc',
       'birthDate',
       'password',
       'email',
       'phone',
-      'role',
+      'profile',
       'adress'
     ]
     const adressOptions = [

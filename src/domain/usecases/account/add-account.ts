@@ -7,13 +7,12 @@ export namespace AddAccount {
   export type Params = {
     name: string
     profilePhoto: string
-    profileType: string
+    profile: string
     doc: string
     birthDate: string
     password: string
     email: string
     phone: string
-    role: string
     // Adress
     cep: string
     endereco: string

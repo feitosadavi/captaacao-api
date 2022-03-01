@@ -35,7 +35,7 @@ describe('Post Routes', () => {
       name: 'Postlos',
       email: 'postlos@gmail.com',
       password: '123',
-      role: 'admin'
+      profile: 'admin'
     })
   }
 

@@ -20,9 +20,9 @@ type SutTypes = {
   loadAccountByTokenStub: LoadAccountByToken
 }
 
-const makeSut = (role?: string, checkId?: boolean): SutTypes => {
+const makeSut = (profile?: string, checkId?: boolean): SutTypes => {
   const loadAccountByTokenStub = mockLoadAccountByToken()
-  const sut = new AuthMiddleware(loadAccountByTokenStub, role, checkId)
+  const sut = new AuthMiddleware(loadAccountByTokenStub, profile, checkId)
   return {
     sut,
     loadAccountByTokenStub
@@ -39,8 +39,8 @@ describe('Auth Middleware', () => {
   })
 
   test('Should 403 if user isnt admin or his id is not equal params id', async () => {
-    const role = 'any_role'
-    const { sut } = makeSut(role, true)
+    const profile = 'any_profile'
+    const { sut } = makeSut(profile, true)
     const response = await sut.handle({
       accessToken: 'any_token',
       id: 'other_id'
@@ -55,11 +55,11 @@ describe('Auth Middleware', () => {
   })
 
   test('Should call LoadAccountByToken with correct accessToken ', async () => {
-    const role = 'any_role'
-    const { sut, loadAccountByTokenStub } = makeSut(role)
+    const profile = 'any_profile'
+    const { sut, loadAccountByTokenStub } = makeSut(profile)
     const loadSpy = jest.spyOn(loadAccountByTokenStub, 'load')
     await sut.handle(mockRequest())
-    expect(loadSpy).toHaveBeenCalledWith({ accessToken: 'any_token', role })
+    expect(loadSpy).toHaveBeenCalledWith({ accessToken: 'any_token', profile })
   })
 
   test('Should return 403 if LoadAccountByToken returns null ', async () => {
@@ -70,9 +70,9 @@ describe('Auth Middleware', () => {
   })
 
   test('Should 200 on id verification success', async () => {
-    const role = 'any_role'
-    const { loadAccountByTokenStub } = makeSut(role)
-    const sut = new AuthMiddleware(loadAccountByTokenStub, role, true)
+    const profile = 'any_profile'
+    const { loadAccountByTokenStub } = makeSut(profile)
+    const sut = new AuthMiddleware(loadAccountByTokenStub, profile, true)
     const loadSpy = jest.spyOn(loadAccountByTokenStub, 'load')
     loadSpy.mockReturnValueOnce(Promise.resolve(mockAccountModel()))
     const response = await sut.handle(mockRequest())

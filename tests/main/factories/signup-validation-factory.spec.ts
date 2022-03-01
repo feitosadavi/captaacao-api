@@ -26,7 +26,7 @@ describe('SignUpValidation Factory', () => {
       'doc',
       'birthDate',
       'phone',
-      'role',
+      'profile',
       'cep',
       'endereco',
       'complemento',
