@@ -2,25 +2,25 @@ export interface AddAccount {
   add (account: AddAccount.Params): AddAccount.Result
 }
 
+// its easier to validate non nested params
 export namespace AddAccount {
   export type Params = {
     name: string
     profilePhoto: string
     profileType: string
-    adress: {
-      cep: string
-      endereco: string
-      complemento: string
-      uf: string
-      cidade: string
-      bairro: string
-    }
     doc: string
     birthDate: string
     password: string
     email: string
     phone: string
     role: string
+    // Adress
+    cep: string
+    endereco: string
+    complemento: string
+    uf: string
+    cidade: string
+    bairro: string
   }
 
   export type Result = Promise<boolean>

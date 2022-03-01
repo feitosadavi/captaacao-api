@@ -31,7 +31,12 @@ export class SignUpController implements Controller<SignUpController.Request> {
         email,
         phone,
         role,
-        adress
+        cep,
+        endereco,
+        complemento,
+        uf,
+        cidade,
+        bairro
       } = request
 
       const isValid = await this.addAccount.add({
@@ -44,7 +49,12 @@ export class SignUpController implements Controller<SignUpController.Request> {
         email,
         phone,
         role,
-        adress
+        cep,
+        endereco,
+        complemento,
+        uf,
+        cidade,
+        bairro
       })
       if (!isValid) return forbidden(new EmailInUseError())
       const authenticationModel = await this.authentication.auth({

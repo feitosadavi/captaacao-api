@@ -7,6 +7,7 @@ import { MongoHelper } from '@/infra/db/mongodb'
 import { setupApp } from '@/main/config/app'
 import env from '@/main/config/env'
 import { Express } from 'express'
+import { mockAccountParams } from '@tests/domain/mocks'
 
 let accountsCollection: Collection
 
@@ -52,16 +53,7 @@ describe('Account Routes', () => {
     test('Should return 200 on signup', async () => {
       await request(app)
         .post('/api/signup')
-        .send({
-          name: 'Anderson Moreira Santos',
-          email: 'andersantos@gmail.com',
-          password: '789456123',
-          passwordConfirmation: '789456123',
-          doc: '58978963252',
-          birthDate: '05/10/1970',
-          phone: '5563982266580',
-          role: 'admin'
-        })
+        .send({ passwordConfirmation: 'any_password', ...mockAccountParams() })
         .expect(200)
     })
   })

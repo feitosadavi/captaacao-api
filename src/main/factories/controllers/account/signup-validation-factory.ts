@@ -6,7 +6,20 @@ import { EmailValidatorAdapter } from '@/infra/validators'
 export const makeSignUpValidation = (): ValidationComposite => {
   // para cada campo que eu tiver, vou adicionar uma validação
   const validations: Validation[] = []
-  for (const field of ['name', 'email', 'password', 'doc', 'birthDate', 'phone', 'role']) {
+  for (const field of [
+    'name',
+    'email',
+    'password',
+    'doc',
+    'birthDate',
+    'phone',
+    'role',
+    'cep',
+    'endereco',
+    'complemento',
+    'uf',
+    'cidade',
+    'bairro']) {
     validations.push(new RequiredFieldValidation(field))
   }
   validations.push(new CompareFieldsValidation('password', 'passwordConfirmation'))

@@ -11,16 +11,18 @@ export const mockAccountParams = (): AddAccount.Params => ({
   role: 'any_role',
   profileType: '1',
   profilePhoto: 'any_photo_link',
-  adress: {
-    cep: 'any_cep',
-    endereco: 'any_endereco',
-    complemento: 'any_complemento',
-    uf: 'any_uf',
-    cidade: 'any_cidade',
-    bairro: 'any_bairro'
-  }
+  ...adressParams
 
 })
+
+const adressParams: AccountModel.Adress = {
+  cep: 'any_cep',
+  endereco: 'any_endereco',
+  complemento: 'any_complemento',
+  uf: 'any_uf',
+  cidade: 'any_cidade',
+  bairro: 'any_bairro'
+}
 
 export const mockAccountModel = (): AccountModel => ({
   id: 'any_id',
