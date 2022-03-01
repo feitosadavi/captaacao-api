@@ -5,6 +5,7 @@ import { Collection } from 'mongodb'
 import { hash } from 'bcrypt'
 import { Express } from 'express'
 import request from 'supertest'
+import { mockAccountParams } from '@tests/domain/mocks'
 
 let accountCollection: Collection
 let app: Express
@@ -55,6 +56,38 @@ describe('Account GraphQL', () => {
       expect(res.body.data).toBeFalsy()
       expect(res.body.errors[0].message).toBe('Unauthorized')
     })
+  })
+
+  describe('Accounts Query', () => {
+    const query = `query {
+      accounts {
+        id
+        name
+        doc
+      }
+    }`
+
+    test('Should return accounts on success', async () => {
+      const password = await hash('123', 12)
+      await accountCollection.insertOne({ password, ...mockAccountParams() })
+      const res = await request(app)
+        .post('/graphql')
+        .send({ query })
+      console.log(res)
+      expect(res.status).toBe(200)
+      expect(res.body.data.accounts[0].id).toBeTruthy()
+      expect(res.body.data.accounts[0].name).toBe('any_name')
+      expect(res.body.data.accounts[0].doc).toBe('cpf_or_cnpj')
+    })
+
+    // test('Should return UnauthorizedError on invalid credentials', async () => {
+    //   const res = await request(app)
+    //     .post('/graphql')
+    //     .send({ query })
+    //   expect(res.status).toBe(401)
+    //   expect(res.body.data).toBeFalsy()
+    //   expect(res.body.errors[0].message).toBe('Unauthorized')
+    // })
   })
 
   describe('SignUp Mutation', () => {
