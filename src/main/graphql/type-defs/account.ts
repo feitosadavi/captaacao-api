@@ -12,7 +12,7 @@ export default gql`
       password: String!
       passwordConfirmation: String!
       profiles: [String!]!
-      profilePhoto: String!
+      profilePhoto: String
       doc: String!
       birthDate: String!
       email: String!
