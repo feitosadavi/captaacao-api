@@ -151,11 +151,11 @@ describe('Account Mongo Repository', () => {
 
       await accountCollection.insertOne({
         ...mockAccountParams(),
-        profile: 'admin',
+        profile: ['admin', 'queijo'],
         accessToken: 'any_token'
       })
 
-      const account = await sut.loadByToken({ accessToken: 'any_token', profiles: ['admin', 'girafa'] })
+      const account = await sut.loadByToken({ accessToken: 'any_token', profiles: ['queijo', 'girafa'] })
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
       expect(account.name).toBe('any_name')

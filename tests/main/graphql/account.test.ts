@@ -100,7 +100,7 @@ describe('Account GraphQL', () => {
         doc: "cpf_or_cnpj",
         birthDate: "00/00/0000",
         phone: "any_phone",
-        profile: "any_profile",
+        profiles: ["any_profile", "other_profile"],
         profilePhoto: "any_photo_link",
         cep: "any_cep",
         endereco: "any_endereco",
@@ -118,7 +118,6 @@ describe('Account GraphQL', () => {
       const res = await request(app)
         .post('/graphql')
         .send({ query })
-
       expect(res.status).toBe(200)
       expect(res.body.data.signUp.accessToken).toBeTruthy()
       expect(res.body.data.signUp.name).toBe('any_name')
