@@ -18,7 +18,7 @@ export class AuthMiddleware implements Middleware {
         const account = await this.loadAccountByToken.load({ accessToken, profiles: this.profiles })
         if (account) {
           if (this.checkId) {
-            if (account.profile === 'admin' || account.id === id) {
+            if (account.profiles.includes('admin') || account.id === id) {
               return serverSuccess({ accountId: account.id })
             } else {
               return forbidden(new AccessDeniedError())
