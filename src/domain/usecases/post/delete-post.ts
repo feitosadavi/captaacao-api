@@ -1,24 +1,10 @@
-import { PostModel } from '@/domain/models'
-
-export interface AddPost {
-  add (params: AddPost.Params): AddPost.Result
+export interface DeletePost {
+  delete (params: DeletePost.Params): DeletePost.Result
 }
 
-export namespace AddPost {
+export namespace DeletePost {
   export type Params = {
-    title: string
-    photos: string[]
-    description: string
-
-    createdAt: Date
-    modifiedAt: Date
-    postedBy: string
-    status: boolean
-    active: boolean
-
-    views: number
-
-    carBeingSold: PostModel.CarBeingSold
+    id: string
   }
-  export type Result = Promise<void>
+  export type Result = Promise<boolean>
 }
