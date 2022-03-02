@@ -11,7 +11,7 @@ export class DeleteAccountController implements Controller<DeleteAccountControll
     try {
       const { id } = request
       const result = await this.deleteAccount.delete({ id })
-      return serverSuccess(result)
+      return serverSuccess({ result })
     } catch (e) {
       return serverError(e)
     }
