@@ -64,4 +64,21 @@ describe('PostMongo Repository', () => {
       expect(post.id).toBeTruthy()
     })
   })
+
+  describe('deletePost()', () => {
+    test('Should return true on success', async () => {
+      const sut = makeSut()
+
+      const res = await postsCollection.insertOne(mockPostsParams()[0])
+      const id = res.ops[0]._id
+
+      const deletionResult = await sut.deletePost({ id })
+      expect(deletionResult).toBe(true)
+    })
+    test('Should return false if post doesnt exists', async () => {
+      const sut = makeSut()
+      const deletionResult = await sut.deletePost({ id: '61539180dd2622353d5e11c8' })
+      expect(deletionResult).toBe(false)
+    })
+  })
 })
