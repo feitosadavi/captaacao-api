@@ -13,7 +13,7 @@ export class DeletePostController implements Controller<DeletePostController.Req
       const { id, accountId } = request
       const post = await this.loadPostById.load({ id })
 
-      if (post.postedBy !== accountId) return unauthorized()
+      if (post.postedBy.toString() !== accountId.toString()) return unauthorized() // just works with toString, dont know exactly why
 
       const result = await this.deletePost.delete({ id })
       return serverSuccess(result)

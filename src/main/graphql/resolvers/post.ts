@@ -3,6 +3,6 @@ import { makeDeletePostController } from '@/main/factories/controllers/post/dele
 
 export default {
   Mutation: {
-    delete: async (parent: any, args: any) => adaptResolver(makeDeletePostController(), args)
+    delete: async (parent: any, args: any, context: any) => adaptResolver(makeDeletePostController(), args, context)
   }
 }
