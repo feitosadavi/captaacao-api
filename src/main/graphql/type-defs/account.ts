@@ -4,6 +4,7 @@ export default gql`
   extend type Query {
     login (email: String!, password: String!): LoginAndSignupResult!
     accounts: [Account!]!
+    account (id: String!): Account
   }
 
   extend type Mutation {
