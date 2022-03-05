@@ -1,14 +1,38 @@
 import { MongoHelper } from '@/infra/db/mongodb'
 import { setupApp } from '@/main/config/app'
 
-import { Collection } from 'mongodb'
+import { Collection, InsertOneWriteOpResult } from 'mongodb'
 import { hash } from 'bcrypt'
 import { Express } from 'express'
 import request from 'supertest'
 import { mockAccountParams } from '@tests/domain/mocks'
+import { sign } from 'jsonwebtoken'
+import env from '@/main/config/env'
 
-let accountCollection: Collection
+let accountsCollection: Collection
 let app: Express
+
+const insertAccount = async (): Promise<InsertOneWriteOpResult<any>> => {
+  return accountsCollection.insertOne({
+    name: 'Anderson Moreira Santos',
+    email: 'andersantos@gmail.com',
+    password: '789456123',
+    doc: '58978963252',
+    birthDate: '05/10/1970',
+    phone: '5563982266580',
+    profiles: ['admin']
+  })
+}
+
+const updateAccountToken = async (id: string, accessToken: string): Promise<void> => {
+  await accountsCollection.updateOne({
+    _id: id
+  }, {
+    $set: {
+      accessToken
+    }
+  })
+}
 
 describe('Account GraphQL', () => {
   beforeAll(async () => {
@@ -21,8 +45,8 @@ describe('Account GraphQL', () => {
   })
 
   beforeEach(async () => {
-    accountCollection = await MongoHelper.getCollection('accounts')
-    await accountCollection.deleteMany({})
+    accountsCollection = await MongoHelper.getCollection('accounts')
+    await accountsCollection.deleteMany({})
   })
 
   describe('Login Query', () => {
@@ -35,7 +59,7 @@ describe('Account GraphQL', () => {
 
     test('Should return an Account on valid credentials', async () => {
       const password = await hash('123', 12)
-      await accountCollection.insertOne({
+      await accountsCollection.insertOne({
         name: 'Rodrigo',
         email: 'rodrigo.manguinho@gmail.com',
         password
@@ -69,11 +93,10 @@ describe('Account GraphQL', () => {
 
     test('Should return accounts on success', async () => {
       const password = await hash('123', 12)
-      await accountCollection.insertOne({ password, ...mockAccountParams() })
+      await accountsCollection.insertOne({ password, ...mockAccountParams() })
       const res = await request(app)
         .post('/graphql')
         .send({ query })
-      console.log(res)
       expect(res.status).toBe(200)
       expect(res.body.data.accounts[0].id).toBeTruthy()
       expect(res.body.data.accounts[0].name).toBe('any_name')
@@ -88,6 +111,28 @@ describe('Account GraphQL', () => {
     //   expect(res.body.data).toBeFalsy()
     //   expect(res.body.errors[0].message).toBe('Unauthorized')
     // })
+  })
+
+  describe('Account Query', () => {
+    test('Should return accounts on success', async () => {
+      const password = await hash('123', 12)
+      const insertResult = await accountsCollection.insertOne({ password, ...mockAccountParams() })
+      const id: string = insertResult.insertedId
+      const query = `query {
+        account (id: "${id}") {
+          id
+          name
+          doc
+        }
+      }`
+      const res = await request(app)
+        .post('/graphql')
+        .send({ query })
+      expect(res.status).toBe(200)
+      expect(res.body.data.account.id).toBeTruthy()
+      expect(res.body.data.account.name).toBe('any_name')
+      expect(res.body.data.account.doc).toBe('cpf_or_cnpj')
+    })
   })
 
   describe('SignUp Mutation', () => {
@@ -125,7 +170,7 @@ describe('Account GraphQL', () => {
 
     test('Should return EmailInUseError on invalid data', async () => {
       const password = await hash('123', 12)
-      await accountCollection.insertOne({
+      await accountsCollection.insertOne({
         name: 'Rodrigo',
         email: 'any_email@mail.com',
         password
@@ -136,6 +181,32 @@ describe('Account GraphQL', () => {
       expect(res.status).toBe(403)
       expect(res.body.data).toBeFalsy()
       expect(res.body.errors[0].message).toBe('The received email is alredy in use') // corrigir ortografia
+    })
+  })
+
+  describe('Update Mutation', () => {
+    const query = `mutation {
+      update (name: "Davi") {
+        ok
+      }
+    }`
+    test('should return 403 if user has no authorization', async () => {
+      const res = await request(app)
+        .post('/graphql')
+        .send({ query })
+      expect(res.status).toBe(403)
+    })
+    test('should return 200 on success', async () => {
+      const insertResult = await insertAccount()
+      const id = insertResult.insertedId
+      const accessToken = sign({ id }, env.secret)
+      await updateAccountToken(id, accessToken)
+
+      const res = await request(app)
+        .post('/graphql')
+        .set('x-access-token', accessToken)
+        .send({ query })
+      expect(res.status).toBe(200)
     })
   })
 })
