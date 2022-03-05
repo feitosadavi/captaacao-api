@@ -44,7 +44,7 @@ describe('Account Mongo Repository', () => {
       // expect(account.doc).toBe('58978963252')
       // expect(account.birthDate).toBe('05/10/1970')
       // expect(account.phone).toBe('5563982266580')
-      // expect(account.profile).toBe('admin')
+      // expect(account.profiles).toBe('admin')
     })
   })
 
@@ -132,7 +132,7 @@ describe('Account Mongo Repository', () => {
   })
 
   describe('loadByToken()', () => {
-    test('Should return an account on loadByToken success without profile', async () => {
+    test('Should return an account on loadByToken success without profiles', async () => {
       const sut = makeSut()
 
       await accountCollection.insertOne({
@@ -146,12 +146,12 @@ describe('Account Mongo Repository', () => {
       expect(account.name).toBe('any_name')
     })
 
-    test('Should return an account on loadByToken success with admin profile', async () => {
+    test('Should return an account on loadByToken success with admin profiles', async () => {
       const sut = makeSut()
 
       await accountCollection.insertOne({
         ...mockAccountParams(),
-        profile: ['admin', 'queijo'],
+        profiles: ['admin', 'queijo'],
         accessToken: 'any_token'
       })
 
@@ -161,7 +161,7 @@ describe('Account Mongo Repository', () => {
       expect(account.name).toBe('any_name')
     })
 
-    test('Should return null on loadByToken if it was loaded with a profile that doesnt belongs to its account', async () => {
+    test('Should return null on loadByToken if it was loaded with a profiles that doesnt belongs to its account', async () => {
       const sut = makeSut()
 
       await accountCollection.insertOne({

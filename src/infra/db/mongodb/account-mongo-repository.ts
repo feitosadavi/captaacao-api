@@ -63,7 +63,13 @@ export class AccountMongoRepository implements AddAccountRepository,
        * An account can have various profiles, so a needed a way to check if its some profile from account
        * could match with profiles from loadByToken params, so a had to build this 'orQuery' in a very 'gambiarra' way :)
       */
-      const orQuery = profiles.map(profile => ({ profile: { $in: [profile] } }))
+      const orQuery = []
+      for (const profile of profiles) {
+        console.log(profile)
+        orQuery.push({ profiles: { $in: [profile] } })
+      }
+
+      console.log(orQuery)
       account = await accountsCollection.findOne({
         accessToken: accessToken,
         $or: orQuery
