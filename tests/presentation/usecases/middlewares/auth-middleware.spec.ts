@@ -10,8 +10,7 @@ import { mockLoadAccountByToken } from '@tests/presentation/mocks'
 
 const mockRequest = (): AuthMiddleware.Request => {
   return {
-    accessToken: 'any_token',
-    id: 'any_id'
+    accessToken: 'any_token'
   }
 }
 
@@ -20,9 +19,9 @@ type SutTypes = {
   loadAccountByTokenStub: LoadAccountByToken
 }
 
-const makeSut = (profiles?: string[], checkId?: boolean): SutTypes => {
+const makeSut = (profiles?: string[]): SutTypes => {
   const loadAccountByTokenStub = mockLoadAccountByToken()
-  const sut = new AuthMiddleware(loadAccountByTokenStub, profiles, checkId)
+  const sut = new AuthMiddleware(loadAccountByTokenStub, profiles)
   return {
     sut,
     loadAccountByTokenStub
@@ -36,16 +35,6 @@ describe('Auth Middleware', () => {
 
   afterAll(() => {
     MockDate.reset() // congela a data com base no valor inserido
-  })
-
-  test('Should 403 if user isnt admin or his id is not equal params id', async () => {
-    const profiles = ['any_profile']
-    const { sut } = makeSut(profiles, true)
-    const response = await sut.handle({
-      accessToken: 'any_token',
-      id: 'other_id'
-    })
-    expect(response).toEqual(forbidden(new AccessDeniedError()))
   })
 
   test('Should 403 if no x-access-token exists in headers ', async () => {
@@ -72,7 +61,7 @@ describe('Auth Middleware', () => {
   test('Should 200 on id verification success', async () => {
     const profiles = ['any_profile']
     const { loadAccountByTokenStub } = makeSut(profiles)
-    const sut = new AuthMiddleware(loadAccountByTokenStub, profiles, true)
+    const sut = new AuthMiddleware(loadAccountByTokenStub, profiles)
     const loadSpy = jest.spyOn(loadAccountByTokenStub, 'load')
     loadSpy.mockReturnValueOnce(Promise.resolve(mockAccountModel()))
     const response = await sut.handle(mockRequest())

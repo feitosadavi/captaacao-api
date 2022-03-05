@@ -6,29 +6,22 @@ import { HttpResponse, Middleware } from '@/presentation/protocols'
 export class AuthMiddleware implements Middleware {
   constructor (
     private readonly loadAccountByToken: LoadAccountByToken,
-    private readonly profiles: string[],
-    private readonly checkId?: boolean
+    private readonly profiles: string[]
   ) {}
 
   async handle (request: AuthMiddleware.Request): Promise<HttpResponse> {
     try {
-      const { accessToken, id } = request // pega o accessToken que eu coloquei nos headers
-
+      const { accessToken } = request
+      console.log({ profiles: this.profiles })
       if (accessToken) {
         const account = await this.loadAccountByToken.load({ accessToken, profiles: this.profiles })
+        console.log(accessToken)
         if (account) {
-          if (this.checkId) {
-            if (account.profiles.includes('admin') || account.id === id) {
-              return serverSuccess({ accountId: account.id })
-            } else {
-              return forbidden(new AccessDeniedError())
-            }
-          }
-
-          return serverSuccess({ accountId: account.id }) // retorna o id da conta encontrada com o accessToken e coloca no body da resposta do middleware
+          console.log(account)
+          return serverSuccess({ accountId: account.id })
         }
       }
-      return forbidden(new AccessDeniedError()) // se não achar um conta com o accessToken ou não tiver o accessToken, retorna acesso negado
+      return forbidden(new AccessDeniedError())
     } catch (error) {
       return serverError(error)
     }
@@ -38,6 +31,5 @@ export class AuthMiddleware implements Middleware {
 export namespace AuthMiddleware {
   export type Request = {
     accessToken?: string
-    id?: string
   }
 }

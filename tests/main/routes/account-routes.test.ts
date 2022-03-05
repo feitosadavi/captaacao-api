@@ -19,7 +19,7 @@ const insertAccount = async (): Promise<InsertOneWriteOpResult<any>> => {
     doc: '58978963252',
     birthDate: '05/10/1970',
     phone: '5563982266580',
-    profile: 'admin'
+    profiles: ['admin']
   })
 }
 
@@ -151,35 +151,26 @@ describe('Account Routes', () => {
         .expect(403)
     })
     test('should return 200 on success', async () => {
-      const res = await insertAccount()
-      const id = res.ops[0]._id
+      const insertResult = await insertAccount()
+      const id = insertResult.insertedId
       const accessToken = sign({ id }, env.secret)
       await updateAccountToken(id, accessToken)
 
-      await request(app)
+      const res = await request(app)
         .get('/api/accounts')
         .set('x-access-token', accessToken)
-        .expect(200)
+      expect(res.status).toBe(200)
     })
   })
 
   describe('GET /accounts/:id', () => {
-    test('should return 403 if user has no authorization', async () => {
-      await request(app)
-        .get('/api/accounts/:id')
-        .query({ id: 'any_id' })
-        .expect(403)
-    })
     test('should return 200 on success', async () => {
-      const res = await insertAccount()
-      const id = res.ops[0]._id
-      const accessToken = sign({ id }, env.secret)
-      await updateAccountToken(id, accessToken)
+      const insertedAccount = await insertAccount()
+      const id = insertedAccount.insertedId
 
       await request(app)
         .get('/api/accounts/:id')
-        .set('x-access-token', accessToken)
-        .query({ id: 'any_id' })
+        .query({ id })
         .expect(200)
     })
   })
@@ -199,8 +190,8 @@ describe('Account Routes', () => {
       await request(app)
         .put('/api/account/update')
         .set('x-access-token', accessToken)
-        .send({ name: 'Davi', nickname: 'davizio' })
-        .expect(400)
+        .send({ name: 'Davi' })
+        .expect(200)
     })
   })
 
@@ -233,15 +224,15 @@ describe('Account Routes', () => {
     })
 
     test('should return 200 on success', async () => {
-      const res = await insertAccount()
-      const id = res.ops[0]._id
+      const insertResult = await insertAccount()
+      const id = insertResult.insertedId
       const accessToken = sign({ id }, env.secret)
       await updateAccountToken(id, accessToken)
 
-      await request(app)
+      const res = await request(app)
         .delete(`/api/accounts/delete/${id}`)
         .set('x-access-token', accessToken)
-        .expect(200)
+      expect(res.status).toBe(200)
     })
   })
 })

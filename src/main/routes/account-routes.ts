@@ -21,9 +21,9 @@ export default (router: Router): void => {
   router.post('/account/check-code', adaptRoute(makeCheckCodeController()))
 
   router.get('/accounts', adminAuth, adaptRoute(makeLoadAllAccountsController()))
-  router.get('/accounts/:id', adminAuth, adaptRoute(makeLoadAllAccountsController()))
+  router.get('/accounts/:id', adaptRoute(makeLoadAllAccountsController()))
 
-  router.delete('/accounts/delete/:id', adaptMiddleware(makeAuthMiddleware(null, true)), adaptRoute(makeDeleteAccountsController()))
+  router.delete('/accounts/delete/:id', adaptMiddleware(makeAuthMiddleware()), adaptRoute(makeDeleteAccountsController()))
 
   router.put('/account/update', auth, adaptRoute(makeUpdateAccountControllerFactory()))
   router.put('/account/update-password/:id', adaptRoute(makeUpdatePasswordControllerFactory()))
