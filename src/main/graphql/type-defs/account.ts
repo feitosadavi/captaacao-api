@@ -27,6 +27,24 @@ export default gql`
       cidade: String!
       bairro: String!
     ): LoginAndSignupResult!
+    update (
+      name: String
+      profilePhoto: String
+      email: String
+      phone: String
+
+      # Adress
+      cep: String
+      endereco: String
+      complemento: String
+      uf: String
+      cidade: String
+      bairro: String
+    ): UpdateResult! @auth
+  }
+
+  type UpdateResult {
+    ok: Boolean!
   }
 
   type Account {

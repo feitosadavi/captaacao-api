@@ -10,12 +10,13 @@ export class UpdateAccountController implements Controller<UpdateAccountControll
 
   async handle (request: UpdateAccountController.Request): Promise<HttpResponse> {
     try {
-      const error = this.validation.validate(request)
+      const { accountId, ...fields } = request // exclude id
+      const error = this.validation.validate(fields)
       if (error) {
         return badRequest(error)
       }
-      const { id, fields } = request
-      const result = await this.updateAccount.update({ id, fields })
+
+      const result = await this.updateAccount.update({ id: accountId, fields })
       return serverSuccess({ ok: result })
     } catch (e) {
       return serverError(e)
@@ -25,7 +26,17 @@ export class UpdateAccountController implements Controller<UpdateAccountControll
 
 export namespace UpdateAccountController {
   export type Request = {
-    id: string
-    fields: Record<string, any>
+    accountId: string
+    name?: string
+    profilePhoto?: string
+    email?: string
+    phone?: string
+
+    cep?: string
+    endereco?: string
+    complemento?: string
+    uf?: string
+    cidade?: string
+    bairro?: string
   }
 }

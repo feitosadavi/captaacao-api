@@ -1,5 +1,5 @@
 import { adaptResolver } from '@/main/adapters'
-import { makeLoadAccountByIdController, makeLoadAllAccountsController, makeLoginController, makeSignUpController } from '@/main/factories'
+import { makeLoadAccountByIdController, makeLoadAllAccountsController, makeLoginController, makeSignUpController, makeUpdateAccountControllerFactory } from '@/main/factories'
 
 export default {
   Query: {
@@ -9,6 +9,7 @@ export default {
   },
 
   Mutation: {
-    signUp: async (parent: any, args: any) => adaptResolver(makeSignUpController(), args)
+    signUp: async (parent: any, args: any) => adaptResolver(makeSignUpController(), args),
+    update: async (parent: any, args: any, context) => adaptResolver(makeUpdateAccountControllerFactory(), args, context)
   }
 }
