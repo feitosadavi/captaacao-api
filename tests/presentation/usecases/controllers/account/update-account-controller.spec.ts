@@ -21,10 +21,18 @@ const makeSut = (): SutTypes => {
   }
 }
 const mockRequest = (): UpdateAccountController.Request => ({
-  id: 'any_id',
-  fields: {
-    field: 'new_value'
-  }
+  accountId: 'any_id',
+  name: 'any_name',
+  profilePhoto: 'any_profile_photo',
+  email: 'email@mail.com',
+  phone: 'any_phone',
+
+  cep: 'any_cep',
+  endereco: 'any_endereco',
+  complemento: 'any_complemento',
+  uf: 'any_uf',
+  cidade: 'any_cidade',
+  bairro: 'any_bairro'
 })
 describe('UpdateAccount Controller', () => {
   test('Should return 400 if Validation returns an error ', async () => {
@@ -40,7 +48,8 @@ describe('UpdateAccount Controller', () => {
     const request = mockRequest()
     const updateSpy = jest.spyOn(updateAccountStub, 'update')
     await sut.handle(request)
-    expect(updateSpy).toHaveBeenCalledWith(request)
+    const { accountId, ...updateParams } = request
+    expect(updateSpy).toHaveBeenCalledWith({ id: accountId, fields: updateParams })
   })
 
   test('Should call updateAccount with correct values', async () => {
