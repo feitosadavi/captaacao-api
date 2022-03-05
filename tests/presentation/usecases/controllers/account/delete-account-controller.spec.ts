@@ -41,6 +41,6 @@ describe('DeleteAccount Controller', () => {
   test('Should return 200 on success', async () => {
     const { sut } = makeSut()
     const response = await sut.handle(mockRequest())
-    expect(response).toEqual(serverSuccess(true))
+    expect(response).toEqual(serverSuccess({ result: true }))
   })
 })
