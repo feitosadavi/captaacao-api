@@ -6,8 +6,6 @@ export const makeUpdateAccountValidationFactory = (): ValidationComposite => {
   // para cada campo que eu tiver, vou adicionar uma validação
   const validations: Validation[] = []
   const allowedFields = ['name',
-    'accountId',
-    'fields',
     'profile',
     'profilePhoto',
     'doc',
@@ -28,7 +26,7 @@ export const makeUpdateAccountValidationFactory = (): ValidationComposite => {
   ]
   const notificationFields = ['message', 'createdAt', 'isSeen']
   const ratingFields = ['message', 'createdAt', 'status', 'rater']
-  const allowedNestedFields = [...adressOptions, ...notificationFields, ...ratingFields, 'name']
+  const allowedNestedFields = [...adressOptions, ...notificationFields, ...ratingFields]
 
   validations.push(new OptionalFieldValidation(allowedFields, allowedNestedFields))
   return new ValidationComposite(validations)
