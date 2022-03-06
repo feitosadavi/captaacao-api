@@ -35,7 +35,7 @@ describe('Profile Routes', () => {
       name: 'any_account_name',
       email: 'mail@email.com',
       password: '123',
-      profile: 'admin'
+      profiles: ['admin']
     })
   }
 
