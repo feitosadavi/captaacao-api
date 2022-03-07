@@ -16,8 +16,8 @@ export class AddPostController implements Controller<AddPostController.Request> 
         title,
         photos,
         description,
-        postedBy,
-        carBeingSold
+        carBeingSold,
+        accountId
       } = request
 
       const createdAt = new Date()
@@ -31,7 +31,7 @@ export class AddPostController implements Controller<AddPostController.Request> 
         description,
         createdAt,
         modifiedAt,
-        postedBy,
+        postedBy: accountId,
         status: true,
         active: true,
         views: 0,
@@ -49,7 +49,8 @@ export namespace AddPostController {
   'status' |
   'active' |
   'views' |
+  'postedBy' |
   'createdAt' |
   'modifiedAt'
-  >
+  > & {accountId: string}
 }

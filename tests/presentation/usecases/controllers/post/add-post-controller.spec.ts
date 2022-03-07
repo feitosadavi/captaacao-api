@@ -10,7 +10,7 @@ import { mockAddPost, mockValidation } from '@tests/presentation/mocks'
 
 const mockRequest = (): AddPostController.Request => {
   const { status, views, createdAt, modifiedAt, ...request } = mockPostsParams()[0]
-  return request
+  return { ...request, accountId: 'any_account_id' }
 }
 
 type SutTypes = {
