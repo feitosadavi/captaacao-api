@@ -10,7 +10,7 @@ export default {
 
   Mutation: {
     signUp: async (parent: any, args: any) => adaptResolver(makeSignUpController(), args),
-    update: async (parent: any, args: any, context: any) => adaptResolver(makeUpdateAccountControllerFactory(), args, context),
+    updateAccount: async (parent: any, args: any, context: any) => adaptResolver(makeUpdateAccountControllerFactory(), args, context),
     deleteAccount: async (parent: any, args: any, context: any) => adaptResolver(makeDeleteAccountsController(), args, context)
   }
 }

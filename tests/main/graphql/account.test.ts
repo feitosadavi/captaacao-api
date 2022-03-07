@@ -186,7 +186,7 @@ describe('Account GraphQL', () => {
 
   describe('Update Mutation', () => {
     const query = `mutation {
-      update (name: "Davi") {
+      updateAccount (name: "Davi") {
         ok
       }
     }`

@@ -27,7 +27,7 @@ export default gql`
       cidade: String!
       bairro: String!
     ): LoginAndSignupResult!
-    update (
+    updateAccount (
       name: String
       profilePhoto: String
       email: String
