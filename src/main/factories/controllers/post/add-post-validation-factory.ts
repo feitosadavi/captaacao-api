@@ -8,7 +8,6 @@ export const makeAddPostValidation = (): ValidationComposite => {
     'title',
     'photos',
     'description',
-    'postedBy',
     'carBeingSold'
   ]) {
     validations.push(new RequiredFieldValidation(field))
