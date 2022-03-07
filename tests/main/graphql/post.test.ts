@@ -37,7 +37,7 @@ const insertPost = async (postedBy: string): Promise<InsertOneWriteOpResult<any>
   })
 }
 
-describe('Account GraphQL', () => {
+describe('Post GraphQL', () => {
   beforeAll(async () => {
     app = await setupApp()
     await MongoHelper.connect(process.env.MONGO_URL)
@@ -54,9 +54,59 @@ describe('Account GraphQL', () => {
     await postsCollection.deleteMany({})
   })
 
+  describe('Add Post Mutation', () => {
+    const query = `mutation {
+      addPost (
+        title: "any_title",
+        photos: ["any_photo_link.com", "other_photo_link.com"],
+        description: "any_description",
+        carBeingSold: {
+          price: 999999,
+          thumb: "any_thumb_link.com",
+          fipePrice: 111111,
+          brand: "any_brand",
+          model: "any_model",
+          year: "any_year",
+          color: "any_color",
+          doors: 4,
+          steering: "any_steering",
+          kmTraveled: 100000,
+          carItems: [
+            "airbag",
+            "alarme",
+            "ar quente",
+            "teto solar"
+          ],
+          licensePlate: "any_license",
+          sold: false,
+          fastSale: true
+        }
+      )
+    }`
+
+    test('Should return 403 on add post without accessToken ', async () => {
+      const res = await request(app)
+        .post('/graphql')
+        .send({ query })
+      expect(res.status).toBe(403)
+    })
+
+    test('Should return 204 on add post success ', async () => {
+      const res = await insertAccount()
+      const id = res.ops[0]._id
+      const accessToken = sign({ id }, env.secret)
+      await updateAccountToken(id, accessToken)
+      await request(app)
+        .post('/graphql')
+        .set('x-access-token', accessToken) // na requisição, eu coloco o accessToken nos headers
+        .send({ query })
+        .expect(200)
+    })
+  })
+
   describe('Delete Mutation', () => {
     const query = `mutation {
-      delete (
+      deletePost (
         id: "any_id"
       ) {
         result
@@ -80,7 +130,7 @@ describe('Account GraphQL', () => {
       const postId = insertPostResult.insertedId
 
       const query = `mutation {
-        delete (
+        deletePost (
           id: "${postId}"
         ) {
           result
@@ -91,7 +141,6 @@ describe('Account GraphQL', () => {
         .post('/graphql')
         .set('x-access-token', accessToken)
         .send({ query })
-      // console.log(res)
       expect(res.status).toBe(200)
     })
   })

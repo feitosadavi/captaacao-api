@@ -13,7 +13,6 @@ describe('AddPost Factory', () => {
       'title',
       'photos',
       'description',
-      'postedBy',
       'carBeingSold'
     ]) {
       validations.push(new RequiredFieldValidation(field))
