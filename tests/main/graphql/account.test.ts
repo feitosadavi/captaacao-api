@@ -209,4 +209,32 @@ describe('Account GraphQL', () => {
       expect(res.status).toBe(200)
     })
   })
+
+  describe('Delete Mutation', () => {
+    const makeDeleteQuery = (id: string): string => (`mutation {
+      deleteAccount(id: "${id}") {
+        result
+      }
+    }`)
+    test('should return 403 if user has no authorization', async () => {
+      const query = makeDeleteQuery('any_id')
+      const res = await request(app)
+        .post('/graphql')
+        .send({ query })
+      expect(res.status).toBe(403)
+    })
+
+    test('should return 200 on success', async () => {
+      const insertResult = await insertAccount()
+      const id = insertResult.insertedId
+      const accessToken = sign({ id }, env.secret)
+      await updateAccountToken(id, accessToken)
+      const query = makeDeleteQuery(id)
+      const res = await request(app)
+        .post('/graphql')
+        .set('x-access-token', accessToken)
+        .send({ query })
+      expect(res.status).toBe(200)
+    })
+  })
 })
