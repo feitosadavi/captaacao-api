@@ -41,11 +41,9 @@ export default gql`
       cidade: String
       bairro: String
     ): UpdateResult! @auth
+    deleteAccount (id: String!): DeleteResult! @auth
   }
 
-  type UpdateResult {
-    ok: Boolean!
-  }
 
   type Account {
     id: ID
@@ -85,5 +83,11 @@ export default gql`
   type LoginAndSignupResult {
     accessToken: String!
     name: String!
+  }
+  type UpdateResult {
+    ok: Boolean!
+  }
+  type DeleteResult {
+    result: Boolean!
   }
 `
