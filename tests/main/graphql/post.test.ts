@@ -6,6 +6,8 @@ import { Express } from 'express'
 import request from 'supertest'
 import { sign } from 'jsonwebtoken'
 import env from '@/main/config/env'
+import { hash } from 'bcrypt'
+import { mockAccountParams } from '@tests/domain/mocks'
 
 let accountsCollection: Collection
 let postsCollection: Collection
@@ -32,8 +34,11 @@ const updateAccountToken = async (id: string, accessToken: string): Promise<void
 
 const insertPost = async (postedBy: string): Promise<InsertOneWriteOpResult<any>> => {
   return postsCollection.insertOne({
-    title: 'teste',
-    postedBy
+    title: 'any_title',
+    postedBy,
+    carBeingSold: {
+      brand: 'any_brand'
+    }
   })
 }
 
@@ -52,6 +57,33 @@ describe('Post GraphQL', () => {
     await accountsCollection.deleteMany({})
     postsCollection = await MongoHelper.getCollection('posts')
     await postsCollection.deleteMany({})
+  })
+
+  describe('Account Query', () => {
+    test('Should return accounts on success', async () => {
+      const password = await hash('123', 12)
+      const accountId = await (await accountsCollection.insertOne({ password, ...mockAccountParams() })).insertedId
+      await insertPost(accountId)
+      const query = `query {
+        posts {
+          id
+          title
+          postedBy
+          carBeingSold {
+            brand
+          }
+        }
+      }`
+      const res = await request(app)
+        .post('/graphql')
+        .send({ query })
+      expect(res.status).toBe(200)
+      const { posts } = res.body.data
+      expect(posts[0].id).toBeTruthy()
+      expect(posts[0].title).toBe('any_title')
+      expect(posts[0].postedBy).toBe(accountId.toString())
+      expect(posts[0].carBeingSold.brand).toBe('any_brand')
+    })
   })
 
   describe('Add Post Mutation', () => {
