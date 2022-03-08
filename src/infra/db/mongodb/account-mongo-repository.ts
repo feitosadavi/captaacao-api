@@ -65,11 +65,8 @@ export class AccountMongoRepository implements AddAccountRepository,
       */
       const orQuery = []
       for (const profile of profiles) {
-        console.log(profile)
         orQuery.push({ profiles: { $in: [profile] } })
       }
-
-      console.log(orQuery)
       account = await accountsCollection.findOne({
         accessToken: accessToken,
         $or: orQuery

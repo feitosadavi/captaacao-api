@@ -92,7 +92,6 @@ describe('Profile Routes', () => {
 
     test('Should return 200 on success', async () => {
       await profileCollection.insertMany([mockProfileParams()])
-      console.log(await profileCollection.find({}).toArray())
       await request(app)
         .get('/api/profiles/all')
         .send()

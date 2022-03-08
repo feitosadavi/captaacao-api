@@ -26,7 +26,6 @@ export class DbPasswordRecover implements PasswordRecover {
         pass: env.recEmailPassword
       })
       const emailIsSent = await this.sendEmail.send(makePasswordRecoverMail(env.recEmail, email, code.number))
-      console.log(emailIsSent)
       return emailIsSent
     } else {
       return false

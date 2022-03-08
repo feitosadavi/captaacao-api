@@ -93,12 +93,10 @@ describe('Post Routes', () => {
         .query({ id: 'any_id' })
         .send()
         .expect(500)
-        .then(res => console.warn(res))
     })
 
     test('Should return 200 on load post by id success', async () => {
       const res = await postsCollection.insertOne({ ...mockPostsParams()[0] })
-      console.log(res.insertedId)
       await request(app)
         .get(`/api/posts/${res.insertedId}`)
         .send()
