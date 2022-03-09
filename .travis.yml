@@ -3,7 +3,7 @@ node_js:
 - 16
 script:
 - eslint 'src/**'
-- npm run test:coveralls
+# - npm run test:coveralls
 - npm run build
 deploy:
   provider: heroku
