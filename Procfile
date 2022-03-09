@@ -1,1 +1,1 @@
-web: npm run compile
+web: npm i -g tsc && npm run compile
