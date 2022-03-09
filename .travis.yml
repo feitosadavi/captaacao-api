@@ -4,7 +4,7 @@ node_js:
 script:
 - eslint 'src/**'
 - npm run test:coveralls
-- npm run compile
+- npm run build
 deploy:
   provider: heroku
   api_key:
