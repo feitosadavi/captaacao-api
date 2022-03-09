@@ -1,1 +1,1 @@
-web: npm i -g tsc && npm run compile
+web: npm start
