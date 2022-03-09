@@ -59,7 +59,7 @@ describe('Post GraphQL', () => {
     await postsCollection.deleteMany({})
   })
 
-  describe('Account Query', () => {
+  describe('Accounts Query', () => {
     test('Should return accounts on success', async () => {
       const password = await hash('123', 12)
       const accountId = await (await accountsCollection.insertOne({ password, ...mockAccountParams() })).insertedId
@@ -83,6 +83,33 @@ describe('Post GraphQL', () => {
       expect(posts[0].title).toBe('any_title')
       expect(posts[0].postedBy).toBe(accountId.toString())
       expect(posts[0].carBeingSold.brand).toBe('any_brand')
+    })
+  })
+
+  describe('Account Query', () => {
+    test('Should return accounts on success', async () => {
+      const password = await hash('123', 12)
+      const accountId = await (await accountsCollection.insertOne({ password, ...mockAccountParams() })).insertedId
+      const postId = await (await insertPost(accountId)).insertedId
+      const query = `query {
+        post (id: "${postId}") {
+          id
+          title
+          postedBy
+          carBeingSold {
+            brand
+          }
+        }
+      }`
+      const res = await request(app)
+        .post('/graphql')
+        .send({ query })
+      expect(res.status).toBe(200)
+      const { post } = res.body.data
+      expect(post.id).toBeTruthy()
+      expect(post.title).toBe('any_title')
+      expect(post.postedBy).toBe(accountId.toString())
+      expect(post.carBeingSold.brand).toBe('any_brand')
     })
   })
 
