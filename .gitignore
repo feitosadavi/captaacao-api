@@ -1,5 +1,6 @@
 node_modules
 dist
+captacao-api
 coverage
 .vscode
 playground.js

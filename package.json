@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node captacao-api/main/server.js",
+    "start": "node main/server.js",
     "compile": "rimraf dist && tsc -p tsconfig-build.json && node dist/main/server.js",
     "dev:watch": "./node_modules/nodemon/bin/nodemon.js -e ts  --exec \"npm run compile\"",
     "debug": "nodemon -L --watch ./dist --inspect=0.0.0.0:9222 --nolazy ./dist/main/server.js",
