@@ -1,6 +1,7 @@
 language: node_js
 node_js:
-  - 14
+  - 16
 script:
   - eslint 'src/**'
   - npm run test:coveralls
+  - npm run compile
