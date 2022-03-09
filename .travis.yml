@@ -2,10 +2,12 @@ language: node_js
 node_js:
 - 16
 script:
-- eslint 'src/**'
-# - npm run test:coveralls
-- npm run build
+  - eslint 'src/**'
+  # - npm run test:coveralls
+  - rvm $(travis_internal_ruby) --fuzzy do ruby -S gem install faraday -v 1.8.0
+  - npm run build
 deploy:
+  app: dist
   provider: heroku
   api_key:
     secure: Ly2TYwHZ3OGP3005RQAPX6/8xfxzQ5aFBzSUlwfBL0GGxTBrwxKL447m0Zq/ev8ib15jSM9lI8jTh2xzZiy72rsjlz21ot9xWT+ec9iy+1JuzlEjQqJlpXH1m7aHtFuO5DxjsE7Y89o2VDWwRSLGAghLMt4qbG/yfAyLe21Dm42eU/5gSSxqaeO94mN0Qz7tyHZxCxr5EFL4as08xdzF858Wa6IDltX0r43hzrQJmDfKMYwfqU+P+NkQAXBG9aqKGPijglnYPHyAkFPFcT5np+3GpJyjyhXX1Qm1KTckhnXi5JuYFTaB2U5LtS2T83c3MFqPsQPr0KfyXlQrg86FrhOYh8zUtvNqiLCsl8IaFlaMeAqdHRybH0kgAW53A4FrN3m65eKIzHHtHEzI+5ZSnO62sdOKnExD8JpKnJ3d7vlSOZ9plNc6+vw+A+AwM7Mc1lw47AZCpP8x9JV8ZdjrLjrWhsn12A7fdNolChcy0dPLqcHmY9X5tpEcTXJuA3YKxL/Em5vohkLsGvpH22xM4CZjNvWahxZM+jur/ADyah+Rui6cc8Q2dge0MjK/8z0PcGXKo6lB6hEZyznuCPNhy5egIBqqQ+k69YzZUivY1BbIM2gHUr/hAXduc+T6CekFublqSaZ6PNaVPPzAd7Ri36jIHHMGNnguLqiE6jFeaT8=
