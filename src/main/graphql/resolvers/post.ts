@@ -1,5 +1,5 @@
 import { adaptResolver } from '@/main/adapters'
-import { makeAddPostController, makeLoadAllPostsController } from '@/main/factories'
+import { makeAddPostController, makeLoadAllPostsController, makeLoadPostByIdController } from '@/main/factories'
 import { makeDeletePostController } from '@/main/factories/controllers/post/delete-profile-controller-factory'
 
 export default {
@@ -9,6 +9,7 @@ export default {
   },
 
   Query: {
-    posts: async (parent: any, args: any) => adaptResolver(makeLoadAllPostsController(), args)
+    posts: async (parent: any, args: any) => adaptResolver(makeLoadAllPostsController(), args),
+    post: async (parent: any, args: any) => adaptResolver(makeLoadPostByIdController(), args)
   }
 }
