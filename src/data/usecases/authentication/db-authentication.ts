@@ -23,7 +23,7 @@ export class DbAuthentication implements Authentication {
         await this.updateAccessTokenRepository.updateAccessToken({ id: account.id, accessToken })
         return {
           accessToken,
-          name: account.name
+          ...account
         }
       }
     }

@@ -6,7 +6,7 @@ import { MissingParamError, EmailInUseError } from '@/presentation/errors'
 import { badRequest, serverError, serverSuccess, forbidden } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols'
 
-import { mockAccountParams, throwError } from '@tests/domain/mocks'
+import { mockAccountModel, mockAccountParams, throwError } from '@tests/domain/mocks'
 import { mockAddAccountStub, mockAuthentication, mockValidation } from '@tests/presentation/mocks'
 
 type SutTypes = {
@@ -58,7 +58,7 @@ describe('SignUp Controller', () => {
   test('Should return 200 and accessToken if valid data is provided', async () => {
     const { sut } = makeSut()
     const accountWithToken = await sut.handle(mockRequest())
-    expect(accountWithToken).toEqual(serverSuccess({ accessToken: 'any_token', name: 'any_name' }))
+    expect(accountWithToken).toEqual(serverSuccess(mockAccountModel()))
   })
 
   test('Should return 403 if an email already in use is provided', async () => {

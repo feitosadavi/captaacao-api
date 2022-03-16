@@ -4,8 +4,10 @@ import {
   HashComparer, Encrypter,
   UpdateAccessTokenRepository, LoadAccountByEmailRepository
 } from '@/data/protocols'
+import MockDate from 'mockdate'
 
 import { mockEncrypter, mockHashComparer, mockLoadAccountByEmailRepository, mockUpdateAccessTokenRepository } from '@tests/data/mocks'
+import { mockAccountModel } from '@tests/domain/mocks'
 
 const mockCredentials = (): Authentication.Params => {
   return {
@@ -43,6 +45,13 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbAuthentication usecase', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   test('Should call LoadAccountByEmailRepository with correct email', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
     const loadSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
@@ -102,7 +111,7 @@ describe('DbAuthentication usecase', () => {
   test('Should return accessToken if Encrypter succeed', async () => {
     const { sut } = makeSut()
     const accessToken = await sut.auth(mockCredentials())
-    expect(accessToken).toEqual({ accessToken: 'any_token', name: 'any_name' })
+    expect(accessToken).toEqual(mockAccountModel())
   })
 
   test('Should call UpdateAccessTokenRepository with correct values', async () => {

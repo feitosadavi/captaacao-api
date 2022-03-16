@@ -111,7 +111,7 @@ export const mockPasswordRecover = (): PasswordRecover => {
 export const mockAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
     async auth (params: Authentication.Params): Authentication.Result {
-      return Promise.resolve({ accessToken: 'any_token', name: 'any_name' })
+      return Promise.resolve(mockAccountModel())
     }
   }
 

@@ -32,6 +32,7 @@ export const mockAccountModel = (): AccountModel => ({
   profiles: ['any_profile'],
   profilePhoto: 'any_photo_link',
   doc: 'cpf_or_cnpj',
+  accessToken: 'any_access_token',
 
   adress: {
     cep: 'any_cep',
@@ -61,6 +62,7 @@ export const mockAccountModel = (): AccountModel => ({
       profiles: ['any_profile'],
       profilePhoto: 'any_photo_link',
       doc: 'cpf_or_cnpj',
+      accessToken: 'any_access_token',
       adress: {
         cep: 'any_cep',
         endereco: 'any_endereco',

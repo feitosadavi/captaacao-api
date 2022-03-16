@@ -1,3 +1,5 @@
+import { AccountModel } from '../models'
+
 export interface Authentication {
   auth: (authenticationParams: Authentication.Params) => Authentication.Result
 }
@@ -8,8 +10,5 @@ export namespace Authentication {
     password: string
   }
 
-  export type Result = Promise<{
-    accessToken: string
-    name: string
-  }>
+  export type Result = Promise<AccountModel>
 }

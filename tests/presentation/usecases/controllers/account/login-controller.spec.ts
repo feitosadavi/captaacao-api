@@ -1,10 +1,12 @@
+import MockDate from 'mockdate'
+
 import { LoginController } from '@/presentation/controllers'
 import { Authentication } from '@/domain/usecases'
 import { serverError, unauthorized, serverSuccess, badRequest } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols'
 import { mockAuthentication, mockValidation } from '@tests/presentation/mocks'
 
-import { throwError } from '@tests/domain/mocks'
+import { mockAccountModel, throwError } from '@tests/domain/mocks'
 
 type SutTypes = {
   sut: LoginController
@@ -26,6 +28,13 @@ const mockRequest = (): LoginController.Request => ({
   password: 'any_password'
 })
 describe('Login Controller', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   test('Should call Authentication with correct values', async () => {
     const { sut, authenticationStub } = makeSut()
     const authSpy = jest.spyOn(authenticationStub, 'auth')
@@ -63,6 +72,6 @@ describe('Login Controller', () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(mockRequest())
 
-    expect(httpResponse).toEqual(serverSuccess({ accessToken: 'any_token', name: 'any_name' }))
+    expect(httpResponse).toEqual(serverSuccess(mockAccountModel()))
   })
 })

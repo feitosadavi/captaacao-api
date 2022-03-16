@@ -52,6 +52,7 @@ describe('Account GraphQL', () => {
   describe('Login Query', () => {
     const query = `query {
       login (email: "rodrigo.manguinho@gmail.com", password: "123") {
+        id
         accessToken
         name
       }
@@ -67,7 +68,9 @@ describe('Account GraphQL', () => {
       const res = await request(app)
         .post('/graphql')
         .send({ query })
+      console.log(res)
       expect(res.status).toBe(200)
+      expect(res.body.data.login.id).toBeTruthy()
       expect(res.body.data.login.accessToken).toBeTruthy()
       expect(res.body.data.login.name).toBe('Rodrigo')
     })
@@ -154,6 +157,7 @@ describe('Account GraphQL', () => {
         cidade: "any_cidade",
         bairro: "any_bairro"
       ) {
+        id
         accessToken
         name
       }
@@ -164,6 +168,7 @@ describe('Account GraphQL', () => {
         .post('/graphql')
         .send({ query })
       expect(res.status).toBe(200)
+      expect(res.body.data.signUp.id).toBeTruthy()
       expect(res.body.data.signUp.accessToken).toBeTruthy()
       expect(res.body.data.signUp.name).toBe('any_name')
     })
