@@ -9,16 +9,17 @@ export type AccountModel = {
   email: string
   phone: string
   adress: AccountModel.Adress
+  accessToken: string
 
   notifications?: AccountModel.Notification[]
   rating?: AccountModel.Rating[]
 
   code?: AccountModel.Code
-  canUseCookies: boolean
-  status: boolean
-  timeout: number
-  profileViews: number
-  online: boolean
+  canUseCookies?: boolean
+  status?: boolean
+  timeout?: number
+  profileViews?: number
+  online?: boolean
 };
 
 export namespace AccountModel {
