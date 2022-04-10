@@ -1,4 +1,4 @@
-FROM node:12
+FROM node:16 AS builder
 
 MAINTAINER davifeitosa.dev@protonmail.com
 
@@ -17,9 +17,6 @@ COPY ./src ./src
 # Typescript compile
 RUN npm install typescript
 RUN npm run build
-
-RUN rm -rf src
-RUN npm uninstall typescript
 
 EXPOSE 5050
 

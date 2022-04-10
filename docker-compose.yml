@@ -1,8 +1,8 @@
 version: "3"
 services:
   mongo:
-    container_name: mongo-container
     image: mongo:3
+    container_name: mongo-captacao
     restart: always
     volumes:
       - ./data:/data/db
@@ -10,18 +10,12 @@ services:
       - "27017:27017"
   api:
     container_name: api-container
-    image: node:12
-    working_dir: /usr/src/captaacao-api
     restart: always
-    command: bash -c "npm install -g tsc && npm install --only=prod && npm run build && npm run start"
-    environment:
-      - MONGO_URL=mongodb://mongo:27017/captaacao-api
-    volumes:
-      - .:/usr/src/captaacao-api/
-      - ./node_modules:/usr/src/captaacao-api/node_modules
+    build: .
     ports:
       - "5050:5050"
-      - "9222:9222"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/captaacao-api
     links:
       - mongo
 
