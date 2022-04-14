@@ -14,7 +14,9 @@ export const authDirectiveTransformer = (schema: GraphQLSchema): GraphQLSchema =
           const request = {
             accessToken: context?.req?.headers?.['x-access-token']
           }
+          console.log(request)
           const httpResponse = await makeAuthMiddleware().handle(request)
+          console.log(httpResponse)
           if (httpResponse.statusCode === 200) {
             Object.assign(context?.req, httpResponse.body)
             return resolve.call(this, parent, args, context, info)

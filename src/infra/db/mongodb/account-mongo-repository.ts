@@ -58,7 +58,9 @@ export class AccountMongoRepository implements AddAccountRepository,
   async loadByToken ({ accessToken, profiles }: LoadAccountByTokenRepository.Params): LoadAccountByTokenRepository.Result {
     const accountsCollection = await MongoHelper.getCollection('accounts')
     let account: AccountModel
+    console.log('loadByToken')
     if (profiles?.length > 0) {
+      console.log('com profiles')
       /**
        * An account can have various profiles, so a needed a way to check if its some profile from account
        * could match with profiles from loadByToken params, so a had to build this 'orQuery' in a very 'gambiarra' way :)
@@ -72,18 +74,25 @@ export class AccountMongoRepository implements AddAccountRepository,
         $or: orQuery
       })
     } else {
+      console.log('sem profiles')
       account = await accountsCollection.findOne({ accessToken: accessToken })
+      console.log({ accountRepository: account })
+      const todas = await accountsCollection.find({}).toArray()
+      console.log({ todas })
     }
     return account && MongoHelper.map(account)
   }
 
   async updateAccessToken ({ id, accessToken }: UpdateAccessTokenRepository.Params): UpdateAccessTokenRepository.Result {
+    console.log({ updateAccessToekn: accessToken })
     const accountsCollection = await MongoHelper.getCollection('accounts')
-    await accountsCollection.updateOne({ _id: id },
+    const res = await accountsCollection.updateOne({ _id: id },
       {
         $set: { accessToken }
       }
     )
+    console.log({ result: res.result })
+    console.log({ count: res.modifiedCount })
   }
 
   async updateAccount (params: UpdateAccountRepository.Params): UpdateAccountRepository.Result {

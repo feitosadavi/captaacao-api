@@ -14,6 +14,7 @@ export class AuthMiddleware implements Middleware {
       const { accessToken } = request
       if (accessToken) {
         const account = await this.loadAccountByToken.load({ accessToken, profiles: this.profiles })
+        console.log({ account })
         if (account) {
           return serverSuccess({ accountId: account.id })
         }
