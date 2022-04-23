@@ -137,10 +137,10 @@ describe('Account Mongo Repository', () => {
 
       await accountCollection.insertOne({
         ...mockAccountParams(),
-        accessToken: 'any_token'
+        accessToken: 'any_access_token'
       })
 
-      const account = await sut.loadByToken({ accessToken: 'any_token' })
+      const account = await sut.loadByToken({ accessToken: 'any_access_token' })
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
       expect(account.name).toBe('any_name')
@@ -152,10 +152,10 @@ describe('Account Mongo Repository', () => {
       await accountCollection.insertOne({
         ...mockAccountParams(),
         profiles: ['admin', 'queijo'],
-        accessToken: 'any_token'
+        accessToken: 'any_access_token'
       })
 
-      const account = await sut.loadByToken({ accessToken: 'any_token', profiles: ['queijo', 'girafa'] })
+      const account = await sut.loadByToken({ accessToken: 'any_access_token', profiles: ['queijo', 'girafa'] })
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
       expect(account.name).toBe('any_name')
@@ -166,10 +166,10 @@ describe('Account Mongo Repository', () => {
 
       await accountCollection.insertOne({
         ...mockAccountParams(),
-        accessToken: 'any_token'
+        accessToken: 'any_access_token'
       })
 
-      const account = await sut.loadByToken({ accessToken: 'any_token', profiles: ['admin', 'girafakkkk'] })
+      const account = await sut.loadByToken({ accessToken: 'any_access_token', profiles: ['admin', 'girafakkkk'] })
       expect(account).toBeFalsy()
     })
 
@@ -178,10 +178,10 @@ describe('Account Mongo Repository', () => {
 
       await accountCollection.insertOne({
         ...mockAccountParams(),
-        accessToken: 'any_token'
+        accessToken: 'any_access_token'
       })
 
-      const account = await sut.loadByToken({ accessToken: 'any_token' })
+      const account = await sut.loadByToken({ accessToken: 'any_access_token' })
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
       expect(account.name).toBe('any_name')
@@ -189,7 +189,7 @@ describe('Account Mongo Repository', () => {
 
     test('Should return null if loadByToken fails', async () => {
       const sut = makeSut()
-      const account = await sut.loadByToken({ accessToken: 'any_token', profiles: ['admin'] })
+      const account = await sut.loadByToken({ accessToken: 'any_access_token', profiles: ['admin'] })
       expect(account).toBeFalsy()
     })
   })
@@ -203,10 +203,10 @@ describe('Account Mongo Repository', () => {
       })
       const fakeAccount = res.ops[0]
       expect(fakeAccount.accessToken).toBeFalsy() // espero que primeiro não tenha accessToken
-      await sut.updateAccessToken({ id: fakeAccount._id, accessToken: 'any_token' })
+      await sut.updateAccessToken({ id: fakeAccount._id, accessToken: 'any_access_token' })
       const account = await accountCollection.findOne({ _id: fakeAccount._id })
       expect(account).toBeTruthy()
-      expect(account.accessToken).toBe('any_token')
+      expect(account.accessToken).toBe('any_access_token')
     })
   })
 

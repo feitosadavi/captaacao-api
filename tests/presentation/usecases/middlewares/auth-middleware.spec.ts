@@ -10,7 +10,7 @@ import { mockLoadAccountByToken } from '@tests/presentation/mocks'
 
 const mockRequest = (): AuthMiddleware.Request => {
   return {
-    accessToken: 'any_token'
+    accessToken: 'any_access_token'
   }
 }
 
@@ -48,7 +48,7 @@ describe('Auth Middleware', () => {
     const { sut, loadAccountByTokenStub } = makeSut(profiles)
     const loadSpy = jest.spyOn(loadAccountByTokenStub, 'load')
     await sut.handle(mockRequest())
-    expect(loadSpy).toHaveBeenCalledWith({ accessToken: 'any_token', profiles })
+    expect(loadSpy).toHaveBeenCalledWith({ accessToken: 'any_access_token', profiles })
   })
 
   test('Should return 403 if LoadAccountByToken returns null ', async () => {

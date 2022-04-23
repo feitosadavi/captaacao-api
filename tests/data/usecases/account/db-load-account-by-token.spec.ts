@@ -25,7 +25,7 @@ const makeSut = (): SutTypes => {
 }
 
 const mockParams = (): LoadAccountByToken.Params => ({
-  accessToken: 'any_token',
+  accessToken: 'any_access_token',
   profiles: ['any_profile', 'other_profile']
 })
 
@@ -42,7 +42,7 @@ describe('DbLoadAccountByToken', () => {
     const { sut, decrypterStub } = makeSut()
     const decryptSpy = jest.spyOn(decrypterStub, 'decrypt')
     await sut.load(mockParams())
-    expect(decryptSpy).toHaveBeenCalledWith('any_token')
+    expect(decryptSpy).toHaveBeenCalledWith('any_access_token')
   })
 
   test('Should return null if Decrypter returns null', async () => {
