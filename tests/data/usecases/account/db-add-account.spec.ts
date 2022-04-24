@@ -52,6 +52,14 @@ describe('DbAddAccount Usecase', () => {
     expect(account).toBe(false)
   })
 
+  test('Should not call UploadFile if profilePhoto isnt set', async () => {
+    const { sut, uploadFileStub } = makeSut()
+    const uploadSpy = jest.spyOn(uploadFileStub, 'upload')
+    const { profilePhoto, ...params } = mockAccountParams() // remove profilePhoto
+    await sut.add(params)
+    expect(uploadSpy).toHaveBeenCalledTimes(0)
+  })
+
   test('Should call UploadFile with correct input', async () => {
     const { sut, uploadFileStub } = makeSut()
     const uploadSpy = jest.spyOn(uploadFileStub, 'upload')
@@ -78,6 +86,14 @@ describe('DbAddAccount Usecase', () => {
     const promise = sut.add(accountData)
     await expect(promise).rejects.toThrow()
   })
+
+  // test('Should call AddAccountRepository even if profilePhoto is not set', async () => {
+  //   const { sut, addAccountRepositoryStub } = makeSut()
+  //   const addSpy = jest.spyOn(addAccountRepositoryStub, 'addAccount')
+  //   const { profilePhoto, ...params } = mockAccountParams() // remove profilePhoto
+  //   await sut.add({ ...params, password: 'hashed_password' })
+  //   expect(addSpy).toHaveBeenCalledWith({ ...mockAccountRepositoryParams(), password: 'hashed_password' })
+  // })
 
   test('Should call AddAccountRepository with correct values', async () => {
     const { sut, addAccountRepositoryStub } = makeSut()
