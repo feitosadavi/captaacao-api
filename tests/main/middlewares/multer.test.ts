@@ -25,8 +25,8 @@ describe('Multer Middleware', () => {
     fs.rmSync(dir, { recursive: true, force: true })
   })
 
-  const mockRoute = (type: 'single' | 'multiple' | 'array' | 'none', fileName: string): void => {
-    app.post('/test_multer', multer(type, fileName), (req, res) => {
+  const mockRoute = (name: string): void => {
+    app.post('/test_multer', multer(name), (req, res) => {
       console.log(req.clientFiles)
       res.json({
         files: req.clientFiles
@@ -35,39 +35,18 @@ describe('Multer Middleware', () => {
   }
 
   test('should multer store a single file', async () => {
-    mockRoute('multiple', 'profile')
+    mockRoute('profile')
     const { body: { files } } = await request(app).post('/test_multer')
-      .attach(
-        'profile',
-        `${dir}/file1.png`
-      )
-
-    const file1IsRecorded = fs.readFileSync(`tmp/${files[0].fileName}`)
+      .attach('profile', `${dir}/file1.png`)
     expect(files[0].fileName.includes('profile')).toBe(true)
-    expect(file1IsRecorded).toBeTruthy()
-    fs.rmSync(`tmp/${files[0].fileName}`, { recursive: true, force: true })
   })
 
   test('should multer store multiple files', async () => {
-    mockRoute('multiple', 'profile')
+    mockRoute('profile')
     const { body: { files } } = await request(app).post('/test_multer')
-      .attach(
-        'profile',
-        `${dir}/file1.png`
-      ).attach(
-        'profile',
-        `${dir}/file2.png`
-      )
-
-    const file1IsRecorded = fs.readFileSync(`tmp/${files[0].fileName}`)
-    const file2IsRecorded = fs.readFileSync(`tmp/${files[1].fileName}`)
-
+      .attach('profile', `${dir}/file1.png`)
+      .attach('profile', `${dir}/file2.png`)
     expect(files[0].fileName.includes('profile')).toBe(true)
     expect(files[1].fileName.includes('profile')).toBe(true)
-    expect(file1IsRecorded).toBeTruthy()
-    expect(file2IsRecorded).toBeTruthy()
-
-    fs.rmSync(`tmp/${files[0].fileName}`, { recursive: true, force: true })
-    fs.rmSync(`tmp/${files[1].fileName}`, { recursive: true, force: true })
   })
 })
