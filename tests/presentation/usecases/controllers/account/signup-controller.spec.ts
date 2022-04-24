@@ -29,15 +29,25 @@ const makeSut = (): SutTypes => {
   }
 }
 
-const mockRequest = (): SignUpController.Request => ({ ...mockAccountParams() })
+const mockRequest = (): SignUpController.Request => {
+  const { profilePhoto, ...accountParams } = mockAccountParams()
+  return {
+    ...accountParams,
+    clientFiles: [{
+      fileName: 'any_photo_link',
+      buffer: Buffer.from('any'),
+      mimeType: 'any_mime_type'
+    }]
+  }
+}
 
 describe('SignUp Controller', () => {
   beforeAll(() => {
-    MockDate.set(new Date()) // congela a data com base no valor inserido
+    MockDate.set(new Date())
   })
 
   afterAll(() => {
-    MockDate.reset() // congela a data com base no valor inserido
+    MockDate.reset()
   })
 
   test('Should return 500 if AddAccount throws', async () => {
@@ -51,7 +61,9 @@ describe('SignUp Controller', () => {
   test('Should call AddAccount with correct values', async () => {
     const { sut, addAccountStub } = makeSut()
     const addSpy = jest.spyOn(addAccountStub, 'add')
-    await sut.handle(mockRequest())
+    const request = mockRequest()
+    console.log(request)
+    await sut.handle(request)
     expect(addSpy).toHaveBeenCalledWith(mockAccountParams())
   })
 

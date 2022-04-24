@@ -9,7 +9,11 @@ export const mockAccountParams = (): AddAccount.Params => ({
   birthDate: '00/00/0000',
   phone: 'any_phone',
   profiles: ['any_profile', 'other_profile'],
-  profilePhoto: 'any_photo_link',
+  profilePhoto: {
+    fileName: 'any_photo_link',
+    buffer: Buffer.from('any'),
+    mimeType: 'any_mime_type'
+  },
   ...adressParams
 })
 
