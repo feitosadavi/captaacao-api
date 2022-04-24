@@ -39,7 +39,7 @@ export class SignUpController implements Controller<SignUpController.Request> {
         name,
         profiles,
         doc,
-        profilePhoto: request.clientFiles[0],
+        profilePhoto: request?.clientFiles[0],
         birthDate,
         password,
         email,
@@ -67,7 +67,7 @@ export class SignUpController implements Controller<SignUpController.Request> {
 
 export namespace SignUpController {
   type ClientFiles = {
-    clientFiles: [{
+    clientFiles?: [{
       fileName: string
       buffer: Buffer
       mimeType: string

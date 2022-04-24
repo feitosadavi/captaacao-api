@@ -36,7 +36,7 @@ export class DbAddAccount implements AddAccount {
       console.log(profilePhoto)
       await this.uploadFile.upload({ file: profilePhoto.buffer, fileName: profilePhoto.fileName })
       const hashedPassword = await this.hasher.hash(params.password)
-      isValid = await this.addAccountRepository.addAccount({ ...addParams, profilePhoto: profilePhoto.fileName, password: hashedPassword })
+      isValid = await this.addAccountRepository.addAccount({ ...addParams, profilePhoto: profilePhoto?.fileName, password: hashedPassword })
     }
     return isValid
   }

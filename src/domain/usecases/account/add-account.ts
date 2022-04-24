@@ -6,7 +6,7 @@ export interface AddAccount {
 export namespace AddAccount {
   export type Params = {
     name: string
-    profilePhoto: {
+    profilePhoto?: {
       fileName: string
       buffer: Buffer
       mimeType: string
