@@ -6,15 +6,9 @@ import { RequestHandler } from 'express'
 import m from 'multer'
 import path from 'path'
 
-export const multer = (type: 'single' | 'multiple' | 'array' | 'none', name: string): RequestHandler =>
+export const multer = (name: string): RequestHandler =>
   (req, res, next) => {
-    const storage = m.diskStorage({
-      destination: 'tmp/',
-      filename: (req, file, callback) => {
-        const fileName = `Captacao-${name}-${Date.now()}${path.extname(file.originalname)}`
-        return callback(null, fileName)
-      }
-    })
+    const storage = m.memoryStorage()
     const store = m({ storage })
     const upload = store.array(name, 4)
 
@@ -25,7 +19,7 @@ export const multer = (type: 'single' | 'multiple' | 'array' | 'none', name: str
 
       if (req.files) {
         const files = (req.files as any[]).map((file: any) => ({
-          fileName: file.filename,
+          fileName: `Captacao-${name}-${Date.now()}${path.extname(file.originalname)}`,
           buffer: file.buffer,
           mimeType: file.mimetype
         }))
