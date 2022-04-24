@@ -9,8 +9,21 @@ import { mockPostsParams, throwError } from '@tests/domain/mocks'
 import { mockAddPost, mockValidation } from '@tests/presentation/mocks'
 
 const mockRequest = (): AddPostController.Request => {
-  const { status, views, createdAt, modifiedAt, ...request } = mockPostsParams()[0]
-  return { ...request, accountId: 'any_account_id' }
+  const { status, views, createdAt, modifiedAt, photos, ...request } = mockPostsParams()[0]
+  return {
+    accountId: 'any_account_id',
+    clientFiles: [{
+      fileName: 'any_file_1_name',
+      buffer: Buffer.from(''),
+      mimeType: 'any_mime_type'
+    }, {
+      fileName: 'any_file_2_name',
+      buffer: Buffer.from(''),
+      mimeType: 'any_mime_type'
+
+    }],
+    ...request
+  }
 }
 
 type SutTypes = {

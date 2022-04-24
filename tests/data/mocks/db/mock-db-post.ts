@@ -41,3 +41,68 @@ export const mockDeletePostRepository = (): DeletePostRepository => {
   }
   return new DeletePostRepositoryStub()
 }
+
+export const mockPostsRepositoryParams = (): AddPostRepository.Params[] => {
+  return [{
+    title: 'any_title',
+    description: 'any_description',
+    photos: ['any_file_1_link', 'any_file_2_link'],
+    createdAt: new Date(),
+    modifiedAt: new Date(),
+    postedBy: 'any_account_id',
+    status: true,
+    active: true,
+    views: 0,
+    carBeingSold: {
+      price: 999999,
+      fipePrice: 111111,
+      brand: 'any_brand',
+      model: 'any_model',
+      year: 'any_year',
+      color: 'any_color',
+      doors: 4,
+      steering: 'any_steering',
+      kmTraveled: 100000,
+      carItems: [
+        'airbag',
+        'alarme',
+        'ar quente',
+        'teto solar'
+      ],
+      licensePlate: 'any_license',
+      sold: false,
+      fastSale: true
+    }
+  },
+  {
+    title: 'other_title',
+    description: 'other_description',
+    photos: ['any_file1_name', 'any_file2_name'],
+    createdAt: new Date(),
+    modifiedAt: new Date(),
+    postedBy: 'other_account_id',
+    status: true,
+    active: true,
+    views: 0,
+    carBeingSold: {
+      price: 999999,
+      fipePrice: 111111,
+      brand: 'other_brand',
+      model: 'other_model',
+      year: 'other_year',
+      color: 'other_color',
+      doors: 4,
+      steering: 'other_steering',
+      kmTraveled: 100000,
+      carItems: [
+        'airbag',
+        'alarme',
+        'ar quente',
+        'teto solar'
+      ],
+      licensePlate: 'other_license',
+      sold: false,
+      fastSale: true
+    }
+  }]
+}

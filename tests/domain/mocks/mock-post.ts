@@ -74,7 +74,15 @@ export const mockPostsParams = (): AddPost.Params[] => {
   return [{
     title: 'any_title',
     description: 'any_description',
-    photos: ['any_photo_link.com', 'other_photo_link.com'],
+    photos: [{
+      fileName: 'any_file_1_name',
+      buffer: Buffer.from(''),
+      mimeType: 'any_mime_type'
+    }, {
+      fileName: 'any_file_2_name',
+      buffer: Buffer.from(''),
+      mimeType: 'any_mime_type'
+    }],
     createdAt: new Date(),
     modifiedAt: new Date(),
     postedBy: 'any_account_id',
@@ -83,7 +91,6 @@ export const mockPostsParams = (): AddPost.Params[] => {
     views: 0,
     carBeingSold: {
       price: 999999,
-      thumb: 'any_thumb_link.com',
       fipePrice: 111111,
       brand: 'any_brand',
       model: 'any_model',
@@ -106,7 +113,11 @@ export const mockPostsParams = (): AddPost.Params[] => {
   {
     title: 'other_title',
     description: 'other_description',
-    photos: ['other_photo_link.com', 'other_photo_link.com'],
+    photos: [{
+      fileName: 'any_file_name',
+      buffer: Buffer.from(''),
+      mimeType: 'any_mime_type'
+    }],
     createdAt: new Date(),
     modifiedAt: new Date(),
     postedBy: 'other_account_id',
@@ -115,7 +126,6 @@ export const mockPostsParams = (): AddPost.Params[] => {
     views: 0,
     carBeingSold: {
       price: 999999,
-      thumb: 'other_thumb_link.com',
       fipePrice: 111111,
       brand: 'other_brand',
       model: 'other_model',
