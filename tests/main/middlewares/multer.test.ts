@@ -27,7 +27,6 @@ describe('Multer Middleware', () => {
 
   const mockRoute = (name: string): void => {
     app.post('/test_multer', multer(name), (req, res) => {
-      console.log(req.clientFiles)
       res.json({
         files: req.clientFiles
       })

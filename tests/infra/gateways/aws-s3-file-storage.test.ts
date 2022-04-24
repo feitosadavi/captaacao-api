@@ -21,7 +21,6 @@ describe('Aws S3 Integration Tests', () => {
     const fileName = 'any_file_name.png'
 
     const pictureUrl = await sut.upload({ fileName, file })
-    console.log(pictureUrl)
     expect((await axios.get(pictureUrl)).status).toBe(200)
 
     await sut.delete({ fileName })

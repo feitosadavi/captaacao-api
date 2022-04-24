@@ -62,7 +62,6 @@ describe('SignUp Controller', () => {
     const { sut, addAccountStub } = makeSut()
     const addSpy = jest.spyOn(addAccountStub, 'add')
     const request = mockRequest()
-    console.log(request)
     await sut.handle(request)
     expect(addSpy).toHaveBeenCalledWith(mockAccountParams())
   })

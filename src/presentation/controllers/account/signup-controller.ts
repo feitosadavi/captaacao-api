@@ -19,7 +19,6 @@ export class SignUpController implements Controller<SignUpController.Request> {
     try {
       const error = this.validation.validate(request)
       if (error) return badRequest(error)
-      console.log(request.clientFiles)
       const {
         name,
         profiles,
