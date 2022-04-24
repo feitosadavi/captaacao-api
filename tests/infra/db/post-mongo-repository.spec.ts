@@ -3,6 +3,7 @@ import { Collection } from 'mongodb'
 import { MongoHelper, PostMongoRepository } from '@/infra/db/mongodb'
 
 import { mockPostsParams } from '@tests/domain/mocks'
+import { mockPostsRepositoryParams } from '@tests/data/mocks'
 
 describe('PostMongo Repository', () => {
   let postsCollection: Collection
@@ -29,7 +30,7 @@ describe('PostMongo Repository', () => {
   describe('add()', () => {
     test('Should create a post on add success', async () => {
       const sut = makeSut()
-      await sut.addPost(mockPostsParams()[0])
+      await sut.addPost(mockPostsRepositoryParams()[0])
       const post = await postsCollection.findOne({ title: 'any_title' })
       expect(post).toBeTruthy()
     })
