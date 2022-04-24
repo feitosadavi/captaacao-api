@@ -87,13 +87,16 @@ describe('DbAddAccount Usecase', () => {
     await expect(promise).rejects.toThrow()
   })
 
-  // test('Should call AddAccountRepository even if profilePhoto is not set', async () => {
-  //   const { sut, addAccountRepositoryStub } = makeSut()
-  //   const addSpy = jest.spyOn(addAccountRepositoryStub, 'addAccount')
-  //   const { profilePhoto, ...params } = mockAccountParams() // remove profilePhoto
-  //   await sut.add({ ...params, password: 'hashed_password' })
-  //   expect(addSpy).toHaveBeenCalledWith({ ...mockAccountRepositoryParams(), password: 'hashed_password' })
-  // })
+  test('Should call AddAccountRepository without profilePhoto if it isnt set', async () => {
+    const { sut, addAccountRepositoryStub } = makeSut()
+    const addSpy = jest.spyOn(addAccountRepositoryStub, 'addAccount')
+
+    const { profilePhoto: db, ...dbParams } = mockAccountParams() // remove profilePhoto
+    await sut.add(dbParams)
+
+    const { profilePhoto: repo, ...repoParams } = mockAccountRepositoryParams() // remove profilePhoto
+    expect(addSpy).toHaveBeenCalledWith({ ...repoParams, password: 'hashed_password' })
+  })
 
   test('Should call AddAccountRepository with correct values', async () => {
     const { sut, addAccountRepositoryStub } = makeSut()
