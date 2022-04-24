@@ -33,11 +33,12 @@ export class DbAddAccount implements AddAccount {
     const account = await this.loadAccountByEmailRepository.loadByEmail({ email: params.email })
     let isValid = false
     if (!account) {
+      const hashedPassword = await this.hasher.hash(addParams.password)
+      let params: AddAccountRepository.Params = { ...addParams, password: hashedPassword }
       if (profilePhoto) {
         await this.uploadFile.upload({ file: profilePhoto.buffer, fileName: profilePhoto.fileName })
+        params = { ...params, profilePhoto: profilePhoto.fileName }
       }
-      const hashedPassword = await this.hasher.hash(addParams.password)
-      const params: AddAccountRepository.Params = { ...addParams, password: hashedPassword }
       isValid = await this.addAccountRepository.addAccount(params)
     }
     return isValid

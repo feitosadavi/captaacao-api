@@ -8,7 +8,7 @@ export interface AddAccountRepository {
 export namespace AddAccountRepository {
   export type Params = {
     name: string
-    profilePhoto: string
+    profilePhoto?: string
     profiles: string[]
     doc: string
     birthDate: string
