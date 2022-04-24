@@ -5,6 +5,8 @@ export interface AddPostRepository {
 }
 
 export namespace AddPostRepository {
-  export type Params = AddPost.Params
+  export type Params = Omit<AddPost.Params, 'photos'> & {
+    photos: string[]
+  }
   export type Result = Promise<AddPost.Result>
 }

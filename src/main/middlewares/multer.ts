@@ -19,7 +19,7 @@ export const multer = (name: string): RequestHandler =>
 
       if (req.files) {
         const files = (req.files as any[]).map((file: any) => ({
-          fileName: `Captacao-${name}-${Date.now()}${path.extname(file.originalname)}`,
+          fileName: process.env.PRODUCTION ? `Captacao-${name}-${Date.now()}${path.extname(file.originalname)}` : file.originalname,
           buffer: file.buffer,
           mimeType: file.mimetype
         }))

@@ -41,11 +41,11 @@ export class SignUpController implements Controller<SignUpController.Request> {
 
 export namespace SignUpController {
   type ClientFiles = {
-    clientFiles?: [{
+    clientFiles?: Array<{
       fileName: string
       buffer: Buffer
       mimeType: string
-    }]
+    }>
   }
   export type Request = Omit<AddAccount.Params, 'profilePhoto'> & ClientFiles
 }

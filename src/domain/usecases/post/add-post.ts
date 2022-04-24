@@ -7,7 +7,11 @@ export interface AddPost {
 export namespace AddPost {
   export type Params = {
     title: string
-    photos: string[]
+    photos: Array<{
+      fileName: string
+      buffer: Buffer
+      mimeType: string
+    }>
     description: string
 
     createdAt: Date
@@ -18,7 +22,7 @@ export namespace AddPost {
 
     views: number
 
-    carBeingSold: PostModel.CarBeingSold
+    carBeingSold: Omit<PostModel.CarBeingSold, 'thumb'>
   }
   export type Result = Promise<void>
 }
