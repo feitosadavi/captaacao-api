@@ -19,41 +19,16 @@ export class SignUpController implements Controller<SignUpController.Request> {
     try {
       const error = this.validation.validate(request)
       if (error) return badRequest(error)
-      const {
-        name,
-        profiles,
-        doc,
-        birthDate,
-        password,
-        email,
-        phone,
-        cep,
-        endereco,
-        complemento,
-        uf,
-        cidade,
-        bairro
-      } = request
-      const isValid = await this.addAccount.add({
-        name,
-        profiles,
-        doc,
-        profilePhoto: request?.clientFiles[0],
-        birthDate,
-        password,
-        email,
-        phone,
-        cep,
-        endereco,
-        complemento,
-        uf,
-        cidade,
-        bairro
-      })
+
+      const { clientFiles, ...requestParams } = request
+      const params = clientFiles ? { ...requestParams, profilePhoto: clientFiles[0] } : requestParams
+
+      const isValid = await this.addAccount.add(params)
       if (!isValid) return forbidden(new EmailInUseError())
+
       const authenticationModel = await this.authentication.auth({
-        email,
-        password
+        email: requestParams.email,
+        password: requestParams.password
       })
 
       return serverSuccess(authenticationModel)
