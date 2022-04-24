@@ -37,7 +37,7 @@ describe('Multer Middleware', () => {
     mockRoute('profile')
     const { body: { files } } = await request(app).post('/test_multer')
       .attach('profile', `${dir}/file1.png`)
-    expect(files[0].fileName.includes('profile')).toBe(true)
+    expect(files[0].fileName.includes('file1.png')).toBe(true)
   })
 
   test('should multer store multiple files', async () => {
@@ -45,7 +45,8 @@ describe('Multer Middleware', () => {
     const { body: { files } } = await request(app).post('/test_multer')
       .attach('profile', `${dir}/file1.png`)
       .attach('profile', `${dir}/file2.png`)
-    expect(files[0].fileName.includes('profile')).toBe(true)
-    expect(files[1].fileName.includes('profile')).toBe(true)
+    console.log(files)
+    expect(files[0].fileName).toBe('file1.png')
+    expect(files[1].fileName).toBe('file2.png')
   })
 })
