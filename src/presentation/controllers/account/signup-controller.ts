@@ -18,13 +18,11 @@ export class SignUpController implements Controller<SignUpController.Request> {
   async handle (request: SignUpController.Request): Promise<HttpResponse> {
     try {
       const error = this.validation.validate(request)
-      if (error) {
-        return badRequest(error)
-      }
+      if (error) return badRequest(error)
+      console.log(request.clientFiles)
       const {
         name,
         profiles,
-        profilePhoto,
         doc,
         birthDate,
         password,
@@ -37,12 +35,11 @@ export class SignUpController implements Controller<SignUpController.Request> {
         cidade,
         bairro
       } = request
-
       const isValid = await this.addAccount.add({
         name,
         profiles,
-        profilePhoto,
         doc,
+        profilePhoto: request.clientFiles[0],
         birthDate,
         password,
         email,
@@ -69,5 +66,12 @@ export class SignUpController implements Controller<SignUpController.Request> {
 }
 
 export namespace SignUpController {
-  export type Request = AddAccount.Params
+  type ClientFiles = {
+    clientFiles: [{
+      fileName: string
+      buffer: Buffer
+      mimeType: string
+    }]
+  }
+  export type Request = Omit<AddAccount.Params, 'profilePhoto'> & ClientFiles
 }
