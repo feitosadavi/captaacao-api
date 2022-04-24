@@ -9,7 +9,8 @@ export class DbAddPost implements AddPost {
 
   async add (params: AddPost.Params): AddPost.Result {
     const photos = params.photos.map(p => ({ file: p.buffer, fileName: p.fileName }))
-    const urls = await this.uploadFile.uploadMany(photos)
-    await this.addPostRepository.addPost({ ...params, photos: urls })
+    await this.uploadFile.uploadMany(photos)
+    const photosFileName = params.photos.map(p => p.fileName)
+    await this.addPostRepository.addPost({ ...params, photos: photosFileName })
   }
 }

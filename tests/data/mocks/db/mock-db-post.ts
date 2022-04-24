@@ -46,7 +46,7 @@ export const mockPostsRepositoryParams = (): AddPostRepository.Params[] => {
   return [{
     title: 'any_title',
     description: 'any_description',
-    photos: ['any_file_1_link', 'any_file_2_link'],
+    photos: ['any_file_1_name', 'any_file_2_name'],
     createdAt: new Date(),
     modifiedAt: new Date(),
     postedBy: 'any_account_id',
