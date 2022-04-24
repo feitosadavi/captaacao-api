@@ -58,6 +58,17 @@ describe('SignUp Controller', () => {
     expect(httpResponse).toEqual(serverError(new Error()))
   })
 
+  test('Should call AddAccount without profilePhoto if request has no clientFiles', async () => {
+    const { sut, addAccountStub } = makeSut()
+    const addSpy = jest.spyOn(addAccountStub, 'add')
+
+    const { clientFiles, ...request } = mockRequest()
+    await sut.handle(request)
+
+    const { profilePhoto, ...addParamsWithoutProfilePhoto } = mockAccountParams()
+    expect(addSpy).toHaveBeenCalledWith(addParamsWithoutProfilePhoto)
+  })
+
   test('Should call AddAccount with correct values', async () => {
     const { sut, addAccountStub } = makeSut()
     const addSpy = jest.spyOn(addAccountStub, 'add')
