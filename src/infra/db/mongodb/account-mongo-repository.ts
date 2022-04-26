@@ -78,15 +78,12 @@ export class AccountMongoRepository implements AddAccountRepository,
   }
 
   async updateAccessToken ({ id, accessToken }: UpdateAccessTokenRepository.Params): UpdateAccessTokenRepository.Result {
-    console.log({ updateAccessToekn: accessToken })
     const accountsCollection = await MongoHelper.getCollection('accounts')
-    const res = await accountsCollection.updateOne({ _id: id },
+    await accountsCollection.updateOne({ _id: id },
       {
         $set: { accessToken }
       }
     )
-    console.log({ result: res.result })
-    console.log({ count: res.modifiedCount })
   }
 
   async updateAccount (params: UpdateAccountRepository.Params): UpdateAccountRepository.Result {

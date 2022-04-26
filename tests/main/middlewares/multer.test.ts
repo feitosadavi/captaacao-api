@@ -45,7 +45,6 @@ describe('Multer Middleware', () => {
     const { body: { files } } = await request(app).post('/test_multer')
       .attach('profile', `${dir}/file1.png`)
       .attach('profile', `${dir}/file2.png`)
-    console.log(files)
     expect(files[0].fileName).toBe('file1.png')
     expect(files[1].fileName).toBe('file2.png')
   })
