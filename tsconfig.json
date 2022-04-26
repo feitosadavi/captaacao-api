@@ -3,9 +3,6 @@
     "outDir": "captacao-api",
     "module": "commonjs",
     "target": "es2019",
-    "lib": [
-      "dom.iterable"
-    ],
     "esModuleInterop": true,
     "sourceMap": true,
     "rootDirs": [
