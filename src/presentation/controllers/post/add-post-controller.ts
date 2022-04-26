@@ -12,26 +12,30 @@ export class AddPostController implements Controller<AddPostController.Request> 
   async handle (request: AddPostController.Request): Promise<HttpResponse> {
     try {
       const error = this.validation.validate(request)
-      if (error) return badRequest(new Error())
-      const { accountId, clientFiles, ...requestParams } = request
+      if (error) return badRequest(error)
+      const { accountId, clientFiles, title, description, ...carBeingSold } = request
 
       const createdAt = new Date()
       const modifiedAt = new Date()
       createdAt.toLocaleString('pt-BR')
       modifiedAt.toLocaleString('pt-BR')
-
-      await this.addPost.add({
-        ...requestParams,
+      const params = {
+        title,
+        description,
         photos: clientFiles,
-        createdAt: new Date(),
-        modifiedAt: new Date(),
         postedBy: accountId,
         status: true,
         active: true,
-        views: 0
-      })
+        views: 0,
+        carBeingSold,
+        createdAt: new Date(),
+        modifiedAt: new Date()
+      }
+
+      await this.addPost.add(params)
       return noContent()
     } catch (error) {
+      console.error(error)
       return serverError(error)
     }
   }
@@ -52,6 +56,24 @@ export namespace AddPostController {
   'views' |
   'postedBy' |
   'createdAt' |
-  'modifiedAt'
-    > & { accountId: string } & ClientFiles
+    'modifiedAt' |
+    'carBeingSold'
+  > & { accountId: string } & ClientFiles & {
+    price: number
+    fipePrice: number
+
+    brand: string
+    model: string
+    year: string
+    color: string
+    doors: number
+    steering: string
+
+    carItems: string[] // airbag, alarme, etc
+    kmTraveled: number
+
+    licensePlate: string
+    sold: boolean
+    fastSale: boolean
+  }
 }
