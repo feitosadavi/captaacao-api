@@ -12,6 +12,11 @@ export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepos
 
   async loadAll (params: LoadAllPostsRepository.Params): LoadAllPostsRepository.Result {
     const postsCollection = await MongoHelper.getCollection('posts')
+
+    // postedBy is an ID, so we need to convert it so that it can be used in find
+    const { postedBy } = params
+    if (postedBy) (params as any).postedBy = new ObjectID(postedBy)
+
     const posts = await postsCollection.find(params).toArray()
     return posts && MongoHelper.mapCollection(posts)
   }
