@@ -32,20 +32,27 @@ describe('DbLoadAllPosts UseCase', () => {
   test('Should call LoadAllPostsRepository', async () => {
     const { sut, loadPostsRepositoryStub } = makeSut()
     const loadAllSpy = jest.spyOn(loadPostsRepositoryStub, 'loadAll')
-    await sut.load()
+    await sut.load({})
     expect(loadAllSpy).toHaveBeenCalled()
+  })
+
+  test('Should call LoadAllPostsRepository with correct filters, if it exists', async () => {
+    const { sut, loadPostsRepositoryStub } = makeSut()
+    const loadAllSpy = jest.spyOn(loadPostsRepositoryStub, 'loadAll')
+    await sut.load({ postedBy: 'any_account_id' })
+    expect(loadAllSpy).toHaveBeenCalledWith({ postedBy: 'any_account_id' })
   })
 
   test('Should return posts on LoadAllPostsRepository success', async () => {
     const { sut } = makeSut()
-    const posts = await sut.load()
+    const posts = await sut.load({})
     expect(posts).toEqual(mockPostsModel())
   })
 
   test('Should throw if LoadAllPostsRepository throws', async () => {
     const { sut, loadPostsRepositoryStub } = makeSut()
     jest.spyOn(loadPostsRepositoryStub, 'loadAll').mockImplementationOnce(throwError)
-    const promise = sut.load()
+    const promise = sut.load({})
     await expect(promise).rejects.toThrow()
   })
 })
