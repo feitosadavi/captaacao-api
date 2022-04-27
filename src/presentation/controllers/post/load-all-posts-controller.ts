@@ -6,7 +6,11 @@ export class LoadAllPostsController implements Controller<LoadAllPostsController
   constructor (private readonly loadPosts: LoadAllPosts) { }
   async handle (request: LoadAllPostsController.Request): Promise<HttpResponse> {
     try {
-      const posts = await this.loadPosts.load()
+      const filters = {}
+      for (const key of Object.keys(request)) {
+        filters[key] = request[key]
+      }
+      const posts = await this.loadPosts.load(filters)
       return posts.length ? serverSuccess(posts) : noContent()
     } catch (error) {
       return serverError(error)
@@ -15,5 +19,13 @@ export class LoadAllPostsController implements Controller<LoadAllPostsController
 }
 
 export namespace LoadAllPostsController {
-  export type Request = any
+  export type Request = LoadAllPosts.Params
+
+  // price: number
+  // brand: string
+  // model: string
+  // year: string
+  // color: string
+  // doors: number
+  // steering: string
 }
