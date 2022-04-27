@@ -1,4 +1,4 @@
-import { Collection } from 'mongodb'
+import { Collection, ObjectID } from 'mongodb'
 
 import { MongoHelper, PostMongoRepository } from '@/infra/db/mongodb'
 
@@ -51,11 +51,11 @@ describe('PostMongoRepository', () => {
 
     test('Should load all posts given the filter', async () => {
       const sut = makeSut()
+      const { postedBy, ...post } = mockPostsParams()[0]
       const res = await postsCollection.insertMany([
-        { ...mockPostsParams()[0] },
+        { postedBy: new ObjectID(), ...post },
         { ...mockPostsParams()[1] }
       ])
-      console.log(res)
       const posts = await sut.loadAll({ postedBy: res.ops[0].postedBy })
       expect(posts.length).toBe(1)
       expect(posts[0].title).toBe('any_title')
