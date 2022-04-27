@@ -5,7 +5,7 @@ import { MongoHelper, PostMongoRepository } from '@/infra/db/mongodb'
 import { mockPostsParams } from '@tests/domain/mocks'
 import { mockPostsRepositoryParams } from '@tests/data/mocks'
 
-describe('PostMongo Repository', () => {
+describe('PostMongoRepository', () => {
   let postsCollection: Collection
 
   // antes e depois de cada teste de integração, precisamos conectar e desconectar do banco
@@ -43,15 +43,27 @@ describe('PostMongo Repository', () => {
         { ...mockPostsParams()[0] },
         { ...mockPostsParams()[1] }
       ])
-      const posts = await sut.loadAll()
+      const posts = await sut.loadAll({})
       expect(posts.length).toBe(2)
       expect(posts[0].title).toBe('any_title')
       expect(posts[1].title).toBe('other_title')
     })
 
+    test('Should load all posts given the filter', async () => {
+      const sut = makeSut()
+      const res = await postsCollection.insertMany([
+        { ...mockPostsParams()[0] },
+        { ...mockPostsParams()[1] }
+      ])
+      console.log(res)
+      const posts = await sut.loadAll({ postedBy: res.ops[0].postedBy })
+      expect(posts.length).toBe(1)
+      expect(posts[0].title).toBe('any_title')
+    })
+
     test('Should load empty list if collection has no posts', async () => {
       const sut = makeSut()
-      const posts = await sut.loadAll()
+      const posts = await sut.loadAll({})
       expect(posts.length).toBe(0)
     })
   })
