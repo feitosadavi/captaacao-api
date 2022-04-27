@@ -10,9 +10,9 @@ export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepos
     await postsCollection.insertOne(params)
   }
 
-  async loadAll (): LoadAllPostsRepository.Result {
+  async loadAll (params: LoadAllPostsRepository.Params): LoadAllPostsRepository.Result {
     const postsCollection = await MongoHelper.getCollection('posts')
-    const posts = await postsCollection.find().toArray()
+    const posts = await postsCollection.find(params).toArray()
     return posts && MongoHelper.mapCollection(posts)
   }
 
