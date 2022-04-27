@@ -21,7 +21,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-describe('LoadPost Controller', () => {
+describe('LoadPostController', () => {
   beforeAll(() => {
     MockDate.set(new Date()) // congela a data com base no valor inserido
   })
@@ -34,7 +34,14 @@ describe('LoadPost Controller', () => {
     const { sut, loadPostsStub } = makeSut()
     const loadPostsSpy = jest.spyOn(loadPostsStub, 'load')
     await sut.handle({})
-    expect(loadPostsSpy).toHaveBeenCalled()
+    expect(loadPostsSpy).toHaveBeenLastCalledWith({})
+  })
+
+  test('Should call LoadAllPosts with correct filters, if it exists', async () => {
+    const { sut, loadPostsStub } = makeSut()
+    const loadPostsSpy = jest.spyOn(loadPostsStub, 'load')
+    await sut.handle({ postedBy: 'any_account_id' })
+    expect(loadPostsSpy).toHaveBeenLastCalledWith({ postedBy: 'any_account_id' })
   })
 
   test('Should 200 on success', async () => {
