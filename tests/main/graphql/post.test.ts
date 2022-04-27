@@ -35,7 +35,7 @@ const updateAccountToken = async (id: string, accessToken: string): Promise<void
 const insertPost = async (postedBy: string): Promise<InsertOneWriteOpResult<any>> => {
   return postsCollection.insertOne({
     title: 'any_title',
-    postedBy,
+    postedBy: postedBy,
     carBeingSold: {
       brand: 'any_brand'
     }
@@ -66,6 +66,31 @@ describe('Post GraphQL', () => {
       await insertPost(accountId)
       const query = `query {
         posts {
+          id
+          title
+          postedBy
+          carBeingSold {
+            brand
+          }
+        }
+      }`
+      const res = await request(app)
+        .post('/graphql')
+        .send({ query })
+      expect(res.status).toBe(200)
+      const { posts } = res.body.data
+      expect(posts[0].id).toBeTruthy()
+      expect(posts[0].title).toBe('any_title')
+      expect(posts[0].postedBy).toBe(accountId.toString())
+      expect(posts[0].carBeingSold.brand).toBe('any_brand')
+    })
+
+    test('Should return filtered accounts if it has filters on success', async () => {
+      const password = await hash('123', 12)
+      const accountId = await (await accountsCollection.insertOne({ password, ...mockAccountParams() })).insertedId
+      await insertPost(accountId)
+      const query = `query {
+        posts (postedBy: "${accountId}"){
           id
           title
           postedBy
