@@ -7,6 +7,7 @@ export interface LoadAllPosts {
 export namespace LoadAllPosts {
   export type Params = {
     postedBy?: string
+    skip?: number
   }
   export type Result = Promise<PostModel[]>
 }
