@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-express'
 
 export default gql`
   extend type Query {
-    posts(postedBy: String): [Post!]
+    posts(skip: Int, postedBy: String): [Post!]
     post (id: String!): Post
   }
 
