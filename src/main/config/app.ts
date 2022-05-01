@@ -2,11 +2,11 @@
 import express, { Express } from 'express'
 import { setupApolloServer } from '../graphql/apollo'
 import setupRoutes from './routes'
-import { cors } from '../middlewares'
+import cors from 'cors'
 
 export const setupApp = async (): Promise<Express> => {
   const app = express()
-  app.use(cors)
+  app.use(cors({ origin: '*' }))
   setupRoutes(app)
   const server = setupApolloServer()
   await server.start()
