@@ -61,6 +61,18 @@ describe('PostMongoRepository', () => {
       expect(posts[0].title).toBe('any_title')
     })
 
+    test('Should skip posts if skip parameter was given', async () => {
+      const sut = makeSut()
+      const { postedBy, ...post } = mockPostsParams()[0]
+      await postsCollection.insertMany([
+        { postedBy: new ObjectID(), ...post },
+        { ...mockPostsParams()[1] }
+      ])
+      const posts = await sut.loadAll({ skip: 1 })
+      expect(posts.length).toBe(1)
+      expect(posts[0].title).toBe('other_title')
+    })
+
     test('Should load empty list if collection has no posts', async () => {
       const sut = makeSut()
       const posts = await sut.loadAll({})
