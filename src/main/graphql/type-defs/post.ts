@@ -69,6 +69,6 @@ export default gql`
     kmTraveled: Int!
     licensePlate: String!
     sold: Boolean!
-    fastSale: Boolean!
+    fastSale: Boolean
   }
 `
