@@ -37,7 +37,7 @@ describe('PostMongoRepository', () => {
   })
 
   describe('loadAll()', () => {
-    test('Should load all posts on load success', async () => {
+    test('Should load all posts with none skip parameters has been passed', async () => {
       const sut = makeSut()
       await postsCollection.insertMany([
         { ...mockPostsParams()[0] },
