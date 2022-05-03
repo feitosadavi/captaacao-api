@@ -61,7 +61,7 @@ describe('PostMongoRepository', () => {
       expect(posts[0].title).toBe('any_title')
     })
 
-    test('Should load all posts given brand filter', async () => {
+    test('Should load all posts given brands filter', async () => {
       const sut = makeSut()
       const { postedBy, ...post } = mockPostsParams()[0]
       const res = await postsCollection.insertMany([
@@ -70,7 +70,19 @@ describe('PostMongoRepository', () => {
       ])
       const posts = await sut.loadAll({ brand: [res.ops[0].carBeingSold.brand, 'Fusca'] })
       expect(posts.length).toBe(1)
-      expect(posts[0].title).toBe('any_title')
+      expect(posts[0].carBeingSold.brand).toBe('any_brand')
+    })
+
+    test('Should load all posts given colors filter', async () => {
+      const sut = makeSut()
+      const { postedBy, ...post } = mockPostsParams()[0]
+      const res = await postsCollection.insertMany([
+        { postedBy: new ObjectID(), ...post },
+        { ...mockPostsParams()[1] }
+      ])
+      const posts = await sut.loadAll({ color: [res.ops[0].carBeingSold.color, 'Roxo'] })
+      expect(posts.length).toBe(1)
+      expect(posts[0].carBeingSold.color).toBe('any_color')
     })
 
     test('Should skip posts if skip parameter was given', async () => {
