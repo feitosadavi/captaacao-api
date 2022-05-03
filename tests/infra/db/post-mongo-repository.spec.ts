@@ -61,7 +61,7 @@ describe('PostMongoRepository', () => {
       expect(posts[0].title).toBe('any_title')
     })
 
-    test('Should load all posts given brands filter', async () => {
+    test('Should load all posts given brand filter', async () => {
       const sut = makeSut()
       const { postedBy, ...post } = mockPostsParams()[0]
       const res = await postsCollection.insertMany([
@@ -73,7 +73,7 @@ describe('PostMongoRepository', () => {
       expect(posts[0].carBeingSold.brand).toBe('any_brand')
     })
 
-    test('Should load all posts given colors filter', async () => {
+    test('Should load all posts given color filter', async () => {
       const sut = makeSut()
       const { postedBy, ...post } = mockPostsParams()[0]
       const res = await postsCollection.insertMany([
@@ -83,6 +83,42 @@ describe('PostMongoRepository', () => {
       const posts = await sut.loadAll({ color: [res.ops[0].carBeingSold.color, 'Roxo'] })
       expect(posts.length).toBe(1)
       expect(posts[0].carBeingSold.color).toBe('any_color')
+    })
+
+    test('Should load all posts given steering filter', async () => {
+      const sut = makeSut()
+      const { postedBy, ...post } = mockPostsParams()[0]
+      const res = await postsCollection.insertMany([
+        { postedBy: new ObjectID(), ...post },
+        { ...mockPostsParams()[1] }
+      ])
+      const posts = await sut.loadAll({ steering: [res.ops[0].carBeingSold.steering, 'Elétrica'] })
+      expect(posts.length).toBe(1)
+      expect(posts[0].carBeingSold.steering).toBe('any_steering')
+    })
+
+    test('Should load all posts given year filter', async () => {
+      const sut = makeSut()
+      const { postedBy, ...post } = mockPostsParams()[0]
+      const res = await postsCollection.insertMany([
+        { postedBy: new ObjectID(), ...post },
+        { ...mockPostsParams()[1] }
+      ])
+      const posts = await sut.loadAll({ year: [res.ops[0].carBeingSold.year, '2000'] })
+      expect(posts.length).toBe(1)
+      expect(posts[0].carBeingSold.year).toBe('any_year')
+    })
+
+    test('Should load all posts given doors filter', async () => {
+      const sut = makeSut()
+      const { postedBy, ...post } = mockPostsParams()[0]
+      const res = await postsCollection.insertMany([
+        { postedBy: new ObjectID(), ...post },
+        { ...mockPostsParams()[1] }
+      ])
+      const posts = await sut.loadAll({ doors: [res.ops[0].carBeingSold.doors, 6] })
+      expect(posts.length).toBe(2)
+      expect(posts[0].carBeingSold.doors).toBe(4)
     })
 
     test('Should skip posts if skip parameter was given', async () => {

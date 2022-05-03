@@ -13,7 +13,7 @@ export namespace LoadAllPosts {
     year?: string[]
     steering?: string[]
     engine?: string[]
-    door?: string[]
+    doors?: string[]
   }
   export type Result = Promise<PostModel[]>
 }
