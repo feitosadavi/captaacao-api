@@ -61,6 +61,18 @@ describe('PostMongoRepository', () => {
       expect(posts[0].title).toBe('any_title')
     })
 
+    test('Should load all posts given brand filter', async () => {
+      const sut = makeSut()
+      const { postedBy, ...post } = mockPostsParams()[0]
+      const res = await postsCollection.insertMany([
+        { postedBy: new ObjectID(), ...post },
+        { ...mockPostsParams()[1] }
+      ])
+      const posts = await sut.loadAll({ brand: [res.ops[0].carBeingSold.brand, 'Fusca'] })
+      expect(posts.length).toBe(1)
+      expect(posts[0].title).toBe('any_title')
+    })
+
     test('Should skip posts if skip parameter was given', async () => {
       const sut = makeSut()
       const { postedBy, ...post } = mockPostsParams()[0]
