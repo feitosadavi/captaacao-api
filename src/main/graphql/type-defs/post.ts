@@ -10,7 +10,7 @@ export default gql`
       year: [String!]
       steering: [String!]
       engine: [String!]
-      doors: [String!]
+      doors: [Int!]
     ) : [Post!]
     post (id: String!): Post
   }
