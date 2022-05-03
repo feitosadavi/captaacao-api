@@ -7,6 +7,7 @@ export interface LoadAllPosts {
 export namespace LoadAllPosts {
   export type Params = {
     postedBy?: string
+    search?: string
     skip?: number
     color?: string[]
     brand?: string[]

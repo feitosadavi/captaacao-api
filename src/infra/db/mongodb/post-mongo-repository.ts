@@ -14,7 +14,7 @@ export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepos
     const postsCollection = await MongoHelper.getCollection('posts')
     console.log(params)
     // postedBy is an ID, so we need to convert it so that it can be used in find
-    const { skip, postedBy, ...filters } = params
+    const { skip, postedBy, search, ...filters } = params
 
     const andQuery = []
     for (const key of Object.keys(filters)) {
@@ -24,7 +24,7 @@ export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepos
       andQuery.push(orQuery)
     }
     if (postedBy) andQuery.push({ postedBy: new ObjectID(postedBy) })
-
+    if (search) andQuery.push({ $text: { $search: search } })
     const query = andQuery.length > 0 ? { $and: andQuery } : {}
     const posts = await postsCollection.find(query).skip(skip ?? 0).toArray()
     return posts && MongoHelper.mapCollection(posts)

@@ -3,6 +3,7 @@ import { gql } from 'apollo-server-express'
 export default gql`
   extend type Query {
     posts(
+      search: String,
       skip: Int,
       postedBy: String,
       color: [String!]
