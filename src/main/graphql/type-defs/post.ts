@@ -9,7 +9,7 @@ export default gql`
       brand: [String!]
       year: [String!]
       steering: [String!]
-      engine: [String!]
+      fuel: [String!]
       doors: [Int!]
     ) : [Post!]
     post (id: String!): Post

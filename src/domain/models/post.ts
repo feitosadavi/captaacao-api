@@ -27,6 +27,7 @@ export namespace PostModel {
     color: string
     doors: number
     steering: string
+    fuel: string
 
     carItems: string[] // airbag, alarme, etc
     kmTraveled: number

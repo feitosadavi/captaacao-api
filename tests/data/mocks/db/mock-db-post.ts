@@ -62,6 +62,7 @@ export const mockPostsRepositoryParams = (): AddPostRepository.Params[] => {
       color: 'any_color',
       doors: 4,
       steering: 'any_steering',
+      fuel: 'any_fuel',
       kmTraveled: 100000,
       carItems: [
         'airbag',
@@ -93,6 +94,7 @@ export const mockPostsRepositoryParams = (): AddPostRepository.Params[] => {
       color: 'other_color',
       doors: 4,
       steering: 'other_steering',
+      fuel: 'other_fuel',
       kmTraveled: 100000,
       carItems: [
         'airbag',

@@ -20,6 +20,7 @@ export const mockPostsModel = (): PostModel[] => {
       brand: 'any_brand',
       model: 'any_model',
       year: 'any_year',
+      fuel: 'any_fuel',
       color: 'any_color',
       doors: 4,
       steering: 'any_steering',
@@ -56,6 +57,7 @@ export const mockPostsModel = (): PostModel[] => {
       color: 'other_color',
       doors: 4,
       steering: 'other_steering',
+      fuel: 'other_fuel',
       kmTraveled: 100000,
       carItems: [
         'airbag',
@@ -98,6 +100,7 @@ export const mockPostsParams = (): AddPost.Params[] => {
       color: 'any_color',
       doors: 4,
       steering: 'any_steering',
+      fuel: 'any_fuel',
       kmTraveled: 100000,
       carItems: [
         'airbag',
@@ -133,6 +136,7 @@ export const mockPostsParams = (): AddPost.Params[] => {
       color: 'other_color',
       doors: 4,
       steering: 'other_steering',
+      fuel: 'other_fuel',
       kmTraveled: 100000,
       carItems: [
         'airbag',
