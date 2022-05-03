@@ -23,6 +23,13 @@ export const MongoHelper = {
     if (!this.client.isConnected()) await this.connect(this.url)
     return this.client.db().collection(name)
   },
+  async setupIndexes (): Promise<void> {
+    const postsCollection = await this.getCollection('posts')
+    console.info('START INDEXES SETUP')
+    console.info('[POSTS] CREATING INDEX - title ')
+    postsCollection.createIndex({ title: 'text' })
+    console.info('[POSTS] FINISHED INDEX - title ')
+  },
   map: (data: any): any => { // regra de negócio: o mongo retorna o id como _id, como preciso utilizar como id
     const { _id, ...collectionWithoutId } = data
     return Object.assign({}, collectionWithoutId, { id: _id })
