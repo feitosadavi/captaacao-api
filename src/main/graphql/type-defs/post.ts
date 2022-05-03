@@ -2,7 +2,16 @@ import { gql } from 'apollo-server-express'
 
 export default gql`
   extend type Query {
-    posts(skip: Int, postedBy: String): [Post!]
+    posts(
+      skip: Int,
+      postedBy: String,
+      color: [String!]
+      brand: [String!]
+      year: [String!]
+      steering: [String!]
+      engine: [String!]
+      doors: [String!]
+    ) : [Post!]
     post (id: String!): Post
   }
 

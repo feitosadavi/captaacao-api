@@ -12,20 +12,22 @@ export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepos
 
   async loadAll (params: LoadAllPostsRepository.Params): LoadAllPostsRepository.Result {
     const postsCollection = await MongoHelper.getCollection('posts')
-
+    console.log(params)
     // postedBy is an ID, so we need to convert it so that it can be used in find
     const { skip, postedBy, ...filters } = params
 
     const orQuery = []
     for (const key of Object.keys(filters)) {
-      if (filters[key].length > 1) {
-        const filterOption = filters[key].map((value: string) => ({ [`carBeingSold.${key}`]: value }))
-        orQuery.push(...filterOption)
-      }
+      const filterOption = filters[key].map((value: string) => ({ [`carBeingSold.${key}`]: value }))
+      orQuery.push(...filterOption)
     }
     if (postedBy) orQuery.push({ postedBy: new ObjectID(postedBy) })
 
-    const posts = await postsCollection.find(orQuery.length > 0 ? { $or: orQuery } : {}).skip(skip ?? 0).toArray()
+    console.log({ orQuery })
+    console.log(orQuery.length)
+    const query = orQuery.length > 0 ? { $or: orQuery } : {}
+    console.log(query)
+    const posts = await postsCollection.find(query).skip(skip ?? 0).toArray()
     return posts && MongoHelper.mapCollection(posts)
   }
 
