@@ -161,6 +161,31 @@ describe('Post GraphQL', () => {
       expect(posts[0].postedBy).toBe(accountId.toString())
       expect(posts[0].carBeingSold.brand).toBe('any_brand')
     })
+
+    test('Should search posts if search param was passed', async () => {
+      const password = await hash('123', 12)
+      const accountId = await (await accountsCollection.insertOne({ password, ...mockAccountParams() })).insertedId
+      await insertPost(accountId)
+      const query = `query {
+        posts(search: "") {
+          id
+          title
+          postedBy
+          carBeingSold {
+            brand
+          }
+        }
+      }`
+      const res = await request(app)
+        .post('/graphql')
+        .send({ query })
+      expect(res.status).toBe(200)
+      const { posts } = res.body.data
+      expect(posts[0].id).toBeTruthy()
+      expect(posts[0].title).toBe('any_title')
+      expect(posts[0].postedBy).toBe(accountId.toString())
+      expect(posts[0].carBeingSold.brand).toBe('any_brand')
+    })
   })
 
   describe('Account Query', () => {
