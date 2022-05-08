@@ -3,6 +3,7 @@ import { gql } from 'apollo-server-express'
 export default gql`
   extend type Query {
     posts(
+      loadFilterOptions: Boolean
       search: String,
       skip: Int,
       postedBy: String,
@@ -12,8 +13,23 @@ export default gql`
       steering: [String!]
       fuel: [String!]
       doors: [Int!]
-    ) : [Post!]
+    ) : PostsResult!
     post (id: String!): Post
+  }
+
+  type PostsResult {
+    posts: [Post!]
+    filterOptions: FilterOptions!
+  }
+
+  type FilterOptions {
+    brand: [String]!
+    model: [String]!
+    fuel: [String]!
+    year: [String]!
+    color: [String]!
+    doors: [Int]!
+    steering: [String]!
   }
 
   extend type Mutation {
@@ -71,6 +87,7 @@ export default gql`
     fipePrice: Int!
     brand: String!
     model: String!
+    fuel: String!
     year: String!
     color: String!
     doors: Int!

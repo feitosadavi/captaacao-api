@@ -11,8 +11,9 @@ export class LoadAllPostsController implements Controller<LoadAllPostsController
         filters[key] = request[key]
       }
       const posts = await this.loadPosts.load(filters)
-      return posts.length ? serverSuccess(posts) : noContent()
+      return posts.posts.length ? serverSuccess(posts) : noContent()
     } catch (error) {
+      console.error(error)
       return serverError(error)
     }
   }
