@@ -116,9 +116,9 @@ describe('PostMongoRepository', () => {
         { postedBy: new ObjectID(), ...post },
         { ...mockPostsParams()[1] }
       ])
-      const posts = await sut.loadAll({ doors: [res.ops[0].carBeingSold.doors, 6] })
-      expect(posts.length).toBe(2)
-      expect(posts[0].carBeingSold.doors).toBe(4)
+      const posts = await sut.loadAll({ doors: [res.ops[0].carBeingSold.doors] })
+      expect(posts.length).toBe(1)
+      expect(posts[0].carBeingSold.doors).toBe(res.ops[0].carBeingSold.doors)
     })
 
     test('Should skip posts if skip parameter was given', async () => {

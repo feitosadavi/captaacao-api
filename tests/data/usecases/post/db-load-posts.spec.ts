@@ -43,10 +43,28 @@ describe('DbLoadAllPosts UseCase', () => {
     expect(loadAllSpy).toHaveBeenCalledWith({ postedBy: 'any_account_id' })
   })
 
+  test('Should LoadAllPostsRepository load filters if param is set', async () => {
+    const { sut } = makeSut()
+    const res = await sut.load({ postedBy: 'any_account_id', loadFilterOptions: true })
+    const posts = mockPostsModel()
+    expect(res).toEqual({
+      posts,
+      filterOptions: {
+        brand: ['any_brand', 'other_brand'],
+        model: ['any_model', 'other_model'],
+        fuel: ['any_fuel', 'other_fuel'],
+        color: ['any_color', 'other_color'],
+        doors: [4, 2],
+        steering: ['any_steering', 'other_steering'],
+        year: ['any_year', 'other_year']
+      }
+    })
+  })
+
   test('Should return posts on LoadAllPostsRepository success', async () => {
     const { sut } = makeSut()
     const posts = await sut.load({})
-    expect(posts).toEqual(mockPostsModel())
+    expect(posts).toEqual({ posts: mockPostsModel() })
   })
 
   test('Should throw if LoadAllPostsRepository throws', async () => {

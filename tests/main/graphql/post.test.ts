@@ -60,17 +60,19 @@ describe('Post GraphQL', () => {
   })
 
   describe('Posts Query', () => {
-    test('Should return accounts on success', async () => {
+    test('Should return all posts on success', async () => {
       const password = await hash('123', 12)
       const accountId = await (await accountsCollection.insertOne({ password, ...mockAccountParams() })).insertedId
       await insertPost(accountId)
       const query = `query {
         posts {
-          id
-          title
-          postedBy
-          carBeingSold {
-            brand
+          posts {
+            id
+            title
+            postedBy
+            carBeingSold {
+              brand
+            }
           }
         }
       }`
@@ -78,7 +80,7 @@ describe('Post GraphQL', () => {
         .post('/graphql')
         .send({ query })
       expect(res.status).toBe(200)
-      const { posts } = res.body.data
+      const { posts: { posts } } = res.body.data
       expect(posts[0].id).toBeTruthy()
       expect(posts[0].title).toBe('any_title')
       expect(posts[0].postedBy).toBe(accountId.toString())
@@ -92,11 +94,13 @@ describe('Post GraphQL', () => {
       await insertPost(accountId)
       const query = `query {
         posts (skip: 1){
-          id
-          title
-          postedBy
-          carBeingSold {
-            brand
+          posts {
+            id
+            title
+            postedBy
+            carBeingSold {
+              brand
+            }
           }
         }
       }`
@@ -104,7 +108,7 @@ describe('Post GraphQL', () => {
         .post('/graphql')
         .send({ query })
       expect(res.status).toBe(200)
-      const { posts } = res.body.data
+      const { posts: { posts } } = res.body.data
       expect(posts.length).toBe(1)
       expect(posts[0].id).toBeTruthy()
       expect(posts[0].title).toBe('any_title')
@@ -118,11 +122,13 @@ describe('Post GraphQL', () => {
       await insertPost(accountId)
       const query = `query {
         posts (postedBy: "${accountId}"){
-          id
-          title
-          postedBy
-          carBeingSold {
-            brand
+          posts {
+            id
+            title
+            postedBy
+            carBeingSold {
+              brand
+            }
           }
         }
       }`
@@ -130,7 +136,7 @@ describe('Post GraphQL', () => {
         .post('/graphql')
         .send({ query })
       expect(res.status).toBe(200)
-      const { posts } = res.body.data
+      const { posts: { posts } } = res.body.data
       expect(posts[0].id).toBeTruthy()
       expect(posts[0].title).toBe('any_title')
       expect(posts[0].postedBy).toBe(accountId.toString())
@@ -143,11 +149,13 @@ describe('Post GraphQL', () => {
       await insertPost(accountId)
       const query = `query {
         posts (brand: ["any_brand", "other_brand"]){
-          id
-          title
-          postedBy
-          carBeingSold {
-            brand
+          posts {
+            id
+            title
+            postedBy
+            carBeingSold {
+              brand
+            }
           }
         }
       }`
@@ -155,7 +163,7 @@ describe('Post GraphQL', () => {
         .post('/graphql')
         .send({ query })
       expect(res.status).toBe(200)
-      const { posts } = res.body.data
+      const { posts: { posts } } = res.body.data
       expect(posts[0].id).toBeTruthy()
       expect(posts[0].title).toBe('any_title')
       expect(posts[0].postedBy).toBe(accountId.toString())
@@ -168,11 +176,13 @@ describe('Post GraphQL', () => {
       await insertPost(accountId)
       const query = `query {
         posts(search: "") {
-          id
-          title
-          postedBy
-          carBeingSold {
-            brand
+          posts {
+            id
+            title
+            postedBy
+            carBeingSold {
+              brand
+            }
           }
         }
       }`
@@ -180,15 +190,52 @@ describe('Post GraphQL', () => {
         .post('/graphql')
         .send({ query })
       expect(res.status).toBe(200)
-      const { posts } = res.body.data
+      const { posts: { posts } } = res.body.data
       expect(posts[0].id).toBeTruthy()
       expect(posts[0].title).toBe('any_title')
       expect(posts[0].postedBy).toBe(accountId.toString())
       expect(posts[0].carBeingSold.brand).toBe('any_brand')
     })
+
+    test('Should load filter options if loadFilterOptions params was passed', async () => {
+      const password = await hash('123', 12)
+      const accountId = await (await accountsCollection.insertOne({ password, ...mockAccountParams() })).insertedId
+      await insertPost(accountId)
+      const query = `query {
+        posts (loadFilterOptions: true) {
+          posts {
+            id
+            title
+            postedBy
+            carBeingSold {
+              brand
+            }
+          }
+          filterOptions {
+            brand
+            model
+            fuel
+            year
+            color
+            doors
+            steering
+          }
+        }
+      }`
+      const res = await request(app)
+        .post('/graphql')
+        .send({ query })
+      expect(res.status).toBe(200)
+      const { posts: { posts, filterOptions } } = res.body.data
+      expect(posts[0].id).toBeTruthy()
+      expect(posts[0].title).toBe('any_title')
+      expect(posts[0].postedBy).toBe(accountId.toString())
+      expect(posts[0].carBeingSold.brand).toBe('any_brand')
+      expect(filterOptions.brand).toEqual(['any_brand'])
+    })
   })
 
-  describe('Account Query', () => {
+  describe('Post Query', () => {
     test('Should return accounts on success', async () => {
       const password = await hash('123', 12)
       const accountId = await (await accountsCollection.insertOne({ password, ...mockAccountParams() })).insertedId

@@ -47,12 +47,12 @@ describe('LoadPostController', () => {
   test('Should 200 on success', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle({})
-    expect(httpResponse).toEqual(serverSuccess(mockPostsModel()))
+    expect(httpResponse).toEqual(serverSuccess({ posts: mockPostsModel() }))
   })
 
   test('Should 204 LoadAllPosts returns empty', async () => {
     const { sut, loadPostsStub } = makeSut()
-    jest.spyOn(loadPostsStub, 'load').mockReturnValueOnce(Promise.resolve([]))
+    jest.spyOn(loadPostsStub, 'load').mockReturnValueOnce(Promise.resolve({ posts: [] }))
     const httpResponse = await sut.handle({})
     expect(httpResponse).toEqual(noContent())
   })
