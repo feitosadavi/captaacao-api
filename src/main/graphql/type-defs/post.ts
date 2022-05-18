@@ -48,8 +48,8 @@ export default gql`
 
   input CarBeingSold {
     thumb: String!
-    price: Int!
-    fipePrice: Int!
+    price: Float!
+    fipePrice: Float!
 
     brand: String!
     model: String!
@@ -83,7 +83,7 @@ export default gql`
 
   type Car {
     thumb: String!
-    price: Int!
+    price: Float!
     fipePrice: Int!
     brand: String!
     model: String!
