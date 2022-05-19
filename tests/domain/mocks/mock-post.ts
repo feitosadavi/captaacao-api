@@ -1,5 +1,6 @@
 import { PostModel } from '@/domain/models'
 import { AddPost } from '@/domain/usecases'
+import { mockAccountModel } from './mock-account'
 
 export const mockPostsModel = (): PostModel[] => {
   return [{
@@ -9,7 +10,7 @@ export const mockPostsModel = (): PostModel[] => {
     photos: ['any_photo_link.com', 'other_photo_link.com'],
     createdAt: new Date(),
     modifiedAt: new Date(),
-    postedBy: 'any_account_id',
+    postedBy: mockAccountModel(),
     status: true,
     active: true,
     views: 0,
@@ -43,7 +44,7 @@ export const mockPostsModel = (): PostModel[] => {
     photos: ['other_photo_link.com', 'other_photo_link.com'],
     createdAt: new Date(),
     modifiedAt: new Date(),
-    postedBy: 'other_account_id',
+    postedBy: mockAccountModel(),
     status: true,
     active: true,
     views: 0,
