@@ -7,6 +7,7 @@ import { mockPostsRepositoryParams } from '@tests/data/mocks'
 
 describe('PostMongoRepository', () => {
   let postsCollection: Collection
+  let accountsCollection: Collection
 
   // antes e depois de cada teste de integração, precisamos conectar e desconectar do banco
   beforeAll(async () => {
@@ -20,7 +21,9 @@ describe('PostMongoRepository', () => {
   // removo todos os registros da tabela antes de cada teste. Para não populuir as tabelas
   beforeEach(async () => {
     postsCollection = await MongoHelper.getCollection('posts')
+    accountsCollection = await MongoHelper.getCollection('accounts')
     await postsCollection.deleteMany({})
+    await accountsCollection.deleteMany({})
   })
 
   const makeSut = (): PostMongoRepository => {
@@ -142,11 +145,13 @@ describe('PostMongoRepository', () => {
 
   describe('loadById()', () => {
     test('Should return a post on success', async () => {
-      const res = await postsCollection.insertOne({ ...mockPostsParams()[0] })
+      const accountId = (await accountsCollection.insertOne({ name: 'any_name' })).insertedId
+      const res = await postsCollection.insertOne({ ...mockPostsRepositoryParams()[0], postedBy: accountId })
       const sut = makeSut()
       const post = await sut.loadById(res.ops[0]._id)
       expect(post).toBeTruthy()
       expect(post.id).toBeTruthy()
+      expect(post.postedBy.name).toBe('any_name')
     })
   })
 
