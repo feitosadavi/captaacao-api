@@ -1,3 +1,5 @@
+import { AccountModel } from './account'
+
 export type PostModel = {
   id: string
   title: string
@@ -6,7 +8,7 @@ export type PostModel = {
 
   createdAt: Date
   modifiedAt: Date
-  postedBy: string
+  postedBy: AccountModel
   status: boolean
   active: boolean
 

@@ -32,8 +32,27 @@ export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepos
 
   async loadById ({ id }: LoadPostByIdRepository.Params): LoadPostByIdRepository.Result {
     const postsCollection = await MongoHelper.getCollection('posts')
-    const post = await postsCollection.findOne({ _id: new ObjectID(id) })
-    return post && MongoHelper.map(post)
+    // const post = await postsCollection.findOne({ _id: new ObjectID(id) })
+    const post = await postsCollection.aggregate([
+      {
+        $match: { $expr: { $eq: ['$_id', new ObjectID(id)] } }
+      },
+      {
+        $lookup: {
+          from: 'accounts',
+          localField: 'postedBy',
+          foreignField: '_id',
+          as: 'postedBy'
+        }
+      },
+      {
+        $addFields: {
+          postedBy: { $arrayElemAt: ['$postedBy', 0] }
+        }
+      }
+    ]).toArray()
+    console.log(post[0])
+    return post[0] && MongoHelper.map(post[0])
   }
 
   async deletePost ({ id }: DeletePost.Params): DeletePost.Result {
