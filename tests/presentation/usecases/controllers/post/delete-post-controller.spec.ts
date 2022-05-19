@@ -4,7 +4,7 @@ import { DeletePostController } from '@/presentation/controllers'
 import { unauthorized } from '@/presentation/helpers'
 
 import { mockDeletePost, mockLoadPostById } from '@tests/presentation/mocks'
-import { mockPostsModel } from '@tests/domain/mocks'
+import { mockAccountModel, mockPostsModel, throwError } from '@tests/domain/mocks'
 
 type SutTypes = {
   sut: DeletePostController
@@ -23,7 +23,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-const mockRequest = (): DeletePostController.Request => ({ id: 'any_id', accountId: 'any_account_id' })
+const mockRequest = (): DeletePostController.Request => ({ id: 'any_id', accountId: 'any_id' })
 
 describe('DeletePostController', () => {
   test('Should call loadPostById with correct params', async () => {
@@ -36,7 +36,7 @@ describe('DeletePostController', () => {
   test('Should return 401 if post id is different from the account id', async () => {
     const { sut, loadPostByIdStub } = makeSut()
     const loadPostByIdStubSpy = jest.spyOn(loadPostByIdStub, 'load')
-    loadPostByIdStubSpy.mockReturnValueOnce(Promise.resolve({ ...mockPostsModel()[0], postedBy: 'any_account_id' }))
+    loadPostByIdStubSpy.mockReturnValueOnce(Promise.resolve({ ...mockPostsModel()[0], postedBy: mockAccountModel() }))
     const response = await sut.handle({ id: 'any_id', accountId: 'different_account_id' })
     expect(response).toEqual(unauthorized())
   })
@@ -51,7 +51,7 @@ describe('DeletePostController', () => {
   test('Should return 500 if deletePost throws', async () => {
     const { sut, deletePostStub } = makeSut()
     const deletePostStubSpy = jest.spyOn(deletePostStub, 'delete')
-    deletePostStubSpy.mockReturnValueOnce(Promise.reject(new Error()))
+    deletePostStubSpy.mockImplementationOnce(throwError)
     const response = await sut.handle(mockRequest())
     expect(response).toEqual(serverError(new Error()))
   })
