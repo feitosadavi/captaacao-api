@@ -1,8 +1,9 @@
 import request from 'supertest'
 import { Express } from 'express'
 
-import { multipartParser } from '@/main/middlewares'
+import { MultipartParser } from '@/presentation/middlewares'
 import { setupApp } from '@/main/config/app'
+import { adaptMiddleware } from '@/main/adapters'
 
 describe('MultipartParser Middleware', () => {
   let app: Express
@@ -17,7 +18,8 @@ describe('MultipartParser Middleware', () => {
       boolean: 'true'
     }
 
-    app.post('/test_multipart_parser', multipartParser, (req, res) => {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    app.post('/test_multipart_parser', adaptMiddleware(new MultipartParser()), (req, res) => {
       res.json({
         parsed: req.body
       })

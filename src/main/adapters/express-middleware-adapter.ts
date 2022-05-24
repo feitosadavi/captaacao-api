@@ -6,10 +6,11 @@ export const adaptMiddleware = (middleware: Middleware) => {
     const request = { // adapta o request
       accessToken: req.headers?.['x-access-token'],
       id: req.params,
-      ...(req.headers || {})
+      headers: { ...(req.headers || {}) },
+      body: req.body
     }
     const httpResponse = await middleware.handle(request)
-    if (httpResponse.statusCode === 200) {
+    if (httpResponse.statusCode >= 200 && httpResponse.statusCode < 300) {
       Object.assign(req, httpResponse.body) // coloco o body da resposta, no caso o accountId, na requisição
       next() // passa pra frente
     } else {
