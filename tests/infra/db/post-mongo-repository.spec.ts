@@ -42,14 +42,17 @@ describe('PostMongoRepository', () => {
   describe('loadAll()', () => {
     test('Should load all posts with none skip parameters has been passed', async () => {
       const sut = makeSut()
+      const accountId = (await accountsCollection.insertOne({ name: 'any_name' })).insertedId
       await postsCollection.insertMany([
-        { ...mockPostsParams()[0] },
-        { ...mockPostsParams()[1] }
+        { ...mockPostsRepositoryParams()[0], postedBy: accountId },
+        { ...mockPostsRepositoryParams()[1], postedBy: accountId }
       ])
       const posts = await sut.loadAll({})
       expect(posts.length).toBe(2)
       expect(posts[0].title).toBe('any_title')
       expect(posts[1].title).toBe('other_title')
+      expect(posts[0].postedBy.name).toBe('any_name')
+      expect(posts[1].postedBy.name).toBe('any_name')
     })
 
     test('Should load all posts given the filter', async () => {
