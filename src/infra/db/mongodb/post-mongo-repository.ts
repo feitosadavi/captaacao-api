@@ -26,7 +26,24 @@ export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepos
     if (postedBy) andQuery.push({ postedBy: new ObjectID(postedBy) })
     if (search) andQuery.push({ $text: { $search: search } })
     const query = andQuery.length > 0 ? { $and: andQuery } : {}
-    const posts = await postsCollection.find(query).skip(skip ?? 0).toArray()
+    const posts = await postsCollection.aggregate([
+      {
+        $match: { ...query }
+      },
+      {
+        $lookup: {
+          from: 'accounts',
+          localField: 'postedBy',
+          foreignField: '_id',
+          as: 'postedBy'
+        }
+      },
+      {
+        $addFields: {
+          postedBy: { $arrayElemAt: ['$postedBy', 0] }
+        }
+      }
+    ]).skip(skip ?? 0).toArray()
     return posts && MongoHelper.mapCollection(posts)
   }
 
@@ -51,8 +68,8 @@ export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepos
         }
       }
     ]).toArray()
-    console.log(post[0])
-    return post[0] && MongoHelper.map(post[0])
+    const postedBy = MongoHelper.map(post[0].postedBy)
+    return post[0] && MongoHelper.map({ ...post[0], postedBy })
   }
 
   async deletePost ({ id }: DeletePost.Params): DeletePost.Result {
