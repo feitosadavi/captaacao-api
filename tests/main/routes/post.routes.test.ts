@@ -76,27 +76,8 @@ describe('Post Routes', () => {
     fileName: 'any_file_2_name',
     buffer: Buffer.from(''),
     mimeType: 'any_mime_type'
-  }])
-  const makeCarBeingSold = (): string => JSON.stringify({
-    price: 999999,
-    fipePrice: 111111,
-    brand: 'any_brand',
-    model: 'any_model',
-    year: 'any_year',
-    color: 'any_color',
-    doors: 4,
-    steering: 'any_steering',
-    kmTraveled: 100000,
-    carItems: [
-      'airbag',
-      'alarme',
-      'ar quente',
-      'teto solar'
-    ],
-    licensePlate: 'any_license',
-    sold: false,
-    fastSale: true
-  })
+    // eslint-disable-next-line @typescript-eslint/indent
+    }])
 
   describe('POST /post', () => {
     test('Should return 403 on add post without accessToken ', async () => {
@@ -104,10 +85,48 @@ describe('Post Routes', () => {
         .post('/api/post')
         .field('title', 'any_title')
         .field('description', 'any_description')
+        .field('carItems', 'any_item, other_item')
+        .field('model', 'any_model')
+        .field('brand', 'any_brand')
+        .field('year', 'any_year')
+        .field('color', 'any_color')
+        .field('doors', '0')
+        .field('year', '1999')
+        .field('fuel', 'any_fuel')
+        .field('steering', 'any_steering')
+        .field('licensePlate', 'any_licensePlate')
+        .field('sold', 'false')
+        .field('fastSale', 'false')
+        .field('price', '100.50')
         .field('photos', makePhotos())
-        .field('carBeingSold', makeCarBeingSold())
         .attach('photos', file, { filename: 'test_img-1_post' })
         .attach('photos', file, { filename: 'test_img_2_post' })
+        .set('Content-Type', 'multipart/form-data')
+        .expect(403)
+    })
+
+    test('Should return 403 on add post without accessToken ', async () => {
+      await request(app)
+        .post('/api/post')
+        .field('title', 'any_title')
+        .field('description', 'any_description')
+        .field('carItems', 'any_item, other_item')
+        .field('model', 'any_model')
+        .field('brand', 'any_brand')
+        .field('year', 'any_year')
+        .field('color', 'any_color')
+        .field('doors', '0')
+        .field('year', '1999')
+        .field('fuel', 'any_fuel')
+        .field('steering', 'any_steering')
+        .field('licensePlate', 'any_licensePlate')
+        .field('sold', 'false')
+        .field('fastSale', 'false')
+        .field('price', '100.50')
+        .field('photos', makePhotos())
+        .attach('photos', file, { filename: 'test_img-1_post' })
+        .attach('photos', file, { filename: 'test_img_2_post' })
+        .set('Content-Type', 'multipart/form-data')
         .expect(403)
     })
 
@@ -116,16 +135,30 @@ describe('Post Routes', () => {
       const id = inserteAccount.ops[0]._id
       const accessToken = sign({ id }, env.secret)
       await updateAccountToken(id, accessToken)
-      await request(app)
+      const res = await request(app)
         .post('/api/post')
         .set('x-access-token', accessToken) // na requisição, eu coloco o accessToken nos headers
         .field('title', 'any_title')
         .field('description', 'any_description')
+        .field('carItems', '[any_item, other_item]')
+        .field('model', 'any_model')
+        .field('brand', 'any_brand')
+        .field('year', 'any_year')
+        .field('color', 'any_color')
+        .field('doors', '0')
+        .field('year', '1999')
+        .field('fuel', 'any_fuel')
+        .field('steering', 'any_steering')
+        .field('licensePlate', 'any_licensePlate')
+        .field('sold', 'false')
+        .field('fastSale', 'false')
+        .field('price', '100.50')
         .field('photos', makePhotos())
-        .field('carBeingSold', makeCarBeingSold())
-        .attach('photos', file, { filename: 'test_img-1_post.png' })
-        .attach('photos', file, { filename: 'test_img_2_post.png' })
-        .expect(204)
+        .attach('photos', file, { filename: 'test_img-1_post' })
+        .attach('photos', file, { filename: 'test_img_2_post' })
+        .set('Content-Type', 'multipart/form-data')
+
+      expect(res.body).toEqual({})
     })
   })
 })

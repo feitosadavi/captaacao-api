@@ -13,13 +13,15 @@ export class AddPostController implements Controller<AddPostController.Request> 
     try {
       const error = this.validation.validate(request)
       if (error) return badRequest(error)
-      const { accountId, clientFiles, title, description, ...carBeingSold } = request
+      const { clientFiles, accountId, ...params } = request
+      const { title, description, ...carBeingSold } = params
 
       const createdAt = new Date()
       const modifiedAt = new Date()
       createdAt.toLocaleString('pt-BR')
       modifiedAt.toLocaleString('pt-BR')
-      const params = {
+
+      await this.addPost.add({
         title,
         description,
         photos: clientFiles,
@@ -30,9 +32,7 @@ export class AddPostController implements Controller<AddPostController.Request> 
         carBeingSold,
         createdAt: new Date(),
         modifiedAt: new Date()
-      }
-
-      await this.addPost.add(params)
+      })
       return noContent()
     } catch (error) {
       console.error(error)
