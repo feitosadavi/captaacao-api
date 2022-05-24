@@ -71,14 +71,34 @@ export default gql`
     title: String!
     photos: [String!]
     description: String!
+    postedBy: Account!
 
     carBeingSold: Car
 
     createdAt: DateTime
     modifiedAt: DateTime
-    postedBy: String
     status: Boolean
     active: Boolean
+  }
+
+  type Account {
+    id: ID
+    name: String
+    profiles: [String]
+    profilePhoto: String
+    doc: String
+    birthDate: String
+    email: String
+    phone: String
+    adress: Adress
+
+    accessToken: String
+    code: Code
+    canUseCookies: Boolean
+    status: Boolean
+    timeout: Int
+    profileViews: Int
+    online: Boolean
   }
 
   type Car {
