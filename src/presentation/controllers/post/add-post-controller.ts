@@ -11,25 +11,31 @@ export class AddPostController implements Controller<AddPostController.Request> 
 
   async handle (request: AddPostController.Request): Promise<HttpResponse> {
     try {
-      const error = this.validation.validate(request)
-      if (error) return badRequest(error)
-      const { clientFiles, accountId, ...params } = request
-      const { title, description, ...carBeingSold } = params
+      const { accountId, data, clientFiles } = request
+      const params = JSON.parse(data as unknown as any)
 
+      const error = this.validation.validate(params)
+      if (error) return badRequest(error)
+
+      console.log(params)
+
+      const { title, description, ...carBeingSold } = params
       const createdAt = new Date()
       const modifiedAt = new Date()
       createdAt.toLocaleString('pt-BR')
       modifiedAt.toLocaleString('pt-BR')
-
       await this.addPost.add({
-        title,
-        description,
-        photos: clientFiles,
+        title: title,
+        description: description,
+        photos: clientFiles as any,
         postedBy: accountId,
         status: true,
         active: true,
         views: 0,
-        carBeingSold,
+        carBeingSold: {
+          ...carBeingSold,
+          sold: false
+        },
         createdAt: new Date(),
         modifiedAt: new Date()
       })
@@ -42,25 +48,18 @@ export class AddPostController implements Controller<AddPostController.Request> 
 }
 
 export namespace AddPostController {
-  type ClientFiles = {
-    clientFiles?: Array<{
-      fileName: string
-      buffer: Buffer
-      mimeType: string
-    }>
-  }
-  export type Request = Omit<AddPost.Params,
-    'photos' |
+  type Data = Omit<AddPost.Params,
   'status' |
   'active' |
   'views' |
+  'photos' |
   'postedBy' |
   'createdAt' |
-    'modifiedAt' |
-    'carBeingSold'
-  > & { accountId: string } & ClientFiles & {
-    price: number
-    fipePrice: number
+  'modifiedAt' |
+  'carBeingSold'
+    > & {
+      price: number
+      fipePrice: number
 
     brand: string
     model: string
@@ -70,11 +69,20 @@ export namespace AddPostController {
     steering: string
     fuel: string
 
-    carItems: string[] // airbag, alarme, etc
+    carItems: string[]
     kmTraveled: number
 
     licensePlate: string
-    sold: boolean
     fastSale: boolean
+  }
+  // eslint-disable-next-line @typescript-eslint/array-type
+  export type Request = {
+    data: Data
+    accountId: string
+    clientFiles?: Array<{
+      fileName: string
+      buffer: Buffer
+      mimeType: string
+    }>
   }
 }

@@ -5,9 +5,7 @@ export const makeAddPostValidation = (): ValidationComposite => {
   const validations: Validation[] = []
 
   for (const field of [
-    'title',
-    'photos',
-    'description'
+    'title'
   ]) {
     validations.push(new RequiredFieldValidation(field))
   }

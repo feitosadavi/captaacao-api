@@ -13,13 +13,13 @@ export default gql`
       steering: [String!]
       fuel: [String!]
       doors: [Int!]
-    ) : PostsResult!
+    ) : PostsResult
     post (id: String!): Post
   }
 
   type PostsResult {
     posts: [Post!]
-    filterOptions: FilterOptions!
+    filterOptions: FilterOptions
   }
 
   type FilterOptions {

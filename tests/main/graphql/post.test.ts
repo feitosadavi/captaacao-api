@@ -59,6 +59,19 @@ describe('Post GraphQL', () => {
     await postsCollection.deleteMany({})
   })
 
+  const QUERY_FIELDS = `
+    posts {
+      id
+      title
+      postedBy {
+        name
+      }
+      carBeingSold {
+        brand
+      }
+    }
+  `
+
   describe('Posts Query', () => {
     test('Should return all posts on success', async () => {
       const password = await hash('123', 12)
@@ -66,14 +79,7 @@ describe('Post GraphQL', () => {
       await insertPost(accountId)
       const query = `query {
         posts {
-          posts {
-            id
-            title
-            postedBy
-            carBeingSold {
-              brand
-            }
-          }
+          ${QUERY_FIELDS}
         }
       }`
       const res = await request(app)
@@ -83,7 +89,7 @@ describe('Post GraphQL', () => {
       const { posts: { posts } } = res.body.data
       expect(posts[0].id).toBeTruthy()
       expect(posts[0].title).toBe('any_title')
-      expect(posts[0].postedBy).toBe(accountId.toString())
+      expect(posts[0].postedBy.name).toBe('any_name')
       expect(posts[0].carBeingSold.brand).toBe('any_brand')
     })
 
@@ -94,14 +100,7 @@ describe('Post GraphQL', () => {
       await insertPost(accountId)
       const query = `query {
         posts (skip: 1){
-          posts {
-            id
-            title
-            postedBy
-            carBeingSold {
-              brand
-            }
-          }
+          ${QUERY_FIELDS}
         }
       }`
       const res = await request(app)
@@ -112,7 +111,7 @@ describe('Post GraphQL', () => {
       expect(posts.length).toBe(1)
       expect(posts[0].id).toBeTruthy()
       expect(posts[0].title).toBe('any_title')
-      expect(posts[0].postedBy).toBe(accountId.toString())
+      expect(posts[0].postedBy.name).toBe('any_name')
       expect(posts[0].carBeingSold.brand).toBe('any_brand')
     })
 
@@ -122,14 +121,7 @@ describe('Post GraphQL', () => {
       await insertPost(accountId)
       const query = `query {
         posts (postedBy: "${accountId}"){
-          posts {
-            id
-            title
-            postedBy
-            carBeingSold {
-              brand
-            }
-          }
+          ${QUERY_FIELDS}
         }
       }`
       const res = await request(app)
@@ -139,7 +131,7 @@ describe('Post GraphQL', () => {
       const { posts: { posts } } = res.body.data
       expect(posts[0].id).toBeTruthy()
       expect(posts[0].title).toBe('any_title')
-      expect(posts[0].postedBy).toBe(accountId.toString())
+      expect(posts[0].postedBy.name).toBe('any_name')
       expect(posts[0].carBeingSold.brand).toBe('any_brand')
     })
 
@@ -149,14 +141,7 @@ describe('Post GraphQL', () => {
       await insertPost(accountId)
       const query = `query {
         posts (brand: ["any_brand", "other_brand"]){
-          posts {
-            id
-            title
-            postedBy
-            carBeingSold {
-              brand
-            }
-          }
+          ${QUERY_FIELDS}
         }
       }`
       const res = await request(app)
@@ -166,7 +151,7 @@ describe('Post GraphQL', () => {
       const { posts: { posts } } = res.body.data
       expect(posts[0].id).toBeTruthy()
       expect(posts[0].title).toBe('any_title')
-      expect(posts[0].postedBy).toBe(accountId.toString())
+      expect(posts[0].postedBy.name).toBe('any_name')
       expect(posts[0].carBeingSold.brand).toBe('any_brand')
     })
 
@@ -176,14 +161,7 @@ describe('Post GraphQL', () => {
       await insertPost(accountId)
       const query = `query {
         posts(search: "") {
-          posts {
-            id
-            title
-            postedBy
-            carBeingSold {
-              brand
-            }
-          }
+          ${QUERY_FIELDS}
         }
       }`
       const res = await request(app)
@@ -193,7 +171,7 @@ describe('Post GraphQL', () => {
       const { posts: { posts } } = res.body.data
       expect(posts[0].id).toBeTruthy()
       expect(posts[0].title).toBe('any_title')
-      expect(posts[0].postedBy).toBe(accountId.toString())
+      expect(posts[0].postedBy.name).toBe('any_name')
       expect(posts[0].carBeingSold.brand).toBe('any_brand')
     })
 
@@ -203,14 +181,7 @@ describe('Post GraphQL', () => {
       await insertPost(accountId)
       const query = `query {
         posts (loadFilterOptions: true) {
-          posts {
-            id
-            title
-            postedBy
-            carBeingSold {
-              brand
-            }
-          }
+          ${QUERY_FIELDS}
           filterOptions {
             brand
             model
@@ -229,7 +200,7 @@ describe('Post GraphQL', () => {
       const { posts: { posts, filterOptions } } = res.body.data
       expect(posts[0].id).toBeTruthy()
       expect(posts[0].title).toBe('any_title')
-      expect(posts[0].postedBy).toBe(accountId.toString())
+      expect(posts[0].postedBy.name).toBe('any_name')
       expect(posts[0].carBeingSold.brand).toBe('any_brand')
       expect(filterOptions.brand).toEqual(['any_brand'])
     })
@@ -241,10 +212,12 @@ describe('Post GraphQL', () => {
       const accountId = await (await accountsCollection.insertOne({ password, ...mockAccountParams() })).insertedId
       const postId = await (await insertPost(accountId)).insertedId
       const query = `query {
-        post (id: "${postId}") {
+        post (id: "${String(postId)}") {
           id
           title
-          postedBy
+          postedBy {
+            name
+          }
           carBeingSold {
             brand
           }
@@ -257,7 +230,7 @@ describe('Post GraphQL', () => {
       const { post } = res.body.data
       expect(post.id).toBeTruthy()
       expect(post.title).toBe('any_title')
-      expect(post.postedBy).toBe(accountId.toString())
+      expect(post.postedBy.name).toBe('any_name')
       expect(post.carBeingSold.brand).toBe('any_brand')
     })
   })

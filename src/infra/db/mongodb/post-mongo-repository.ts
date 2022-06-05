@@ -50,6 +50,7 @@ export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepos
   async loadById ({ id }: LoadPostByIdRepository.Params): LoadPostByIdRepository.Result {
     const postsCollection = await MongoHelper.getCollection('posts')
     // const post = await postsCollection.findOne({ _id: new ObjectID(id) })
+    console.log({ id })
     const post = await postsCollection.aggregate([
       {
         $match: { $expr: { $eq: ['$_id', new ObjectID(id)] } }
@@ -68,6 +69,7 @@ export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepos
         }
       }
     ]).toArray()
+    console.log(post[0])
     const postedBy = MongoHelper.map(post[0].postedBy)
     return post[0] && MongoHelper.map({ ...post[0], postedBy })
   }

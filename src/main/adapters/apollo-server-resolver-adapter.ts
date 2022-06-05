@@ -8,6 +8,7 @@ export const adaptResolver = async (controller: Controller, args?: any, context?
   }
   if (context?.req?.accountId) request.accountId = context?.req?.accountId
   const httpResponse = await controller.handle(request)
+  console.log(httpResponse)
   switch (httpResponse.statusCode) {
     case 200:
     case 204: return httpResponse.body

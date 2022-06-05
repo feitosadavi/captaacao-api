@@ -6,8 +6,10 @@ import cors from 'cors'
 
 export const setupApp = async (): Promise<Express> => {
   const app = express()
-  app.use(express.json())
+  // app.use(express.json())
+  // app.use(express.urlencoded({ extended: true }))
   app.use(cors({ origin: '*' }))
+
   setupRoutes(app)
   const server = setupApolloServer()
   await server.start()

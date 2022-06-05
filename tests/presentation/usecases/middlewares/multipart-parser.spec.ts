@@ -15,21 +15,29 @@ describe('MultipartParser Middleware', () => {
       string: 'string',
       array: '[item1, item2]',
       number: '0',
-      boolean: 'true'
+      boolean: 'true',
+      nested: {
+        number: '123',
+        numArr: '[1, 2, 3]'
+      }
     }
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     app.post('/test_multipart_parser', adaptMiddleware(new MultipartParser()), (req, res) => {
       res.json({
-        parsed: req.body
+        parsed: req
       })
     })
-    const res = await request(app).post('/test_multipart_parser').send(data)
+    const res = await request(app).post('/test_multipart_parser').field('queijo', '1')
     expect(res.body.parsed).toEqual({
       string: 'string',
       array: ['item1', 'item2'],
       number: 0,
-      boolean: true
+      boolean: true,
+      nested: {
+        number: 123,
+        numArr: [1, 2, 3]
+      }
     })
   })
 })

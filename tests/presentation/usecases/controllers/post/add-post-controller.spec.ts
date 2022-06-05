@@ -11,10 +11,12 @@ import { mockAddPost, mockValidation } from '@tests/presentation/mocks'
 const mockRequest = (): AddPostController.Request => {
   const { status, views, createdAt, modifiedAt, photos, postedBy, active, carBeingSold, ...request } = mockPostsParams()[0]
   return {
+    data: {
+      ...carBeingSold,
+      ...request
+    },
     accountId: postedBy,
-    clientFiles: photos,
-    ...carBeingSold,
-    ...request
+    clientFiles: photos
   }
 }
 
