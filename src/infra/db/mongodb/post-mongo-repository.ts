@@ -1,10 +1,10 @@
 import { ObjectID } from 'mongodb'
 
-import { AddPostRepository, LoadPostByIdRepository, LoadAllPostsRepository, DeletePostRepository } from '@/data/protocols'
+import { AddPostRepository, LoadPostByIdRepository, LoadAllPostsRepository, DeletePostRepository, UpdatePostRepository } from '@/data/protocols'
 import { MongoHelper } from '@/infra/db/mongodb'
 import { DeletePost } from '@/domain/usecases'
 
-export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepository, LoadPostByIdRepository, DeletePostRepository {
+export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepository, LoadPostByIdRepository, UpdatePostRepository, DeletePostRepository {
   async addPost (params: AddPostRepository.Params): AddPostRepository.Result {
     const postsCollection = await MongoHelper.getCollection('posts')
     await postsCollection.insertOne(params)
@@ -44,13 +44,17 @@ export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepos
         }
       }
     ]).skip(skip ?? 0).toArray()
+
+    // const p = posts.map(post => { post.postedBy = MongoHelper.map(post.postedBy); return post })
+
+    // console.log({ postedBy: p[0] })
+
     return posts && MongoHelper.mapCollection(posts)
   }
 
   async loadById ({ id }: LoadPostByIdRepository.Params): LoadPostByIdRepository.Result {
     const postsCollection = await MongoHelper.getCollection('posts')
     // const post = await postsCollection.findOne({ _id: new ObjectID(id) })
-    console.log({ id })
     const post = await postsCollection.aggregate([
       {
         $match: { $expr: { $eq: ['$_id', new ObjectID(id)] } }
@@ -69,9 +73,18 @@ export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepos
         }
       }
     ]).toArray()
-    console.log(post[0])
     const postedBy = MongoHelper.map(post[0].postedBy)
     return post[0] && MongoHelper.map({ ...post[0], postedBy })
+  }
+
+  async updatePost (params: UpdatePostRepository.Params): UpdatePostRepository.Result {
+    const postsCollection = await MongoHelper.getCollection('posts')
+    await postsCollection.updateOne({ _id: params.id },
+      {
+        $set: { ...params.fields }
+      }
+    )
+    return true
   }
 
   async deletePost ({ id }: DeletePost.Params): DeletePost.Result {
