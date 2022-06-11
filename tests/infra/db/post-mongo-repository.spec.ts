@@ -158,6 +158,24 @@ describe('PostMongoRepository', () => {
     })
   })
 
+  describe('updateAccount()', () => {
+    test('Should update the post fields on updatePost success', async () => {
+      const sut = makeSut()
+
+      const res = await postsCollection.insertOne({
+        ...mockPostsParams()[0]
+      })
+      const fakePost = res.ops[0]
+      const result = await sut.updatePost({ id: fakePost._id, fields: { title: 'other_title', description: 'other_description' } })
+      expect(result).toBe(true)
+      const post = await postsCollection.findOne({ _id: fakePost._id })
+
+      expect(post).toBeTruthy()
+      expect(post.title).toBe('other_title')
+      expect(post.description).toBe('other_description')
+    })
+  })
+
   describe('deletePost()', () => {
     test('Should return true on success', async () => {
       const sut = makeSut()
