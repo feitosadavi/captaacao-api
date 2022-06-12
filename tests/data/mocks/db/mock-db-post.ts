@@ -1,7 +1,8 @@
 import {
   AddPostRepository,
   LoadPostByIdRepository,
-  LoadAllPostsRepository
+  LoadAllPostsRepository,
+  UpdatePostRepository
 } from '@/data/protocols'
 import { DeletePostRepository } from '@/data/protocols/db/post/delete-post-repository'
 import { mockPostsModel } from '@tests/domain/mocks'
@@ -31,6 +32,15 @@ export const mockLoadPostByIdRepository = (): LoadPostByIdRepository => {
     }
   }
   return new LoadPostByIdRepositoryStub()
+}
+
+export const mockUpdatePostRepository = (): UpdatePostRepository => {
+  class UpdatePostRepositoryStub implements UpdatePostRepository {
+    async updatePost (params: UpdatePostRepository.Params): UpdatePostRepository.Result {
+      return Promise.resolve(true)
+    }
+  }
+  return new UpdatePostRepositoryStub()
 }
 
 export const mockDeletePostRepository = (): DeletePostRepository => {

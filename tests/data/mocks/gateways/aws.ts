@@ -1,4 +1,4 @@
-import { UploadFile, UploadManyFiles } from '@/data/protocols'
+import { DeleteManyFiles, UploadFile, UploadManyFiles } from '@/data/protocols'
 
 export const mockUploadFileStub = (): UploadFile => {
   class UploadFileStub implements UploadFile {
@@ -16,4 +16,13 @@ export const mockUploadManyFilesStub = (): UploadManyFiles => {
     }
   }
   return new UploadManyFilesStub()
+}
+
+export const mockDeleteManyFilesStub = (): DeleteManyFiles => {
+  class DeleteManyFilesStub implements DeleteManyFiles {
+    async deleteMany (input: DeleteManyFiles.Input): Promise<void> {
+      return await null
+    }
+  }
+  return new DeleteManyFilesStub()
 }
