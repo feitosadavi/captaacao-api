@@ -1,5 +1,5 @@
 import { PostModel } from '@/domain/models'
-import { AddPost, LoadPostById, LoadAllPosts, DeletePost } from '@/domain/usecases'
+import { AddPost, LoadPostById, LoadAllPosts, DeletePost, UpdatePost } from '@/domain/usecases'
 
 import { mockPostsModel } from '@tests/domain/mocks'
 
@@ -28,6 +28,15 @@ export const mockLoadPostById = (): LoadPostById => {
     }
   }
   return new LoadPostByIdStub()
+}
+
+export const mockUpdatePost = (): UpdatePost => {
+  class UpdatePostStub implements UpdatePost {
+    async update (): Promise<boolean> {
+      return Promise.resolve(true)
+    }
+  }
+  return new UpdatePostStub()
 }
 
 export const mockDeletePost = (): DeletePost => {
