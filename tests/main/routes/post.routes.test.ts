@@ -1,5 +1,5 @@
 
-import { Collection, InsertOneWriteOpResult } from 'mongodb'
+import { Collection, InsertOneWriteOpResult, ObjectId } from 'mongodb'
 import request from 'supertest'
 import { sign } from 'jsonwebtoken'
 
@@ -54,6 +54,15 @@ describe('Post Routes', () => {
       email: 'postlos@gmail.com',
       password: '123',
       profiles: ['admin']
+    })
+  }
+
+  const insertPost = async (postedBy: string): Promise<InsertOneWriteOpResult<any>> => {
+    return postsCollection.insertOne({
+      title: 'any_title',
+      description: 'any_description',
+      postedBy: new ObjectId(postedBy),
+      photos: ['photo1.jpg', 'photo2.jpg']
     })
   }
 
@@ -128,6 +137,43 @@ describe('Post Routes', () => {
         .set('Content-Type', 'multipart/form-data')
       expect(res.body).toEqual({})
       expect(res.status).toBe(204)
+    })
+  })
+
+  describe('POST /update-post/:id', () => {
+    test('Should return 403 on add post without accessToken ', async () => {
+      const accountId = (await insertAccount()).ops[0]._id
+      const postId = (await insertPost(accountId)).ops[0]._id
+
+      await request(app)
+        .post(`/api/update-post/${postId}`)
+        .field('data', JSON.stringify(mockData()))
+        .attach('photos', file, { filename: 'test_img-1_post' })
+        .attach('photos', file, { filename: 'test_img_2_post' })
+        .set('Content-Type', 'multipart/form-data')
+        .expect(403)
+    })
+
+    test('Should return 204 on add post success ', async () => {
+      const inserteAccount = await insertAccount()
+      const id = inserteAccount.ops[0]._id
+      const accessToken = sign({ id }, env.secret)
+      await updateAccountToken(id, accessToken)
+
+      const insertedPost = await insertPost(id)
+      const res = await request(app)
+        .post(`/api/update-post/${insertedPost.ops[0]._id}`)
+        .set('x-access-token', accessToken) // na requisição, eu coloco o accessToken nos headers
+        .field('data', JSON.stringify({ title: 'other_title' }))
+        .attach('photos', file, { filename: 'test_img_1_post' })
+        .attach('photos', file, { filename: 'test_img_2_post' })
+        .set('Content-Type', 'multipart/form-data')
+      expect(res.body).toEqual({ ok: true })
+      expect(res.status).toBe(200)
+
+      const post = await postsCollection.findOne({ id: (insertedPost.ops as any)._id })
+      expect(post.photos).toEqual(['test_img_1_post', 'test_img_2_post'])
+      expect(post.title).toBe('other_title')
     })
   })
 })
