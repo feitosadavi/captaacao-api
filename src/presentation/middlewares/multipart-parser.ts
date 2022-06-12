@@ -44,7 +44,6 @@ export class MultipartParser implements Middleware {
   // eslint-disable-next-line @typescript-eslint/require-await
   async handle (request: any): Promise<HttpResponse> {
     try {
-      console.log(request)
       const parse = (obj: Record<any, any>): Record<any, any> => {
         const parsedParams = { ...obj }
         for (const key of Object.keys(parsedParams)) {

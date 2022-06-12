@@ -17,8 +17,6 @@ export class AddPostController implements Controller<AddPostController.Request> 
       const error = this.validation.validate(params)
       if (error) return badRequest(error)
 
-      console.log(params)
-
       const { title, description, ...carBeingSold } = params
       const createdAt = new Date()
       const modifiedAt = new Date()

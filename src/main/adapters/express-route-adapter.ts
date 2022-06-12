@@ -14,7 +14,6 @@ export const adaptRoute = (controller: Controller) => {
       clientFiles: (req as any).clientFiles,
       accountId: (req as any).accountId
     }
-    console.log(httpRequest)
     const httpResponse = await controller.handle(httpRequest)
 
     if (httpResponse.statusCode >= 200 && httpResponse.statusCode <= 299) {
