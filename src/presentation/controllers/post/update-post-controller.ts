@@ -12,13 +12,14 @@ export class UpdatePostController implements Controller<UpdatePostController.Req
 
   async handle (request: UpdatePostController.Request): Promise<HttpResponse> {
     try {
-      const { accountId, ...fields } = request // exclude id
-      const error = this.validation.validate(fields)
+      const { clientFiles, id, data } = request // exclude id
+      const error = this.validation.validate(data)
       if (error) {
         return badRequest(error)
       }
-
-      const result = await this.updatePost.update({ id: accountId, fields })
+      const params = JSON.parse(data as unknown as string)
+      const fieldsToUpdate = { ...params, photos: clientFiles }
+      const result = await this.updatePost.update({ id: id, fields: fieldsToUpdate })
       return serverSuccess({ ok: result })
     } catch (e) {
       return serverError(e)
@@ -27,8 +28,15 @@ export class UpdatePostController implements Controller<UpdatePostController.Req
 }
 
 export namespace UpdatePostController {
-  export type Request = {
-    accountId: string
+  type ClientFiles = {
+    clientFiles?: Array<{
+      fileName: string
+      buffer: Buffer
+      mimeType: string
+    }>
+  }
+
+  type Data = {
     title: string
     photos: string[]
     description: string
@@ -40,4 +48,10 @@ export namespace UpdatePostController {
 
     carBeingSold: PostModel.CarBeingSold
   }
+
+  export type Request = {
+    accountId: string
+    id: string
+    data: Data
+  } & ClientFiles
 }
