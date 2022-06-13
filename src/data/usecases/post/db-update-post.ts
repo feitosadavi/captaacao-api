@@ -14,7 +14,16 @@ export class DbUpdatePost implements UpdatePost {
     const post = await this.loadPostByIdRepository.loadById({ id: params.id })
     let result = false
     if (post?.id) {
-      const fieldsToUpdate = { ...params }
+      const { title, description, photos, ...fields } = params.fields
+
+      for (const key of Object.keys(fields)) {
+        console.log({ key })
+        Object.defineProperty(fields, `carBeingSold.${key}`,
+          Object.getOwnPropertyDescriptor(fields, key))
+        delete fields[key]
+      }
+
+      const fieldsToUpdate: any = { title, description, ...fields }
 
       if (params.fields.photos) {
         await this.deleteManyFiles.deleteMany({ filesNames: post.photos })
@@ -25,10 +34,10 @@ export class DbUpdatePost implements UpdatePost {
           local.push(p.fileName)
         })
         await this.uploadManyFiles.uploadMany(remote)
-        fieldsToUpdate.fields.photos = local
+        fieldsToUpdate.photos = local
       }
 
-      result = await this.updatePostRepository.updatePost(fieldsToUpdate)
+      result = await this.updatePostRepository.updatePost({ id: params.id, fields: fieldsToUpdate })
     }
     return result
   }
