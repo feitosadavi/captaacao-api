@@ -45,11 +45,8 @@ export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepos
       }
     ]).skip(skip ?? 0).toArray()
 
-    // const p = posts.map(post => { post.postedBy = MongoHelper.map(post.postedBy); return post })
-
-    // console.log({ postedBy: p[0] })
-
-    return posts && MongoHelper.mapCollection(posts)
+    const p = posts.map(post => { post.postedBy = MongoHelper.map(post.postedBy); return post })
+    return posts && MongoHelper.mapCollection(p)
   }
 
   async loadById ({ id }: LoadPostByIdRepository.Params): LoadPostByIdRepository.Result {
@@ -89,7 +86,7 @@ export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepos
 
   async deletePost ({ id }: DeletePost.Params): DeletePost.Result {
     const postsCollection = await MongoHelper.getCollection('posts')
-    const result = await postsCollection.deleteOne({ _id: id })
+    const result = await postsCollection.deleteOne({ _id: new ObjectID(id) })
     return result.deletedCount === 1
   }
 }
