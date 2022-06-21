@@ -6,6 +6,8 @@ export default gql`
       loadFilterOptions: Boolean
       search: String,
       skip: Int,
+      limit: Int,
+      count: Boolean,
       postedBy: String,
       color: [String!]
       brand: [String!]

@@ -19,7 +19,7 @@ export const mockAddPostRepository = (): AddPostRepository => {
 export const mockLoadAllPostsRepository = (): LoadAllPostsRepository => {
   class LoadAllPostsRepositoryStub implements LoadAllPostsRepository {
     async loadAll (): Promise<LoadAllPostsRepository.Result> {
-      return Promise.resolve(mockPostsModel())
+      return Promise.resolve({ result: mockPostsModel() })
     }
   }
   return new LoadAllPostsRepositoryStub()

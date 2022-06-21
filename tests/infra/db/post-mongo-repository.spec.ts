@@ -30,14 +30,14 @@ describe('PostMongoRepository', () => {
     return new PostMongoRepository()
   }
 
-  describe('add()', () => {
-    test('Should create a post on add success', async () => {
-      const sut = makeSut()
-      await sut.addPost(mockPostsRepositoryParams()[0])
-      const post = await postsCollection.findOne({ title: 'any_title' })
-      expect(post).toBeTruthy()
-    })
-  })
+  // describe('add()', () => {
+  //   test('Should create a post on add success', async () => {
+  //     const sut = makeSut()
+  //     await sut.addPost(mockPostsRepositoryParams()[0])
+  //     const post = await postsCollection.findOne({ title: 'any_title' })
+  //     expect(post).toBeTruthy()
+  //   })
+  // })
 
   describe('loadAll()', () => {
     test('Should load all posts with none skip parameters has been passed', async () => {
@@ -48,101 +48,101 @@ describe('PostMongoRepository', () => {
         { ...mockPostsRepositoryParams()[1], postedBy: accountId }
       ])
       const posts = await sut.loadAll({})
-      expect(posts.length).toBe(2)
-      expect(posts[0].title).toBe('any_title')
-      expect(posts[1].title).toBe('other_title')
-      expect(posts[0].postedBy.name).toBe('any_name')
-      expect(posts[1].postedBy.name).toBe('any_name')
+      expect(posts.result.length).toBe(2)
+      expect(posts.result[0].title).toBe('any_title')
+      expect(posts.result[1].title).toBe('other_title')
+      expect(posts.result[0].postedBy.name).toBe('any_name')
+      expect(posts.result[1].postedBy.name).toBe('any_name')
     })
 
     test('Should load all posts given the filter', async () => {
       const sut = makeSut()
-      const { postedBy, ...post } = mockPostsParams()[0]
-      const res = await postsCollection.insertMany([
-        { postedBy: new ObjectID(), ...post },
-        { ...mockPostsParams()[1] }
+      const accountId = (await accountsCollection.insertOne({ name: 'any_name' })).insertedId
+      await postsCollection.insertMany([
+        { ...mockPostsRepositoryParams()[0], postedBy: new ObjectID(accountId) }
       ])
-      const posts = await sut.loadAll({ postedBy: res.ops[0].postedBy })
-      expect(posts.length).toBe(1)
-      expect(posts[0].title).toBe('any_title')
+      const posts = await sut.loadAll({ postedBy: accountId })
+      expect(posts.result.length).toBe(1)
+      expect(posts.result[0].title).toBe('any_title')
     })
 
     test('Should load all posts given brand filter', async () => {
       const sut = makeSut()
-      const { postedBy, ...post } = mockPostsParams()[0]
-      const res = await postsCollection.insertMany([
-        { postedBy: new ObjectID(), ...post },
-        { ...mockPostsParams()[1] }
+      const accountId = (await accountsCollection.insertOne({ name: 'any_name' })).insertedId
+      const insertedPost = await postsCollection.insertMany([
+        { ...mockPostsRepositoryParams()[0], postedBy: accountId },
+        { ...mockPostsRepositoryParams()[1], postedBy: accountId }
       ])
-      const posts = await sut.loadAll({ brand: [res.ops[0].carBeingSold.brand, 'Fusca'] })
-      expect(posts.length).toBe(1)
-      expect(posts[0].carBeingSold.brand).toBe('any_brand')
+      const posts = await sut.loadAll({ brand: [insertedPost.ops[0].carBeingSold.brand, 'Fusca'] })
+      expect(posts.result.length).toBe(1)
+      expect(posts.result[0].carBeingSold.brand).toBe('any_brand')
     })
 
     test('Should load all posts given color filter', async () => {
       const sut = makeSut()
-      const { postedBy, ...post } = mockPostsParams()[0]
-      const res = await postsCollection.insertMany([
-        { postedBy: new ObjectID(), ...post },
-        { ...mockPostsParams()[1] }
+      const accountId = (await accountsCollection.insertOne({ name: 'any_name' })).insertedId
+      const insertedPost = await postsCollection.insertMany([
+        { ...mockPostsRepositoryParams()[0], postedBy: accountId },
+        { ...mockPostsRepositoryParams()[1], postedBy: accountId }
       ])
-      const posts = await sut.loadAll({ color: [res.ops[0].carBeingSold.color, 'Roxo'] })
-      expect(posts.length).toBe(1)
-      expect(posts[0].carBeingSold.color).toBe('any_color')
+      const posts = await sut.loadAll({ color: [insertedPost.ops[0].carBeingSold.color, 'Roxo'] })
+      expect(posts.result.length).toBe(1)
+      expect(posts.result[0].carBeingSold.color).toBe('any_color')
     })
 
     test('Should load all posts given steering filter', async () => {
       const sut = makeSut()
-      const { postedBy, ...post } = mockPostsParams()[0]
-      const res = await postsCollection.insertMany([
-        { postedBy: new ObjectID(), ...post },
-        { ...mockPostsParams()[1] }
+      const accountId = (await accountsCollection.insertOne({ name: 'any_name' })).insertedId
+      const insertedPost = await postsCollection.insertMany([
+        { ...mockPostsRepositoryParams()[0], postedBy: accountId },
+        { ...mockPostsRepositoryParams()[1], postedBy: accountId }
       ])
-      const posts = await sut.loadAll({ steering: [res.ops[0].carBeingSold.steering, 'Elétrica'] })
-      expect(posts.length).toBe(1)
-      expect(posts[0].carBeingSold.steering).toBe('any_steering')
+      const posts = await sut.loadAll({ steering: [insertedPost.ops[0].carBeingSold.steering, 'Elétrica'] })
+      expect(posts.result.length).toBe(1)
+      expect(posts.result[0].carBeingSold.steering).toBe('any_steering')
     })
 
     test('Should load all posts given year filter', async () => {
       const sut = makeSut()
-      const { postedBy, ...post } = mockPostsParams()[0]
-      const res = await postsCollection.insertMany([
-        { postedBy: new ObjectID(), ...post },
-        { ...mockPostsParams()[1] }
+      const accountId = (await accountsCollection.insertOne({ name: 'any_name' })).insertedId
+      const insertedPost = await postsCollection.insertMany([
+        { ...mockPostsRepositoryParams()[0], postedBy: accountId },
+        { ...mockPostsRepositoryParams()[1], postedBy: accountId }
       ])
-      const posts = await sut.loadAll({ year: [res.ops[0].carBeingSold.year, '2000'] })
-      expect(posts.length).toBe(1)
-      expect(posts[0].carBeingSold.year).toBe('any_year')
+      const posts = await sut.loadAll({ year: [insertedPost.ops[0].carBeingSold.year, '2000'] })
+      expect(posts.result.length).toBe(1)
+      expect(posts.result[0].carBeingSold.year).toBe('any_year')
     })
 
     test('Should load all posts given doors filter', async () => {
       const sut = makeSut()
-      const { postedBy, ...post } = mockPostsParams()[0]
-      const res = await postsCollection.insertMany([
-        { postedBy: new ObjectID(), ...post },
-        { ...mockPostsParams()[1] }
+      const accountId = (await accountsCollection.insertOne({ name: 'any_name' })).insertedId
+      const insertedPost = await postsCollection.insertMany([
+        { ...mockPostsRepositoryParams()[0], postedBy: accountId },
+        { ...mockPostsRepositoryParams()[1], postedBy: accountId }
       ])
-      const posts = await sut.loadAll({ doors: [res.ops[0].carBeingSold.doors] })
-      expect(posts.length).toBe(1)
-      expect(posts[0].carBeingSold.doors).toBe(res.ops[0].carBeingSold.doors)
+      const posts = await sut.loadAll({ doors: [insertedPost.ops[0].carBeingSold.doors] })
+      expect(posts.result.length).toBe(2)
+      expect(posts.result[0].carBeingSold.doors).toBe(insertedPost.ops[0].carBeingSold.doors)
     })
 
     test('Should skip posts if skip parameter was given', async () => {
       const sut = makeSut()
-      const { postedBy, ...post } = mockPostsParams()[0]
+      const accountId = (await accountsCollection.insertOne({ name: 'any_name' })).insertedId
       await postsCollection.insertMany([
-        { postedBy: new ObjectID(), ...post },
-        { ...mockPostsParams()[1] }
+        { ...mockPostsRepositoryParams()[0], postedBy: accountId },
+        { ...mockPostsRepositoryParams()[1], postedBy: accountId }
       ])
+
       const posts = await sut.loadAll({ skip: 1 })
-      expect(posts.length).toBe(1)
-      expect(posts[0].title).toBe('other_title')
+      expect(posts.result.length).toBe(1)
+      expect(posts.result[0].title).toBe('other_title')
     })
 
     test('Should load empty list if collection has no posts', async () => {
       const sut = makeSut()
       const posts = await sut.loadAll({})
-      expect(posts.length).toBe(0)
+      expect(posts.result.length).toBe(0)
     })
   })
 

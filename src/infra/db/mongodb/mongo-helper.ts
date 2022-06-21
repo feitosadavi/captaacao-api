@@ -31,6 +31,7 @@ export const MongoHelper = {
     console.info('[POSTS] FINISHED INDEX - title ')
   },
   map: (data: any): any => { // regra de negócio: o mongo retorna o id como _id, como preciso utilizar como id
+    // console.log({ data })
     const { _id, ...collectionWithoutId } = data
     return Object.assign({}, collectionWithoutId, { id: _id })
   },

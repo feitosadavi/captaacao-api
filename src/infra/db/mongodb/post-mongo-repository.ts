@@ -13,7 +13,7 @@ export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepos
   async loadAll (params: LoadAllPostsRepository.Params): Promise<LoadAllPostsRepository.Result> {
     const postsCollection = await MongoHelper.getCollection('posts')
     // postedBy is an ID, so we need to convert it so that it can be used in find
-    const { skip, postedBy, search, ...filters } = params
+    const { skip, limit, count, postedBy, search, ...filters } = params
     const andQuery = []
     if (Object.keys(filters).length !== 0) {
       for (const key of Object.keys(filters)) {
@@ -43,10 +43,13 @@ export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepos
           postedBy: { $arrayElemAt: ['$postedBy', 0] }
         }
       }
-    ]).skip(skip ?? 0).toArray()
+    ]).skip(skip ?? 0).limit(limit || 9999999999999).toArray()
 
     const p = posts.map(post => { post.postedBy = MongoHelper.map(post.postedBy); return post })
-    return posts && MongoHelper.mapCollection(p)
+    const result: LoadAllPostsRepository.Result = { result: MongoHelper.mapCollection(p) }
+    if (count) result.count = await postsCollection.countDocuments()
+
+    return result
   }
 
   async loadById ({ id }: LoadPostByIdRepository.Params): LoadPostByIdRepository.Result {
