@@ -152,6 +152,21 @@ describe('PostMongoRepository', () => {
       expect(posts.result[0].title).toBe('any_title')
     })
 
+    test('Should return a number of posts given limit and skip value', async () => {
+      const sut = makeSut()
+      const accountId = (await accountsCollection.insertOne({ name: 'any_name' })).insertedId
+      await postsCollection.insertMany([
+        { ...mockPostsRepositoryParams()[0], postedBy: accountId }, // any_title
+        { ...mockPostsRepositoryParams()[1], postedBy: accountId }, // other_title
+        { ...mockPostsRepositoryParams()[1], postedBy: accountId } // other_title
+      ])
+
+      const posts = await sut.loadAll({ skip: 1, limit: 2 })
+      expect(posts.result.length).toBe(2)
+      expect(posts.result[0].title).toBe('other_title')
+      expect(posts.result[1].title).toBe('other_title')
+    })
+
     test('Should load empty list if collection has no posts', async () => {
       const sut = makeSut()
       const posts = await sut.loadAll({})
