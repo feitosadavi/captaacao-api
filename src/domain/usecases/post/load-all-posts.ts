@@ -10,7 +10,7 @@ export namespace LoadAllPosts {
     postedBy?: string
     search?: string
     skip?: number
-    count?: number
+    count?: boolean
     limit?: number
     color?: string[]
     brand?: string[]
