@@ -28,5 +28,5 @@ export namespace LoadAllPosts {
     doors: number[]
     steering: string[]
   }
-  export type Result = { posts: PostModel[], filterOptions?: FilterOptions }
+  export type Result = { posts: PostModel[], filterOptions?: FilterOptions, count?: number }
 }

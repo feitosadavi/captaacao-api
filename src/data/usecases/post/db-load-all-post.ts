@@ -1,13 +1,15 @@
 import { LoadAllPosts } from '@/domain/usecases'
 import { LoadAllPostsRepository } from '@/data/protocols'
+import { PostModel } from '@/domain/models'
 
 export class DbLoadAllPosts implements LoadAllPosts {
   constructor (private readonly loadAllPostsRepository: LoadAllPostsRepository) { }
 
   async load (params: LoadAllPosts.Params): Promise<LoadAllPosts.Result> {
     const { loadFilterOptions, ...repoParams } = params
-    const posts = await this.loadAllPostsRepository.loadAll(repoParams)
-    let res: LoadAllPosts.Result = { posts }
+    const loadResult = await this.loadAllPostsRepository.loadAll(repoParams)
+    const posts: PostModel[] = loadResult.result
+    const res: LoadAllPosts.Result = { posts: loadResult.result, count: loadResult.count }
     if (params.loadFilterOptions) {
       const filterNames: Array<'brand' | 'model' | 'fuel' | 'year' | 'color' | 'steering' | 'doors'> = [
         'brand',
@@ -27,7 +29,7 @@ export class DbLoadAllPosts implements LoadAllPosts {
           }
         }
       }
-      res = { posts, filterOptions }
+      res.filterOptions = filterOptions
     }
     return res
   }

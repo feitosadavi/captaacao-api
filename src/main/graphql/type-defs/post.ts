@@ -22,6 +22,7 @@ export default gql`
   type PostsResult {
     posts: [Post!]
     filterOptions: FilterOptions
+    count: Int
   }
 
   type FilterOptions {
