@@ -79,12 +79,13 @@ export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepos
 
   async updatePost (params: UpdatePostRepository.Params): UpdatePostRepository.Result {
     const postsCollection = await MongoHelper.getCollection('posts')
-    await postsCollection.updateOne({ _id: new ObjectID(params.id) },
+    const { id, fields } = params
+    const res = await postsCollection.updateOne({ _id: new ObjectID(id) },
       {
-        $set: { ...params.fields }
+        $set: fields
       }
     )
-    return true
+    return res.result.nModified > 0
   }
 
   async deletePost ({ id }: DeletePost.Params): DeletePost.Result {

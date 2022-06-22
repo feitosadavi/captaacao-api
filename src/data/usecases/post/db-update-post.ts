@@ -17,15 +17,17 @@ export class DbUpdatePost implements UpdatePost {
       const { title, description, photos, ...fields } = params.fields
 
       for (const key of Object.keys(fields)) {
-        console.log({ key })
         Object.defineProperty(fields, `carBeingSold.${key}`,
           Object.getOwnPropertyDescriptor(fields, key))
         delete fields[key]
       }
 
-      const fieldsToUpdate: any = { title, description, ...fields }
+      const fieldsToUpdate: any = { ...fields }
 
-      if (params.fields.photos) {
+      if (title) fieldsToUpdate.title = title
+      if (description) fieldsToUpdate.description = description
+
+      if (params.fields.photos.length > 0) {
         await this.deleteManyFiles.deleteMany({ filesNames: post.photos })
         const remote: Array<{ file: Buffer, fileName: string }> = []
         const local: string[] = []
