@@ -9,7 +9,8 @@ import {
   PasswordRecover,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   LoadAccountByCode,
-  UpdatePassword
+  UpdatePassword,
+  AddFavouritePost
 } from '@/domain/usecases'
 import { Authentication } from '@/domain/usecases/authentication'
 
@@ -79,6 +80,15 @@ export const mockUpdateAccount = (): UpdateAccount => {
     }
   }
   return new UpdateAccountStub()
+}
+
+export const mockAddFavouritePost = (): AddFavouritePost => {
+  class AddFavouritePostStub implements AddFavouritePost {
+    async add (params: AddFavouritePost.Params): AddFavouritePost.Result {
+      return Promise.resolve({ ok: true })
+    }
+  }
+  return new AddFavouritePostStub()
 }
 
 export const mockUpdatePassword = (): UpdatePassword => {
