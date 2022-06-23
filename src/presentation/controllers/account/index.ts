@@ -1,4 +1,5 @@
 export * from './delete-account-controller'
+export * from './add-favourite-post-controller'
 export * from './load-account-by-id-controller'
 export * from './load-accounts-controller'
 export * from './login-controller'

@@ -1,3 +1,5 @@
+import { PostModel } from './post'
+
 export type AccountModel = {
   id: string
   name: string
@@ -14,6 +16,7 @@ export type AccountModel = {
   notifications?: AccountModel.Notification[]
   rating?: AccountModel.Rating[]
 
+  favouritesList?: PostModel[]
   code?: AccountModel.Code
   canUseCookies?: boolean
   status?: boolean
