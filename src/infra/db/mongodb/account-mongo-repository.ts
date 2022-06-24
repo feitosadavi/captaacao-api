@@ -4,6 +4,7 @@ import { MongoHelper } from './mongo-helper'
 import { AccountModel } from '@/domain/models'
 import {
   AddAccountRepository,
+  AddFavouritePostRepository,
   DeleteAccountRepository,
   LoadAccountByCodeRepository,
   LoadAccountByEmailRepository,
@@ -15,7 +16,9 @@ import {
   UpdatePasswordRepository
 } from '@/data/protocols'
 
-export class AccountMongoRepository implements AddAccountRepository,
+export class AccountMongoRepository implements
+  AddAccountRepository,
+  AddFavouritePostRepository,
   LoadAllAccountsRepository,
   LoadAccountByIdRepository,
   LoadAccountByEmailRepository,
@@ -84,6 +87,19 @@ export class AccountMongoRepository implements AddAccountRepository,
         $set: { accessToken }
       }
     )
+  }
+
+  async addFavourite ({ favouritePostId, id }: AddFavouritePostRepository.Params): AddFavouritePostRepository.Result {
+    const accountsCollection = await MongoHelper.getCollection('accounts')
+    const res = await accountsCollection.updateOne({ _id: id },
+      {
+        $addToSet: {
+          favouritePost: favouritePostId
+        }
+
+      }
+    )
+    return res.result.nModified > 0
   }
 
   async updateAccount (params: UpdateAccountRepository.Params): UpdateAccountRepository.Result {
