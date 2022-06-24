@@ -1,3 +1,4 @@
+export * from './add-favourite-post-factory'
 export * from './delete-account-factory'
 export * from './load-account-by-id-factory'
 export * from './load-accounts-factory'

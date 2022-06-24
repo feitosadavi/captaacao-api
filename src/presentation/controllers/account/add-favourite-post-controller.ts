@@ -11,15 +11,16 @@ export class AddFavouritePostController implements Controller<AddFavouritePostCo
 
   async handle (request: AddFavouritePostController.Request): Promise<HttpResponse> {
     try {
-      const { accountId, favouritePostId, ...fields } = request // exclude id
-      const error = this.validation.validate(fields)
+      const { accountId, ...body } = request // exclude id
+      const error = this.validation.validate(body)
       if (error) {
         return badRequest(error)
       }
 
-      const result = await this.addFavourite.add({ id: accountId, favouritePostId })
+      const result = await this.addFavourite.add({ id: accountId, favouritePostId: body.favouritePostId })
       return serverSuccess(result)
     } catch (e) {
+      console.log(e)
       return serverError(e)
     }
   }

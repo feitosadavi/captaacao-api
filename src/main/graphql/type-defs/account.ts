@@ -42,6 +42,7 @@ export default gql`
       bairro: String
     ): UpdateResult! @auth
     deleteAccount (id: String!): DeleteResult! @auth
+    addFavouritePost(favouritePostId: String!): UpdateResult @auth
   }
 
 
@@ -64,6 +65,7 @@ export default gql`
     profileViews: Int
     online: Boolean
   }
+
 
   type Adress {
     cep: String
