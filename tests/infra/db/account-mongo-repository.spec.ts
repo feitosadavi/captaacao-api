@@ -232,28 +232,28 @@ describe('Account Mongo Repository', () => {
       const sut = makeSut()
 
       const res = await accountCollection.insertOne({
-        ...mockAccountParams(), favouritePost: ['any_favourite_post_1']
+        ...mockAccountParams(), favouritePosts: ['any_favourite_post_1']
       })
       const fakeAccount = res.ops[0]
       const result = await sut.addFavourite({ id: fakeAccount._id, favouritePostId: 'any_favourite_post_1' })
       expect(result).toBe(false)
       const account = await accountCollection.findOne({ _id: fakeAccount._id })
       expect(account).toBeTruthy()
-      expect(account.favouritePost).toEqual(['any_favourite_post_1'])
+      expect(account.favouritePosts).toEqual(['any_favourite_post_1'])
     })
 
     test('Should update the account fields on updateAccount success', async () => {
       const sut = makeSut()
 
       const res = await accountCollection.insertOne({
-        ...mockAccountParams(), favouritePost: ['any_favourite_post_1']
+        ...mockAccountParams(), favouritePosts: ['any_favourite_post_1']
       })
       const fakeAccount = res.ops[0]
       const result = await sut.addFavourite({ id: fakeAccount._id, favouritePostId: 'any_favourite_post_2' })
       expect(result).toBe(true)
       const account = await accountCollection.findOne({ _id: fakeAccount._id })
       expect(account).toBeTruthy()
-      expect(account.favouritePost).toEqual(['any_favourite_post_1', 'any_favourite_post_2'])
+      expect(account.favouritePosts).toEqual(['any_favourite_post_1', 'any_favourite_post_2'])
     })
   })
 
