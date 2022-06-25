@@ -85,6 +85,20 @@ describe('Account Mongo Repository', () => {
   })
 
   describe('loadById()', () => {
+    test('Should return with lookup on favouritesList with this field isnt empty', async () => {
+      const sut = makeSut()
+      const insertedPost = await insertPost()
+      const res = await accountCollection.insertOne({
+        ...mockAccountParams(),
+        favouritesList: [new ObjectID(insertedPost.ops[0]._id)]
+      })
+
+      const account = await sut.loadById(res.ops[0]._id)
+      expect(account).toBeTruthy()
+      expect(account.id).toBeTruthy()
+      expect(account.name).toBe('any_name')
+      expect(account.favouritesList[0].id).toBeTruthy()
+    })
     test('Should return an account on loadById success', async () => {
       const sut = makeSut()
       const res = await accountCollection.insertOne({
