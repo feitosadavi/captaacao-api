@@ -127,7 +127,7 @@ export class AccountMongoRepository implements
     const res = await accountsCollection.updateOne({ _id: new ObjectID(id) },
       {
         $addToSet: {
-          favouritePosts: new ObjectID(favouritePostId) // corrigir para favourtieList
+          favouritesList: new ObjectID(favouritePostId) // corrigir para favourtieList
         }
       }
     )
