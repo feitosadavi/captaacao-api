@@ -11,7 +11,8 @@ import {
   LoadAccountByTokenRepository,
   LoadAllAccountsRepository,
   UpdateAccessTokenRepository,
-  AddFavouritePostRepository
+  AddFavouritePostRepository,
+  RemoveFavouritePostRepository
 } from '@/data/protocols'
 
 export const mockAddAccountRepositoryStub = (): AddAccountRepository => {
@@ -68,6 +69,15 @@ export const mockAddFavouritePostRepository = (): AddFavouritePostRepository => 
     }
   }
   return new AddFavouritePostRepositoryStub()
+}
+
+export const mockRemoveFavouritePostRepository = (): RemoveFavouritePostRepository => {
+  class RemoveFavouritePostRepositoryStub implements RemoveFavouritePostRepository {
+    async removeFavourite (params: RemoveFavouritePostRepository.Params): RemoveFavouritePostRepository.Result {
+      return Promise.resolve(true)
+    }
+  }
+  return new RemoveFavouritePostRepositoryStub()
 }
 
 export const mockUpdateAccountRepository = (): UpdateAccountRepository => {
