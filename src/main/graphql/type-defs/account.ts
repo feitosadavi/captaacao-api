@@ -43,6 +43,7 @@ export default gql`
     ): UpdateResult! @auth
     deleteAccount (id: String!): DeleteResult! @auth
     addFavouritePost(favouritePostId: String!): UpdateResult @auth
+    removeFavouritePost(favouritePostId: String!): UpdateResult @auth
   }
 
 
