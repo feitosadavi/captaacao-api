@@ -1,5 +1,5 @@
 import MockDate from 'mockdate'
-import { Collection } from 'mongodb'
+import { Collection, InsertOneWriteOpResult, ObjectID } from 'mongodb'
 
 import { AccountModel } from '@/domain/models'
 import { MongoHelper, AccountMongoRepository } from '@/infra/db/mongodb'
@@ -9,6 +9,7 @@ import { mockAccountRepositoryParams } from '@tests/data/mocks'
 
 describe('Account Mongo Repository', () => {
   let accountCollection: Collection
+  let postsCollection: Collection
 
   // antes e depois de cada teste de integração, precisamos conectar e desconectar do banco
   beforeAll(async () => {
@@ -25,7 +26,15 @@ describe('Account Mongo Repository', () => {
   beforeEach(async () => {
     accountCollection = await MongoHelper.getCollection('accounts')
     await accountCollection.deleteMany({})
+    postsCollection = await MongoHelper.getCollection('posts')
+    await postsCollection.deleteMany({})
   })
+
+  const insertPost = async (): Promise<InsertOneWriteOpResult<{ _id: string, title: string }>> => {
+    return postsCollection.insertOne({
+      title: 'any_title'
+    })
+  }
 
   const makeSut = (): AccountMongoRepository => {
     return new AccountMongoRepository()
@@ -48,14 +57,15 @@ describe('Account Mongo Repository', () => {
     })
   })
 
-  describe('loadAccouts()', () => {
+  describe('loadAll()', () => {
     test('Should return an account array on loadAccouts success', async () => {
       const sut = makeSut()
-
+      const insertedPost = await insertPost()
       await accountCollection.insertMany([{
         ...mockAccountParams()
       }, {
-        ...mockAccountParams()
+        ...mockAccountParams(),
+        favouritesList: [new ObjectID(insertedPost.ops[0]._id)]
       }])
 
       const accounts = await sut.loadAll()
@@ -64,6 +74,7 @@ describe('Account Mongo Repository', () => {
       expect(accounts[0].id).toBeTruthy()
       expect(accounts[0].name).toBe('any_name')
       expect(accounts[0].email).toBe('any_email@mail.com')
+      expect(accounts[1].favouritesList[0].id).toBeTruthy()
     })
 
     test('Should return null if loadByEmail fails', async () => {
