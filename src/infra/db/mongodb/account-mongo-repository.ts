@@ -134,7 +134,7 @@ export class AccountMongoRepository implements
     return res.result.nModified > 0
   }
 
-  async remove ({ favouritePostId, id }: AddFavouritePostRepository.Params): AddFavouritePostRepository.Result {
+  async removeFavourite ({ favouritePostId, id }: AddFavouritePostRepository.Params): AddFavouritePostRepository.Result {
     const accountsCollection = await MongoHelper.getCollection('accounts')
     const res = await accountsCollection.updateOne({ _id: new ObjectID(id) },
       { $pull: { favouritesList: new ObjectID(favouritePostId) } }

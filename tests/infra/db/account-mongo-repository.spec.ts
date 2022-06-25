@@ -291,7 +291,7 @@ describe('Account Mongo Repository', () => {
         ...mockAccountParams(), favouritesList: [favouritePostId]
       })
       const fakeAccount = res.ops[0]
-      const result = await sut.remove({ id: fakeAccount._id, favouritePostId: String(favouritePostId) })
+      const result = await sut.removeFavourite({ id: fakeAccount._id, favouritePostId: String(favouritePostId) })
       expect(result).toBe(true)
       const account = await accountCollection.findOne({ _id: fakeAccount._id })
       expect(account.favouritesList).toEqual([])
