@@ -124,10 +124,10 @@ export class AccountMongoRepository implements
 
   async addFavourite ({ favouritePostId, id }: AddFavouritePostRepository.Params): AddFavouritePostRepository.Result {
     const accountsCollection = await MongoHelper.getCollection('accounts')
-    const res = await accountsCollection.updateOne({ _id: id },
+    const res = await accountsCollection.updateOne({ _id: new ObjectID(id) },
       {
         $addToSet: {
-          favouritePosts: favouritePostId // corrigir para favourtieList
+          favouritePosts: new ObjectID(favouritePostId) // corrigir para favourtieList
         }
       }
     )
