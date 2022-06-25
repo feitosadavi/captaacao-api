@@ -1,5 +1,6 @@
 export * from './add-account'
 export * from './add-favourite-post'
+export * from './remove-favourite-post'
 export * from './delete-account'
 export * from './load-account-by-id'
 export * from './load-account-by-token'

@@ -1,5 +1,6 @@
 export * from './add-account-repository'
 export * from './add-favourite-post-repository'
+export * from './remove-favourite-post-repository'
 export * from './delete-account-repository'
 
 export * from './load-account-by-email-repository'

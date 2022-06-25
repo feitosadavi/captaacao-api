@@ -11,6 +11,7 @@ import {
   LoadAccountByIdRepository,
   LoadAccountByTokenRepository,
   LoadAllAccountsRepository,
+  RemoveFavouritePostRepository,
   UpdateAccessTokenRepository,
   UpdateAccountRepository,
   UpdatePasswordRepository
@@ -19,15 +20,16 @@ import {
 export class AccountMongoRepository implements
   AddAccountRepository,
   AddFavouritePostRepository,
-  LoadAllAccountsRepository,
-  LoadAccountByIdRepository,
-  LoadAccountByEmailRepository,
+  DeleteAccountRepository,
   LoadAccountByCodeRepository,
+  LoadAccountByEmailRepository,
+  LoadAccountByIdRepository,
   LoadAccountByTokenRepository,
+  LoadAllAccountsRepository,
+  RemoveFavouritePostRepository,
   UpdateAccessTokenRepository,
   UpdateAccountRepository,
-  UpdatePasswordRepository,
-  DeleteAccountRepository {
+  UpdatePasswordRepository {
   async addAccount (params: AddAccountRepository.Params): AddAccountRepository.Result {
     const accountsCollection = await MongoHelper.getCollection('accounts')
     const result = await accountsCollection.insertOne(params)
@@ -125,9 +127,17 @@ export class AccountMongoRepository implements
     const res = await accountsCollection.updateOne({ _id: id },
       {
         $addToSet: {
-          favouritePosts: favouritePostId
+          favouritePosts: favouritePostId // corrigir para favourtieList
         }
       }
+    )
+    return res.result.nModified > 0
+  }
+
+  async remove ({ favouritePostId, id }: AddFavouritePostRepository.Params): AddFavouritePostRepository.Result {
+    const accountsCollection = await MongoHelper.getCollection('accounts')
+    const res = await accountsCollection.updateOne({ _id: new ObjectID(id) },
+      { $pull: { favouritesList: new ObjectID(favouritePostId) } }
     )
     return res.result.nModified > 0
   }
