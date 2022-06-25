@@ -57,6 +57,7 @@ export default gql`
     phone: String
     adress: Adress
 
+    favouritesList: [Post]
     accessToken: String
     code: Code
     canUseCookies: Boolean
@@ -64,6 +65,39 @@ export default gql`
     timeout: Int
     profileViews: Int
     online: Boolean
+  }
+
+  type Post {
+    id: String!
+    title: String!
+    photos: [String!]
+    description: String!
+    postedBy: Account!
+
+    carBeingSold: Car
+
+    createdAt: DateTime
+    modifiedAt: DateTime
+    status: Boolean
+    active: Boolean
+  }
+
+  type Car {
+    thumb: String!
+    price: Float!
+    fipePrice: Int!
+    brand: String!
+    model: String!
+    fuel: String!
+    year: String!
+    color: String!
+    doors: Int!
+    steering: String!
+    carItems: [String]!
+    kmTraveled: Int!
+    licensePlate: String!
+    sold: Boolean!
+    fastSale: Boolean
   }
 
 
