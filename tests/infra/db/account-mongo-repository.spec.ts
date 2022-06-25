@@ -252,7 +252,7 @@ describe('Account Mongo Repository', () => {
     })
   })
 
-  describe('updateAccount()', () => {
+  describe('addFavourite()', () => {
     test('Should not add duplicated itens', async () => {
       const sut = makeSut()
 
@@ -280,6 +280,35 @@ describe('Account Mongo Repository', () => {
       expect(account).toBeTruthy()
       expect(account.favouritePosts).toEqual(['any_favourite_post_1', 'any_favourite_post_2'])
     })
+  })
+
+  describe('removeFavourite()', () => {
+    test('Should remove favouritePost from list givem the id', async () => {
+      const sut = makeSut()
+      const favouritePostId = new ObjectID()
+      const res = await accountCollection.insertOne({
+        ...mockAccountParams(), favouritesList: [favouritePostId]
+      })
+      const fakeAccount = res.ops[0]
+      const result = await sut.remove({ id: fakeAccount._id, favouritePostId: String(favouritePostId) })
+      expect(result).toBe(true)
+      const account = await accountCollection.findOne({ _id: fakeAccount._id })
+      expect(account.favouritesList).toEqual([])
+    })
+
+    // test('Should update the account fields on updateAccount success', async () => {
+    //   const sut = makeSut()
+
+    //   const res = await accountCollection.insertOne({
+    //     ...mockAccountParams(), favouritePosts: ['any_favourite_post_1']
+    //   })
+    //   const fakeAccount = res.ops[0]
+    //   const result = await sut.addFavourite({ id: fakeAccount._id, favouritePostId: 'any_favourite_post_2' })
+    //   expect(result).toBe(true)
+    //   const account = await accountCollection.findOne({ _id: fakeAccount._id })
+    //   expect(account).toBeTruthy()
+    //   expect(account.favouritePosts).toEqual(['any_favourite_post_1', 'any_favourite_post_2'])
+    // })
   })
 
   describe('updatePassword()', () => {
