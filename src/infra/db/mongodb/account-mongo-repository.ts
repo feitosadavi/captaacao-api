@@ -36,8 +36,24 @@ export class AccountMongoRepository implements
 
   async loadAll (): LoadAllAccountsRepository.Result {
     const accountsCollection = await MongoHelper.getCollection('accounts')
-    const accounts = await accountsCollection.find({}).toArray()
-    return accounts && MongoHelper.mapCollection(accounts)
+    const accountsNonMappedId = await accountsCollection.aggregate([
+      {
+        $lookup: {
+          from: 'posts',
+          localField: 'favouritesList',
+          foreignField: '_id',
+          as: 'favouritesList'
+        }
+      }
+    ]).toArray()
+    const accountMappedId = accountsNonMappedId.map(account => {
+      const favouritesList = account?.favouritesList
+      if (favouritesList) {
+        account.favouritesList = MongoHelper.mapCollection(favouritesList)
+      }
+      return account
+    })
+    return accountMappedId && MongoHelper.mapCollection(accountMappedId)
   }
 
   async loadById ({ id }: LoadAccountByIdRepository.Params): LoadAccountByIdRepository.Result {
@@ -91,7 +107,6 @@ export class AccountMongoRepository implements
 
   async addFavourite ({ favouritePostId, id }: AddFavouritePostRepository.Params): AddFavouritePostRepository.Result {
     const accountsCollection = await MongoHelper.getCollection('accounts')
-    console.log({ favouritePostId })
     const res = await accountsCollection.updateOne({ _id: id },
       {
         $addToSet: {
