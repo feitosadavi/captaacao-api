@@ -10,7 +10,8 @@ import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   LoadAccountByCode,
   UpdatePassword,
-  AddFavouritePost
+  AddFavouritePost,
+  RemoveFavouritePost
 } from '@/domain/usecases'
 import { Authentication } from '@/domain/usecases/authentication'
 
@@ -89,6 +90,15 @@ export const mockAddFavouritePost = (): AddFavouritePost => {
     }
   }
   return new AddFavouritePostStub()
+}
+
+export const mockRemoveFavouritePost = (): RemoveFavouritePost => {
+  class RemoveFavouritePostStub implements RemoveFavouritePost {
+    async remove (params: RemoveFavouritePost.Params): RemoveFavouritePost.Result {
+      return Promise.resolve({ ok: true })
+    }
+  }
+  return new RemoveFavouritePostStub()
 }
 
 export const mockUpdatePassword = (): UpdatePassword => {
