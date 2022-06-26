@@ -21,6 +21,7 @@ export class LoginController implements Controller<LoginController.Request> {
 
       return serverSuccess(authenticationModel)
     } catch (e) {
+      console.log(e)
       return serverError(e)
     }
   }

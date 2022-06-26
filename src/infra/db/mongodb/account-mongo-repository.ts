@@ -81,8 +81,23 @@ export class AccountMongoRepository implements
 
   async loadByEmail ({ email }: LoadAccountByEmailRepository.Params): LoadAccountByEmailRepository.Result {
     const accountsCollection = await MongoHelper.getCollection('accounts')
-    const account = await accountsCollection.findOne({ email })
-    return account && MongoHelper.map(account)
+    const accountsNonMappedId = await accountsCollection.aggregate([
+      {
+        $match: { $expr: { $eq: ['$email', email] } }
+      },
+      {
+        $lookup: {
+          from: 'posts',
+          localField: 'favouritesList',
+          foreignField: '_id',
+          as: 'favouritesList'
+        }
+      }
+    ]).toArray()
+    if (accountsNonMappedId[0]?.favouritesList.length > 0) {
+      accountsNonMappedId[0].favouritesList = MongoHelper.mapCollection(accountsNonMappedId[0].favouritesList)
+    }
+    return accountsNonMappedId[0] && MongoHelper.map(accountsNonMappedId[0])
   }
 
   async loadByCode ({ code }: LoadAccountByCodeRepository.Params): LoadAccountByCodeRepository.Result {
