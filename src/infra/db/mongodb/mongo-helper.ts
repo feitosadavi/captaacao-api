@@ -7,8 +7,8 @@ export const MongoHelper = {
   async connect (url: string): Promise<void> {
     this.url = url
     this.client = await MongoClient.connect(url, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
+      // useNewUrlParser: true,
+      // useUnifiedTopology: true
     })
   },
   async disconnect (): Promise<void> {
@@ -16,12 +16,7 @@ export const MongoHelper = {
     this.cliente = null
   },
   async getCollection (name: string): Promise<Collection> {
-    /** ?
-     *  as vezes a conexão poderá ter sido encerrada,
-     * então faremos o reconect para garantir que o usuário não receba um erro
-     */
-    if (!this.client.isConnected()) await this.connect(this.url)
-    return this.client.db().collection(name)
+    return await this.client.db().collection(name)
   },
   async setupIndexes (): Promise<void> {
     const postsCollection = await this.getCollection('posts')

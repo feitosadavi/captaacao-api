@@ -7,5 +7,5 @@ export interface LoadAllPostsRepository {
 
 export namespace LoadAllPostsRepository {
   export type Params = Omit<LoadAllPosts.Params, 'loadFilterOptions'>
-  export type Result = { result: PostModel[], count?: number }
+  export type Result = { result: PostModel[], count?: { sold: number, notSold: number } }
 }

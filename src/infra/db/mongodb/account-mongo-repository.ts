@@ -118,12 +118,12 @@ export class AccountMongoRepository implements
       for (const profile of profiles) {
         orQuery.push({ profiles: { $in: [profile] } })
       }
-      account = await accountsCollection.findOne({
+      account = await accountsCollection.find({
         accessToken: accessToken,
         $or: orQuery
-      })
+      }).toArray()[0]
     } else {
-      account = await accountsCollection.findOne({ accessToken: accessToken })
+      account = await accountsCollection.find({ accessToken: accessToken }).toArray()[0]
     }
     return account && MongoHelper.map(account)
   }
@@ -146,7 +146,7 @@ export class AccountMongoRepository implements
         }
       }
     )
-    return res.result.nModified > 0
+    return res.modifiedCount > 0
   }
 
   async removeFavourite ({ favouritePostId, id }: AddFavouritePostRepository.Params): AddFavouritePostRepository.Result {
@@ -154,7 +154,7 @@ export class AccountMongoRepository implements
     const res = await accountsCollection.updateOne({ _id: new ObjectID(id) },
       { $pull: { favouritesList: new ObjectID(favouritePostId) } }
     )
-    return res.result.nModified > 0
+    return res.modifiedCount > 0
   }
 
   async updateAccount (params: UpdateAccountRepository.Params): UpdateAccountRepository.Result {
