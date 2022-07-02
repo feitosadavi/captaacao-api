@@ -15,7 +15,7 @@
     "down": "sudo docker-compose down",
     "playground": "nodemon playground/index.js",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
-    "test:verbose": "jest --watch --passWithNoTests --runInBand /home/eu/Documents/captaacao-api/tests/infra/db/post-mongo-repository.spec.ts",
+    "test:verbose": "jest --watch --passWithNoTests --runInBand /home/eu/Documents/captaacao-api/tests/data/usecases/account/db-load-accounts.spec.ts",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
     "test:integration": "npm test -- --watch -c jest-integration-config.js",
     "test:staged": "npm test -- --findRelatedTests",

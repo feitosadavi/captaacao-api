@@ -1,4 +1,4 @@
-import { ObjectID } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import { MongoHelper } from './mongo-helper'
 
 import { AccountModel } from '@/domain/models'
@@ -33,6 +33,7 @@ export class AccountMongoRepository implements
   async addAccount (params: AddAccountRepository.Params): AddAccountRepository.Result {
     const accountsCollection = await MongoHelper.getCollection('accounts')
     const result = await accountsCollection.insertOne(params)
+    console.log(result)
     return !!result.insertedId
   }
 
@@ -62,7 +63,7 @@ export class AccountMongoRepository implements
     const accountsCollection = await MongoHelper.getCollection('accounts')
     const accountsNonMappedId = await accountsCollection.aggregate([
       {
-        $match: { $expr: { $eq: ['$_id', new ObjectID(id)] } }
+        $match: { $expr: { $eq: ['$_id', new ObjectId(id)] } }
       },
       {
         $lookup: {
@@ -123,7 +124,7 @@ export class AccountMongoRepository implements
         $or: orQuery
       }).toArray()[0]
     } else {
-      account = await accountsCollection.find({ accessToken: accessToken }).toArray()[0]
+      account = await accountsCollection.findOne({ accessToken: accessToken }) as any
     }
     return account && MongoHelper.map(account)
   }
@@ -139,10 +140,10 @@ export class AccountMongoRepository implements
 
   async addFavourite ({ favouritePostId, id }: AddFavouritePostRepository.Params): AddFavouritePostRepository.Result {
     const accountsCollection = await MongoHelper.getCollection('accounts')
-    const res = await accountsCollection.updateOne({ _id: new ObjectID(id) },
+    const res = await accountsCollection.updateOne({ _id: new ObjectId(id) },
       {
         $addToSet: {
-          favouritesList: new ObjectID(favouritePostId) // corrigir para favourtieList
+          favouritesList: new ObjectId(favouritePostId) // corrigir para favourtieList
         }
       }
     )
@@ -151,8 +152,8 @@ export class AccountMongoRepository implements
 
   async removeFavourite ({ favouritePostId, id }: AddFavouritePostRepository.Params): AddFavouritePostRepository.Result {
     const accountsCollection = await MongoHelper.getCollection('accounts')
-    const res = await accountsCollection.updateOne({ _id: new ObjectID(id) },
-      { $pull: { favouritesList: new ObjectID(favouritePostId) } }
+    const res = await accountsCollection.updateOne({ _id: new ObjectId(id) },
+      { $pull: { favouritesList: new ObjectId(favouritePostId) } }
     )
     return res.modifiedCount > 0
   }
@@ -179,7 +180,7 @@ export class AccountMongoRepository implements
 
   async deleteAccount ({ id }: DeleteAccountRepository.Params): DeleteAccountRepository.Result {
     const accountsCollection = await MongoHelper.getCollection('accounts')
-    const deletionResult = await accountsCollection.deleteOne({ _id: new ObjectID(id) })
+    const deletionResult = await accountsCollection.deleteOne({ _id: new ObjectId(id) })
     return deletionResult.deletedCount === 1
   }
 }

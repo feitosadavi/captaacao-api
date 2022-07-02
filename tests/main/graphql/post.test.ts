@@ -1,7 +1,7 @@
 import { MongoHelper } from '@/infra/db/mongodb'
 import { setupApp } from '@/main/config/app'
 
-import { Collection, InsertOneWriteOpResult } from 'mongodb'
+import { Collection, InsertOneResult } from 'mongodb'
 import { Express } from 'express'
 import request from 'supertest'
 import { sign } from 'jsonwebtoken'
@@ -13,7 +13,7 @@ let accountsCollection: Collection
 let postsCollection: Collection
 let app: Express
 
-const insertAccount = async (): Promise<InsertOneWriteOpResult<any>> => {
+const insertAccount = async (): Promise<InsertOneResult<any>> => {
   return accountsCollection.insertOne({
     name: 'Teste',
     email: 'teste@gmail.com',
@@ -32,7 +32,7 @@ const updateAccountToken = async (id: string, accessToken: string): Promise<void
   })
 }
 
-const insertPost = async (postedBy: string): Promise<InsertOneWriteOpResult<any>> => {
+const insertPost = async (postedBy: string): Promise<InsertOneResult<any>> => {
   return postsCollection.insertOne({
     title: 'any_title',
     postedBy: postedBy,
@@ -75,8 +75,8 @@ describe('Post GraphQL', () => {
   describe('Posts Query', () => {
     test('Should return all posts on success', async () => {
       const password = await hash('123', 12)
-      const accountId = await (await accountsCollection.insertOne({ password, ...mockAccountParams() })).insertedId
-      await insertPost(accountId)
+      const accountId = (await accountsCollection.insertOne({ password, ...mockAccountParams() })).insertedId
+      await insertPost(String(accountId))
       const query = `query {
         posts {
           ${QUERY_FIELDS}
@@ -96,8 +96,8 @@ describe('Post GraphQL', () => {
     test('Should skip some posts given skip value', async () => {
       const password = await hash('123', 12)
       const accountId = await (await accountsCollection.insertOne({ password, ...mockAccountParams() })).insertedId
-      await insertPost(accountId)
-      await insertPost(accountId)
+      await insertPost(String(accountId))
+      await insertPost(String(accountId))
       const query = `query {
         posts (skip: 1){
           ${QUERY_FIELDS}
@@ -118,7 +118,7 @@ describe('Post GraphQL', () => {
     test('Should return filtered accounts if it has filters', async () => {
       const password = await hash('123', 12)
       const accountId = await (await accountsCollection.insertOne({ password, ...mockAccountParams() })).insertedId
-      await insertPost(accountId)
+      await insertPost(String(accountId))
       const query = `query {
         posts (postedBy: "${accountId}"){
           ${QUERY_FIELDS}
@@ -138,7 +138,7 @@ describe('Post GraphQL', () => {
     test('Should return filter accounts with array filters', async () => {
       const password = await hash('123', 12)
       const accountId = await (await accountsCollection.insertOne({ password, ...mockAccountParams() })).insertedId
-      await insertPost(accountId)
+      await insertPost(String(accountId))
       const query = `query {
         posts (brand: ["any_brand", "other_brand"]){
           ${QUERY_FIELDS}
@@ -158,7 +158,7 @@ describe('Post GraphQL', () => {
     test('Should search posts if search param was passed', async () => {
       const password = await hash('123', 12)
       const accountId = await (await accountsCollection.insertOne({ password, ...mockAccountParams() })).insertedId
-      await insertPost(accountId)
+      await insertPost(String(accountId))
       const query = `query {
         posts(search: "") {
           ${QUERY_FIELDS}
@@ -178,7 +178,7 @@ describe('Post GraphQL', () => {
     test('Should load filter options if loadFilterOptions params was passed', async () => {
       const password = await hash('123', 12)
       const accountId = await (await accountsCollection.insertOne({ password, ...mockAccountParams() })).insertedId
-      await insertPost(accountId)
+      await insertPost(String(accountId))
       const query = `query {
         posts (loadFilterOptions: true) {
           ${QUERY_FIELDS}
@@ -210,7 +210,7 @@ describe('Post GraphQL', () => {
     test('Should return accounts on success', async () => {
       const password = await hash('123', 12)
       const accountId = await (await accountsCollection.insertOne({ password, ...mockAccountParams() })).insertedId
-      const postId = await (await insertPost(accountId)).insertedId
+      const postId = await (await insertPost(String(accountId))).insertedId
       const query = `query {
         post (id: "${String(postId)}") {
           id
@@ -253,11 +253,11 @@ describe('Post GraphQL', () => {
 
     test('Should return 200 on request without authentication', async () => {
       const insertAccountResult = await insertAccount()
-      const accountId = insertAccountResult.ops[0]._id
+      const accountId = String(insertAccountResult.insertedId)
       const accessToken = sign({ id: accountId }, env.secret)
       await updateAccountToken(accountId, accessToken)
 
-      const insertPostResult = await insertPost(accountId)
+      const insertPostResult = await insertPost(String(accountId))
       const postId = insertPostResult.insertedId
 
       const query = `mutation {

@@ -7,7 +7,6 @@ export default gql`
       search: String,
       skip: Int,
       limit: Int,
-      count: Boolean,
       postedBy: String,
       color: [String!]
       brand: [String!]
@@ -22,7 +21,12 @@ export default gql`
   type PostsResult {
     posts: [Post!]
     filterOptions: FilterOptions
-    count: Int
+    count: Count
+  }
+
+  type Count {
+    sold: Int
+    notSold: Int
   }
 
   type FilterOptions {

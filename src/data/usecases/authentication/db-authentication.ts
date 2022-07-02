@@ -15,6 +15,7 @@ export class DbAuthentication implements Authentication {
   ) { }
 
   async auth (authentication: Authentication.Params): Authentication.Result {
+    console.log('começa auth')
     const account = await this.loadAccountByEmailRepository.loadByEmail({ email: authentication.email })
     if (account) {
       console.log({ account: account.id })

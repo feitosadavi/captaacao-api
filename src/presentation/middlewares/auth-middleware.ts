@@ -12,14 +12,17 @@ export class AuthMiddleware implements Middleware {
   async handle (request: AuthMiddleware.Request): Promise<HttpResponse> {
     try {
       const { accessToken } = request
+      console.log({ accessToken })
       if (accessToken) {
         const account = await this.loadAccountByToken.load({ accessToken, profiles: this.profiles })
+        console.log({ account })
         if (account) {
           return serverSuccess({ accountId: account.id })
         }
       }
       return forbidden(new AccessDeniedError())
     } catch (error) {
+      console.log(error)
       return serverError(error)
     }
   }
