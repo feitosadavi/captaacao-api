@@ -91,10 +91,10 @@ describe('DbAddAccount Usecase', () => {
     const { sut, addAccountRepositoryStub } = makeSut()
     const addSpy = jest.spyOn(addAccountRepositoryStub, 'addAccount')
 
-    const { profilePhoto: db, ...dbParams } = mockAccountParams() // remove profilePhoto
+    const { profilePhoto: dbPhoto, ...dbParams } = mockAccountParams() // remove profilePhoto
     await sut.add(dbParams)
 
-    const { profilePhoto: repo, ...repoParams } = mockAccountRepositoryParams() // remove profilePhoto
+    const { profilePhoto: repoPhoto, ...repoParams } = mockAccountRepositoryParams()[0] // remove profilePhoto
     expect(addSpy).toHaveBeenCalledWith({ ...repoParams, password: 'hashed_password' })
   })
 
@@ -103,7 +103,7 @@ describe('DbAddAccount Usecase', () => {
     const addSpy = jest.spyOn(addAccountRepositoryStub, 'addAccount')
     const params = { ...mockAccountParams(), password: 'hashed_password' }
     await sut.add(params)
-    expect(addSpy).toHaveBeenCalledWith({ ...mockAccountRepositoryParams(), password: 'hashed_password' })
+    expect(addSpy).toHaveBeenCalledWith({ ...mockAccountRepositoryParams()[0], password: 'hashed_password' })
   })
 
   test('Should DbAddAccount throw if AddAccountRepository throws', async () => {
