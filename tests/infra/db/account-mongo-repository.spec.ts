@@ -1,14 +1,14 @@
 import MockDate from 'mockdate'
-import { Collection, InsertOneWriteOpResult, ObjectID } from 'mongodb'
+import { Collection, ObjectId } from 'mongodb'
 
-import { AccountModel } from '@/domain/models'
+import { AccountModel, PostModel } from '@/domain/models'
 import { MongoHelper, AccountMongoRepository } from '@/infra/db/mongodb'
 
 import { mockAccountParams, mockAccountConfirmationCode } from '@tests/domain/mocks'
-import { mockAccountRepositoryParams } from '@tests/data/mocks'
+import { mockAccountRepositoryParams, mockPostsRepositoryParams } from '@tests/data/mocks'
 
 describe('Account Mongo Repository', () => {
-  let accountCollection: Collection
+  let accountsCollection: Collection
   let postsCollection: Collection
 
   // antes e depois de cada teste de integração, precisamos conectar e desconectar do banco
@@ -24,16 +24,28 @@ describe('Account Mongo Repository', () => {
 
   // removo todos os registros da tabela antes de cada teste. Para não populuir as tabelas
   beforeEach(async () => {
-    accountCollection = await MongoHelper.getCollection('accounts')
-    await accountCollection.deleteMany({})
+    accountsCollection = await MongoHelper.getCollection('accounts')
+    await accountsCollection.deleteMany({})
     postsCollection = await MongoHelper.getCollection('posts')
     await postsCollection.deleteMany({})
   })
 
-  const insertPost = async (): Promise<InsertOneWriteOpResult<{ _id: string, title: string }>> => {
-    return postsCollection.insertOne({
-      title: 'any_title'
-    })
+  type InsertedResult<T = any> = Omit<T, 'id'> & { _id: ObjectId }
+
+  const insertPostAndReturnResult = async (): Promise<InsertedResult<PostModel>> => {
+    const res = await postsCollection.insertOne({ ...mockPostsRepositoryParams()[0], postedBy: new ObjectId() })
+    const insertedPosts = await postsCollection.findOne({ _id: res.insertedId })
+    return insertedPosts as unknown as InsertedResult<PostModel>
+  }
+
+  const insertAccountsAndReturnResult = async (favouritesList?: ObjectId[]): Promise<Array<InsertedResult<AccountModel>>> => {
+    await accountsCollection.insertMany([
+      { ...mockAccountRepositoryParams()[0], favouritesList },
+      { ...mockAccountRepositoryParams()[1], favouritesList }
+    ])
+
+    const insertedAccounts = await accountsCollection.find().toArray()
+    return insertedAccounts as unknown as Array<InsertedResult<AccountModel>>
   }
 
   const makeSut = (): AccountMongoRepository => {
@@ -43,7 +55,7 @@ describe('Account Mongo Repository', () => {
   describe('add()', () => {
     test('Should return true success', async () => {
       const sut = makeSut()
-      const result = await sut.addAccount({ ...mockAccountRepositoryParams() })
+      const result = await sut.addAccount({ ...mockAccountRepositoryParams()[0] })
       expect(result).toBe(true)
       // eu espero que tenha retornado algum valor do "add"
       // expect(account.id).toBeTruthy() // espero que a account tenha algum id
@@ -60,13 +72,8 @@ describe('Account Mongo Repository', () => {
   describe('loadAll()', () => {
     test('Should return an account array on loadAccouts success', async () => {
       const sut = makeSut()
-      const insertedPost = await insertPost()
-      await accountCollection.insertMany([{
-        ...mockAccountParams()
-      }, {
-        ...mockAccountParams(),
-        favouritesList: [new ObjectID(insertedPost.ops[0]._id)]
-      }])
+      const insertedPost = await insertPostAndReturnResult()
+      await insertAccountsAndReturnResult([insertedPost._id])
 
       const accounts = await sut.loadAll()
       expect(accounts).toBeTruthy()
@@ -87,13 +94,9 @@ describe('Account Mongo Repository', () => {
   describe('loadById()', () => {
     test('Should return with lookup on favouritesList with this field isnt empty', async () => {
       const sut = makeSut()
-      const insertedPost = await insertPost()
-      const res = await accountCollection.insertOne({
-        ...mockAccountParams(),
-        favouritesList: [new ObjectID(insertedPost.ops[0]._id)]
-      })
-
-      const account = await sut.loadById(res.ops[0]._id)
+      const insertedPost = await insertPostAndReturnResult()
+      const insertedAccounts = await insertAccountsAndReturnResult([insertedPost._id])
+      const account = await sut.loadById({ id: String(insertedAccounts[0]._id) })
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
       expect(account.name).toBe('any_name')
@@ -101,11 +104,9 @@ describe('Account Mongo Repository', () => {
     })
     test('Should return an account on loadById success', async () => {
       const sut = makeSut()
-      const res = await accountCollection.insertOne({
-        ...mockAccountParams()
-      })
+      const insertedAccounts = await insertAccountsAndReturnResult()
 
-      const account = await sut.loadById(res.ops[0]._id)
+      const account = await sut.loadById({ id: String(insertedAccounts[0]._id) })
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
       expect(account.name).toBe('any_name')
@@ -115,12 +116,8 @@ describe('Account Mongo Repository', () => {
   describe('loadByEmail()', () => {
     test('Should return an account on loadByEmail success', async () => {
       const sut = makeSut()
-
-      await accountCollection.insertOne({
-        ...mockAccountParams()
-      })
-
-      const account = await sut.loadByEmail({ email: 'any_email@mail.com' })
+      const insertedAccounts = await insertAccountsAndReturnResult()
+      const account = await sut.loadByEmail({ email: insertedAccounts[0].email })
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
       expect(account.name).toBe('any_name')
@@ -138,7 +135,7 @@ describe('Account Mongo Repository', () => {
     test('Should return an account on loadByCode success', async () => {
       const sut = makeSut()
       const code = mockAccountConfirmationCode()
-      await accountCollection.insertOne({
+      await accountsCollection.insertOne({
         ...mockAccountParams(),
         code
       })
@@ -160,7 +157,7 @@ describe('Account Mongo Repository', () => {
     test('Should return an account on loadByToken success without profiles', async () => {
       const sut = makeSut()
 
-      await accountCollection.insertOne({
+      await accountsCollection.insertOne({
         ...mockAccountParams(),
         accessToken: 'any_access_token'
       })
@@ -174,13 +171,13 @@ describe('Account Mongo Repository', () => {
     test('Should return an account on loadByToken success with admin profiles', async () => {
       const sut = makeSut()
 
-      await accountCollection.insertOne({
+      await accountsCollection.insertOne({
         ...mockAccountParams(),
         profiles: ['admin', 'queijo'],
         accessToken: 'any_access_token'
       })
 
-      const account = await sut.loadByToken({ accessToken: 'any_access_token', profiles: ['queijo', 'girafa'] })
+      const account = await sut.loadByToken({ accessToken: 'any_access_token', profiles: ['admin'] })
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
       expect(account.name).toBe('any_name')
@@ -189,7 +186,7 @@ describe('Account Mongo Repository', () => {
     test('Should return null on loadByToken if it was loaded with a profiles that doesnt belongs to its account', async () => {
       const sut = makeSut()
 
-      await accountCollection.insertOne({
+      await accountsCollection.insertOne({
         ...mockAccountParams(),
         accessToken: 'any_access_token'
       })
@@ -201,7 +198,7 @@ describe('Account Mongo Repository', () => {
     test('Should return an account on loadByToken success if user is admin', async () => {
       const sut = makeSut()
 
-      await accountCollection.insertOne({
+      await accountsCollection.insertOne({
         ...mockAccountParams(),
         accessToken: 'any_access_token'
       })
@@ -222,15 +219,12 @@ describe('Account Mongo Repository', () => {
   describe('updateAccessToken()', () => {
     test('Should update the account accessToken on updateAccessToken success', async () => {
       const sut = makeSut()
+      const insertedAccounts = await insertAccountsAndReturnResult()
+      expect(insertedAccounts[0].accessToken).toBeFalsy() // espero que primeiro não tenha accessToken
 
-      const res = await accountCollection.insertOne({
-        ...mockAccountParams()
-      })
-      const fakeAccount = res.ops[0]
-      expect(fakeAccount.accessToken).toBeFalsy() // espero que primeiro não tenha accessToken
-      await sut.updateAccessToken({ id: fakeAccount._id, accessToken: 'any_access_token' })
-      const account = await accountCollection.findOne({ _id: fakeAccount._id })
-      expect(account).toBeTruthy()
+      await sut.updateAccessToken({ id: String(insertedAccounts[0]._id), accessToken: 'any_access_token' })
+      const account = await accountsCollection.findOne({ _id: insertedAccounts[0]._id })
+      expect(account._id).toBeTruthy()
       expect(account.accessToken).toBe('any_access_token')
     })
   })
@@ -238,14 +232,11 @@ describe('Account Mongo Repository', () => {
   describe('updateAccount()', () => {
     test('Should update the account fields on updateAccount success', async () => {
       const sut = makeSut()
-
-      const res = await accountCollection.insertOne({
-        ...mockAccountParams()
-      })
-      const fakeAccount = res.ops[0]
-      const result = await sut.updateAccount({ id: fakeAccount._id, fields: { name: 'other_name', cep: 'other_cep' } })
+      const insertedAccounts = await insertAccountsAndReturnResult()
+      const result = await sut.updateAccount({ id: String(insertedAccounts[0]._id), fields: { name: 'other_name', cep: 'other_cep' } })
       expect(result).toBe(true)
-      const account = await accountCollection.findOne({ _id: fakeAccount._id })
+
+      const account = await accountsCollection.findOne({ _id: insertedAccounts[0]._id })
       expect(account).toBeTruthy()
       expect(account.name).toBe('other_name')
       expect(account.cep).toBe('other_cep')
@@ -255,29 +246,25 @@ describe('Account Mongo Repository', () => {
   describe('addFavourite()', () => {
     test('Should not add duplicated itens', async () => {
       const sut = makeSut()
-      const favouritePostId1 = new ObjectID()
-      const res = await accountCollection.insertOne({
-        ...mockAccountParams(), favouritesList: [favouritePostId1]
-      })
-      const fakeAccount = res.ops[0]
-      const result = await sut.addFavourite({ id: fakeAccount._id, favouritePostId: String(favouritePostId1) })
+      const favouritePostId1 = new ObjectId()
+      const insertedAccounts = await insertAccountsAndReturnResult([favouritePostId1])
+      const result = await sut.addFavourite({ id: String(insertedAccounts[0]._id), favouritePostId: String(favouritePostId1) })
       expect(result).toBe(false)
-      const account = await accountCollection.findOne({ _id: fakeAccount._id })
+
+      const account = await accountsCollection.findOne({ _id: insertedAccounts[0]._id })
       expect(account).toBeTruthy()
       expect(account.favouritesList).toEqual([favouritePostId1])
     })
 
-    test('Should update the account fields on updateAccount success', async () => {
+    test('Should addFavourite on success', async () => {
       const sut = makeSut()
-      const favouritePostId1 = new ObjectID()
-      const favouritePostId2 = new ObjectID()
-      const res = await accountCollection.insertOne({
-        ...mockAccountParams(), favouritesList: [favouritePostId1]
-      })
-      const fakeAccount = res.ops[0]
-      const result = await sut.addFavourite({ id: fakeAccount._id, favouritePostId: String(favouritePostId2) })
-      expect(result).toBe(true)
-      const account = await accountCollection.findOne({ _id: fakeAccount._id })
+      const favouritePostId1 = new ObjectId()
+      const favouritePostId2 = new ObjectId()
+      const insertedAccounts = await insertAccountsAndReturnResult([favouritePostId1])
+      const result = await sut.addFavourite({ id: String(insertedAccounts[0]._id), favouritePostId: String(favouritePostId2) })
+      expect(result).toBe(true) // verify this
+
+      const account = await accountsCollection.findOne({ _id: insertedAccounts[0]._id })
       expect(account).toBeTruthy()
       expect(account.favouritesList).toEqual([favouritePostId1, favouritePostId2])
     })
@@ -286,27 +273,26 @@ describe('Account Mongo Repository', () => {
   describe('removeFavourite()', () => {
     test('Should remove favouritePost from list givem the id', async () => {
       const sut = makeSut()
-      const favouritePostId = new ObjectID()
-      const res = await accountCollection.insertOne({
-        ...mockAccountParams(), favouritesList: [favouritePostId]
-      })
-      const fakeAccount = res.ops[0]
-      const result = await sut.removeFavourite({ id: fakeAccount._id, favouritePostId: String(favouritePostId) })
+      const favouritePostId = new ObjectId()
+      const insertedAccounts = await insertAccountsAndReturnResult([favouritePostId])
+      const result = await sut.removeFavourite({ id: String(insertedAccounts[0]._id), favouritePostId: String(favouritePostId) })
       expect(result).toBe(true)
-      const account = await accountCollection.findOne({ _id: fakeAccount._id })
+
+      const account = await accountsCollection.findOne({ _id: insertedAccounts[0]._id })
+      expect(account).toBeTruthy()
       expect(account.favouritesList).toEqual([])
     })
 
     // test('Should update the account fields on updateAccount success', async () => {
     //   const sut = makeSut()
 
-    //   const res = await accountCollection.insertOne({
+    //   const res = await accountsCollection.insertOne({
     //     ...mockAccountParams(), favouritePosts: ['any_favourite_post_1']
     //   })
     //   const fakeAccount = res.ops[0]
     //   const result = await sut.addFavourite({ id: fakeAccount._id, favouritePostId: 'any_favourite_post_2' })
     //   expect(result).toBe(true)
-    //   const account = await accountCollection.findOne({ _id: fakeAccount._id })
+    //   const account = await accountsCollection.findOne({ _id: fakeAccount._id })
     //   expect(account).toBeTruthy()
     //   expect(account.favouritePosts).toEqual(['any_favourite_post_1', 'any_favourite_post_2'])
     // })
@@ -315,16 +301,13 @@ describe('Account Mongo Repository', () => {
   describe('updatePassword()', () => {
     test('Should update accounts password on updatePassword success', async () => {
       const sut = makeSut()
-
-      const res = await accountCollection.insertOne({
-        ...mockAccountParams()
-      })
-      const fakeAccount = res.ops[0]
-      const result = await sut.updatePassword({ id: fakeAccount._id, password: 'other_password' })
+      const insertedAccounts = await insertAccountsAndReturnResult()
+      const result = await sut.updatePassword({ id: String(insertedAccounts[0]._id), password: 'other_password' })
       expect(result).toBe(true)
-      const account: AccountModel = await accountCollection.findOne({ _id: fakeAccount._id })
+
+      const account = await accountsCollection.findOne({ _id: insertedAccounts[0]._id })
       expect(account).toBeTruthy()
-      expect(account.password !== fakeAccount._id).toBe(true)
+      expect(account.password !== insertedAccounts[0]._id).toBe(true)
     })
   })
 
@@ -332,10 +315,10 @@ describe('Account Mongo Repository', () => {
     test('Should return true on success', async () => {
       const sut = makeSut()
 
-      const res = await accountCollection.insertOne({
+      const res = await accountsCollection.insertOne({
         ...mockAccountParams()
       })
-      const id = res.ops[0]._id
+      const id = { id: String(res.insertedId) }
 
       const deletionResult = await sut.deleteAccount(id)
       expect(deletionResult).toBe(true)

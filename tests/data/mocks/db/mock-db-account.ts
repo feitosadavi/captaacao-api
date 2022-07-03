@@ -126,21 +126,43 @@ export const mockDeleteAccountRepository = (): DeleteAccountRepository => {
 }
 
 // repo params are diff thant db params, so we need to use a diff mock
-export const mockAccountRepositoryParams = (): AddAccountRepository.Params => ({
-  name: 'any_name',
-  email: 'any_email@mail.com',
-  password: 'any_password',
-  doc: 'cpf_or_cnpj',
-  birthDate: '00/00/0000',
-  phone: 'any_phone',
-  profiles: ['any_profile', 'other_profile'],
-  profilePhoto: 'any_photo_link',
-  adress: {
-    cep: 'any_cep',
-    endereco: 'any_endereco',
-    complemento: 'any_complemento',
-    uf: 'any_uf',
-    cidade: 'any_cidade',
-    bairro: 'any_bairro'
-  }
-})
+export const mockAccountRepositoryParams = (): AddAccountRepository.Params[] => (
+  [
+    {
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password',
+      doc: 'cpf_or_cnpj',
+      birthDate: '00/00/0000',
+      phone: 'any_phone',
+      profiles: ['any_profile', 'other_profile'],
+      profilePhoto: 'any_photo_link',
+      adress: {
+        cep: 'any_cep',
+        endereco: 'any_endereco',
+        complemento: 'any_complemento',
+        uf: 'any_uf',
+        cidade: 'any_cidade',
+        bairro: 'any_bairro'
+      }
+    },
+    {
+      name: 'other_name',
+      email: 'other_email@mail.com',
+      password: 'other_password',
+      doc: 'cpf_or_cnpj',
+      birthDate: '00/00/0000',
+      phone: 'other_phone',
+      profiles: ['other_profile', 'other_profile'],
+      profilePhoto: 'other_photo_link',
+      adress: {
+        cep: 'other_cep',
+        endereco: 'other_endereco',
+        complemento: 'other_complemento',
+        uf: 'other_uf',
+        cidade: 'other_cidade',
+        bairro: 'other_bairro'
+      }
+    }
+  ]
+)

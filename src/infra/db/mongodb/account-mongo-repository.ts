@@ -1,7 +1,6 @@
 import { ObjectId } from 'mongodb'
 import { MongoHelper } from './mongo-helper'
 
-import { AccountModel } from '@/domain/models'
 import {
   AddAccountRepository,
   AddFavouritePostRepository,
@@ -33,13 +32,12 @@ export class AccountMongoRepository implements
   async addAccount (params: AddAccountRepository.Params): AddAccountRepository.Result {
     const accountsCollection = await MongoHelper.getCollection('accounts')
     const result = await accountsCollection.insertOne(params)
-    console.log(result)
     return !!result.insertedId
   }
 
   async loadAll (): LoadAllAccountsRepository.Result {
     const accountsCollection = await MongoHelper.getCollection('accounts')
-    const accountsNonMappedId = await accountsCollection.aggregate([
+    const accountsNonMappedId = (await accountsCollection.aggregate([
       {
         $lookup: {
           from: 'posts',
@@ -48,7 +46,8 @@ export class AccountMongoRepository implements
           as: 'favouritesList'
         }
       }
-    ]).toArray()
+    ]).toArray())
+
     const accountMappedId = accountsNonMappedId.map(account => {
       const favouritesList = account?.favouritesList
       if (favouritesList) {
@@ -63,7 +62,7 @@ export class AccountMongoRepository implements
     const accountsCollection = await MongoHelper.getCollection('accounts')
     const accountsNonMappedId = await accountsCollection.aggregate([
       {
-        $match: { $expr: { $eq: ['$_id', new ObjectId(id)] } }
+        $match: { _id: new ObjectId(id) }
       },
       {
         $lookup: {
@@ -109,20 +108,16 @@ export class AccountMongoRepository implements
 
   async loadByToken ({ accessToken, profiles }: LoadAccountByTokenRepository.Params): LoadAccountByTokenRepository.Result {
     const accountsCollection = await MongoHelper.getCollection('accounts')
-    let account: AccountModel
+    let account: any
     if (profiles?.length > 0) {
       /**
        * An account can have various profiles, so a needed a way to check if its some profile from account
        * could match with profiles from loadByToken params, so a had to build this 'orQuery' in a very 'gambiarra' way :)
       */
-      const orQuery = []
-      for (const profile of profiles) {
-        orQuery.push({ profiles: { $in: [profile] } })
-      }
-      account = await accountsCollection.find({
+      account = await accountsCollection.findOne({
         accessToken: accessToken,
-        $or: orQuery
-      }).toArray()[0]
+        profiles: { $in: profiles }
+      })
     } else {
       account = await accountsCollection.findOne({ accessToken: accessToken }) as any
     }
@@ -131,7 +126,7 @@ export class AccountMongoRepository implements
 
   async updateAccessToken ({ id, accessToken }: UpdateAccessTokenRepository.Params): UpdateAccessTokenRepository.Result {
     const accountsCollection = await MongoHelper.getCollection('accounts')
-    await accountsCollection.updateOne({ _id: id },
+    await accountsCollection.updateOne({ _id: new ObjectId(id) },
       {
         $set: { accessToken }
       }
@@ -147,7 +142,8 @@ export class AccountMongoRepository implements
         }
       }
     )
-    return res.modifiedCount > 0
+    console.log(res)
+    return res.modifiedCount >= 1
   }
 
   async removeFavourite ({ favouritePostId, id }: AddFavouritePostRepository.Params): AddFavouritePostRepository.Result {
@@ -158,24 +154,24 @@ export class AccountMongoRepository implements
     return res.modifiedCount > 0
   }
 
-  async updateAccount (params: UpdateAccountRepository.Params): UpdateAccountRepository.Result {
+  async updateAccount ({ id, fields }: UpdateAccountRepository.Params): UpdateAccountRepository.Result {
     const accountsCollection = await MongoHelper.getCollection('accounts')
-    await accountsCollection.updateOne({ _id: params.id },
+    const res = await accountsCollection.updateOne({ _id: new ObjectId(id) },
       {
-        $set: { ...params.fields }
+        $set: { ...fields }
       }
     )
-    return true
+    return res.modifiedCount >= 1
   }
 
   async updatePassword ({ id, password }: UpdatePasswordRepository.Params): UpdatePasswordRepository.Result {
     const accountsCollection = await MongoHelper.getCollection('accounts')
-    await accountsCollection.updateOne({ _id: id },
+    const res = await accountsCollection.updateOne({ _id: new ObjectId(id) },
       {
         $set: { password }
       }
     )
-    return true
+    return res.modifiedCount >= 1
   }
 
   async deleteAccount ({ id }: DeleteAccountRepository.Params): DeleteAccountRepository.Result {
