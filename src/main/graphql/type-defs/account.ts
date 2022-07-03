@@ -32,18 +32,20 @@ export default gql`
       profilePhoto: String
       email: String
       phone: String
-
-      # Adress
-      cep: String
-      endereco: String
-      complemento: String
-      uf: String
-      cidade: String
-      bairro: String
+      adress: AdressInput
     ): UpdateResult! @auth
     deleteAccount (id: String!): DeleteResult! @auth
     addFavouritePost(favouritePostId: String!): UpdateResult @auth
     removeFavouritePost(favouritePostId: String!): UpdateResult @auth
+  }
+
+  input AdressInput {
+    cep: String
+    endereco: String
+    complemento: String
+    uf: String
+    cidade: String
+    bairro: String
   }
 
 
