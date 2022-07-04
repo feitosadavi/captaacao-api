@@ -142,7 +142,6 @@ export class AccountMongoRepository implements
         }
       }
     )
-    console.log(res)
     return res.modifiedCount >= 1
   }
 
@@ -176,7 +175,25 @@ export class AccountMongoRepository implements
 
   async deleteAccount ({ id }: DeleteAccountRepository.Params): DeleteAccountRepository.Result {
     const accountsCollection = await MongoHelper.getCollection('accounts')
-    const deletionResult = await accountsCollection.deleteOne({ _id: new ObjectId(id) })
-    return deletionResult.deletedCount === 1
+    const postsCollection = await MongoHelper.getCollection('posts')
+
+    const session = await MongoHelper.client.startSession()
+    let isOk = false
+    try {
+      session.startTransaction()
+      const accountDeletionResult = await accountsCollection.deleteOne({ _id: new ObjectId(id) }, { session })
+      if (!accountDeletionResult.acknowledged || accountDeletionResult.deletedCount === 0) {
+        await session.abortTransaction()
+      }
+      await postsCollection.deleteMany({ postedBy: new ObjectId(id) }, { session })
+      await session.commitTransaction()
+      isOk = true
+    } catch (error) {
+      console.error(error)
+      isOk = false
+    } finally {
+      await session.endSession()
+    }
+    return isOk
   }
 }

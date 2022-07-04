@@ -32,8 +32,8 @@ describe('Account Mongo Repository', () => {
 
   type InsertedResult<T = any> = Omit<T, 'id'> & { _id: ObjectId }
 
-  const insertPostAndReturnResult = async (): Promise<InsertedResult<PostModel>> => {
-    const res = await postsCollection.insertOne({ ...mockPostsRepositoryParams()[0], postedBy: new ObjectId() })
+  const insertPostAndReturnResult = async (postedBy?: ObjectId): Promise<InsertedResult<PostModel>> => {
+    const res = await postsCollection.insertOne({ ...mockPostsRepositoryParams()[0], postedBy: postedBy || new ObjectId() })
     const insertedPosts = await postsCollection.findOne({ _id: res.insertedId })
     return insertedPosts as unknown as InsertedResult<PostModel>
   }
@@ -318,10 +318,17 @@ describe('Account Mongo Repository', () => {
       const res = await accountsCollection.insertOne({
         ...mockAccountParams()
       })
+      await insertPostAndReturnResult(res.insertedId)
       const id = { id: String(res.insertedId) }
+
+      let posts = await postsCollection.find({ postedBy: res.insertedId }).toArray()
+      expect(posts.length).toBe(1)
 
       const deletionResult = await sut.deleteAccount(id)
       expect(deletionResult).toBe(true)
+
+      posts = await postsCollection.find({ postedBy: res.insertedId }).toArray()
+      expect(posts.length).toBe(0)
     })
     test('Should return false if account doesnt exists', async () => {
       const sut = makeSut()

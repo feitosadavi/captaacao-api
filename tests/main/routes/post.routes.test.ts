@@ -1,5 +1,5 @@
 
-import { Collection, InsertOneWriteOpResult, ObjectId } from 'mongodb'
+import { Collection, InsertOneResult, ObjectId } from 'mongodb'
 import request from 'supertest'
 import { sign } from 'jsonwebtoken'
 
@@ -48,7 +48,7 @@ describe('Post Routes', () => {
     file = fs.readFileSync(path)
   }
 
-  const insertAccount = async (): Promise<InsertOneWriteOpResult<any>> => {
+  const insertAccount = async (): Promise<InsertOneResult<any>> => {
     return accountsCollection.insertOne({
       name: 'Postlos',
       email: 'postlos@gmail.com',
@@ -57,7 +57,7 @@ describe('Post Routes', () => {
     })
   }
 
-  const insertPost = async (postedBy: string): Promise<InsertOneWriteOpResult<any>> => {
+  const insertPost = async (postedBy: string): Promise<InsertOneResult<any>> => {
     return postsCollection.insertOne({
       title: 'any_title',
       description: 'any_description',
@@ -124,7 +124,7 @@ describe('Post Routes', () => {
 
     test('Should return 204 on add post success ', async () => {
       const inserteAccount = await insertAccount()
-      const id = inserteAccount.ops[0]._id
+      const id = String(inserteAccount.insertedId)
       const accessToken = sign({ id }, env.secret)
       await updateAccountToken(id, accessToken)
 
@@ -142,11 +142,11 @@ describe('Post Routes', () => {
 
   describe('POST /update-post/:id', () => {
     test('Should return 403 on add post without accessToken ', async () => {
-      const accountId = (await insertAccount()).ops[0]._id
-      const postId = (await insertPost(accountId)).ops[0]._id
+      const accountId = (await insertAccount()).insertedId
+      const postId = (await insertPost(String(accountId))).insertedId
 
       await request(app)
-        .post(`/api/update-post/${postId}`)
+        .post(`/api/update-post/${String(postId)}`)
         .field('data', JSON.stringify(mockData()))
         .attach('photos', file, { filename: 'test_img-1_post' })
         .attach('photos', file, { filename: 'test_img_2_post' })
@@ -156,13 +156,13 @@ describe('Post Routes', () => {
 
     test('Should return 204 on add post success ', async () => {
       const inserteAccount = await insertAccount()
-      const id = inserteAccount.ops[0]._id
+      const id = String(inserteAccount.insertedId)
       const accessToken = sign({ id }, env.secret)
       await updateAccountToken(id, accessToken)
 
       const insertedPost = await insertPost(id)
       const res = await request(app)
-        .post(`/api/update-post/${insertedPost.ops[0]._id}`)
+        .post(`/api/update-post/${insertedPost.insertedId}`)
         .set('x-access-token', accessToken) // na requisição, eu coloco o accessToken nos headers
         .field('data', JSON.stringify({ title: 'other_title' }))
         .attach('photos', file, { filename: 'test_img_1_post' })
@@ -171,7 +171,7 @@ describe('Post Routes', () => {
       expect(res.body).toEqual({ ok: true })
       expect(res.status).toBe(200)
 
-      const post = await postsCollection.findOne({ id: (insertedPost.ops as any)._id })
+      const post = await postsCollection.findOne({ id: insertedPost.insertedId })
       expect(post.photos).toEqual(['test_img_1_post', 'test_img_2_post'])
       expect(post.title).toBe('other_title')
     })
