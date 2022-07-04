@@ -7,6 +7,10 @@ module.exports = {
       version: '4.0.3',
       skipMDS: true
     },
-    autoStart: false
+    autoStart: false,
+    replSet: {
+      count: 4,
+      storageEngine: 'wiredTiger'
+    }
   }
 }
