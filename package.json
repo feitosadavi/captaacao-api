@@ -4,18 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node captacao-api/main/server.js NODE_ENV=production",
-    "compile": "rimraf captacao-api && tsc -p tsconfig-build.json && node captacao-api/main/server.js",
+    "start": "node build/main/server.js NODE_ENV=production",
+    "compile": "rimraf build && tsc -p tsconfig-build.json && node build/main/server.js",
     "dev": "nodemon --watch 'src/' --exec \"ts-node-dev -r tsconfig-paths/register src/main/server.ts\" -e ts",
-    "debug": "nodemon -L --watch ./captacao-api --inspect=0.0.0.0:9222 --nolazy ./captacao-api/main/server.js",
-    "build": "rimraf captacao-api && tsc -p tsconfig-build.json",
+    "debug": "nodemon -L --watch ./build --inspect=0.0.0.0:9222 --nolazy ./build/main/server.js",
+    "build": "rimraf build && tsc -p tsconfig-build.json",
     "docker:build": "sudo docker build . -t feitosadavi/captacao-api:latest",
     "docker:pull": "docker pull feitosadavi/captacao-api:latest",
     "up": "npm run build && sudo docker-compose up -d",
     "down": "sudo docker-compose down",
     "playground": "nodemon playground/index.js",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
-    "test:verbose": "jest --watch --passWithNoTests --runInBand /home/eu/Documents/captaacao-api/tests/data/usecases/account/db-load-accounts.spec.ts",
+    "test:verbose": "jest --watch --passWithNoTests --runInBand /home/eu/Documents/captaacao-api/tests/infra/db/account-mongo-repository.spec.ts",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
     "test:integration": "npm test -- --watch -c jest-integration-config.js",
     "test:staged": "npm test -- --findRelatedTests",
@@ -82,6 +82,6 @@
     "node": "16.x"
   },
   "_moduleAliases": {
-    "@": "src"
+    "@": "build"
   }
 }

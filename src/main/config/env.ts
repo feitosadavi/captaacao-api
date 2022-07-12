@@ -2,7 +2,8 @@ export default {
   mongoUrl: process.env.MONGO_URL ?? 'mongodb+srv://captacao-admins:dq42hSFYWgwZZ32c@captacao.ddftp.mongodb.net/myFirstDatabase?retryWrites=false&w=majority',
   port: process.env.PORT ?? 5050,
   secret: process.env.SECRET ?? 'secret',
-
+  apiUrl: process.env.API_URL ?? 'http://localhost:',
+  isProd: process.env.NODE_ENV === 'production',
   recEmail: process.env.REC_EMAIL ?? 'captacaodevtesting@gmail.com',
   recEmailPassword: process.env.REC_EMAIL_PASSWORD ?? '6dL5DFV3ePmspXS',
 

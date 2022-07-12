@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "captacao-api",
+    "outDir": "build",
     "module": "commonjs",
     "target": "es2019",
     "experimentalDecorators": true,
