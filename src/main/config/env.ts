@@ -1,5 +1,5 @@
 export default {
-  mongoUrl: process.env.MONGO_URL ?? 'mongodb+srv://captacao-admins:dq42hSFYWgwZZ32c@captacao.ddftp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+  mongoUrl: process.env.MONGO_URL ?? 'mongodb+srv://captacao-admins:dq42hSFYWgwZZ32c@captacao.ddftp.mongodb.net/myFirstDatabase?retryWrites=false&w=majority',
   port: process.env.PORT ?? 5050,
   secret: process.env.SECRET ?? 'secret',
 
