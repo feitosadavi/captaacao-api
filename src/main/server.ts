@@ -1,8 +1,16 @@
+/* eslint-disable import/first */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
+import moduleAlias from 'module-alias'
 import 'module-alias/register'
+import { resolve } from 'path'
+import env from './config/env'
+
+// SETUP ALIASES FOR DEV AND PROD ENVIRONMENTS
+const absolutePath = resolve('.')
+const alias = env.isProd ? { '@': `${absolutePath}/build` } : { '@': '/' }
+moduleAlias.addAliases(alias)
 
 import { MongoHelper } from '@/infra/db/mongodb'
-import env from './config/env'
 
 MongoHelper.connect(env.mongoUrl)
   .then(async () => {

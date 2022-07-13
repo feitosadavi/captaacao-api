@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node build/main/server.js NODE_ENV=production",
+    "start": "NODE_ENV=production node build/main/server.js",
     "compile": "rimraf build && tsc -p tsconfig-build.json && node build/main/server.js",
     "dev": "nodemon --watch 'src/' --exec \"ts-node-dev -r tsconfig-paths/register src/main/server.ts\" -e ts",
     "debug": "nodemon -L --watch ./build --inspect=0.0.0.0:9222 --nolazy ./build/main/server.js",
@@ -32,6 +32,7 @@
     "@types/express": "^4.17.11",
     "@types/jest": "^24.9.1",
     "@types/jsonwebtoken": "^8.5.0",
+    "@types/module-alias": "^2.0.1",
     "@types/node": "^17.0.21",
     "@types/nodemailer": "^6.4.4",
     "@types/supertest": "^2.0.10",
@@ -79,8 +80,5 @@
   },
   "engines": {
     "node": "16.x"
-  },
-  "_moduleAliases": {
-    "@": "build"
   }
 }
