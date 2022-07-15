@@ -21,9 +21,9 @@ export const MongoHelper = {
   async setupIndexes (): Promise<void> {
     const postsCollection = await this.getCollection('posts')
     console.info('START INDEXES SETUP')
-    console.info('[POSTS] CREATING INDEX - title ')
-    postsCollection.createIndex({ title: 'text' })
-    console.info('[POSTS] FINISHED INDEX - title ')
+    console.info('[POSTS] CREATING INDEX - title and description')
+    postsCollection.createIndex({ title: 'text', description: 'text' }, { default_language: 'pt' })
+    console.info('FINISH INDEXES SETUP ')
   },
   map: (data: any): any => { // regra de negócio: o mongo retorna o id como _id, como preciso utilizar como id
     // console.log({ data })
