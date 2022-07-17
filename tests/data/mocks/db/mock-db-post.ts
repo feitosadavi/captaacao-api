@@ -102,7 +102,7 @@ export const mockPostsRepositoryParams = (): AddPostRepository.Params[] => {
       model: 'other_model',
       year: 'other_year',
       color: 'other_color',
-      doors: 4,
+      doors: 2,
       steering: 'other_steering',
       fuel: 'other_fuel',
       kmTraveled: 100000,

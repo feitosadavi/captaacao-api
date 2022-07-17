@@ -15,13 +15,26 @@ export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepos
     const postsCollection = await MongoHelper.getCollection('posts')
     // postedBy is an ID, so we need to convert it so that it can be used in find
     const { skip, limit, count, postedBy, search, ...filters } = params
-    // const posts = await postsCollection.aggregate([
-    //   {
-    //     $match: { ...query }
-    //   }
-    // ]).skip(skip ?? 0).limit(limit || 9999999999999).toArray()
 
-    const stages: any = [
+    // SETUP FILTERS
+    const and = []
+    const keys = Object.keys(filters)
+    if (keys.length !== 0) {
+      for (const key of keys) {
+        // make the comparations query based on filters key and value
+        const comparassion = { [`carBeingSold.${key}`]: { $in: filters[key] } }
+        and.push(comparassion)
+      }
+    } else {
+      // and query will be an empty obj arr if no filters were settled
+      and.push({})
+    }
+
+    if (postedBy) and.push({ postedBy: new ObjectId(postedBy) })
+    if (search) and.push({ $text: { $search: search } })
+
+    const aggregation = [
+      { $match: { $and: and } },
       {
         $facet: {
           sold: [
@@ -45,29 +58,13 @@ export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepos
               }
             },
             { $skip: skip || 0 },
-            { $limit: limit || 999999999 }
+            { $limit: limit || 99999999999 }
           ]
         }
       }
     ]
 
-    const andQuery = []
-    if (Object.keys(filters).length !== 0) {
-      for (const key of Object.keys(filters)) {
-        const orQuery = { $or: [] }
-        const filterOption = filters[key].map((value: string) => ({ [`carBeingSold.${key}`]: value }))
-        orQuery.$or.push(...filterOption)
-        andQuery.push(orQuery)
-      }
-    }
-    if (search) andQuery.push({ $text: { $search: search } })
-    const query = andQuery.length > 0 ? { $and: andQuery } : {}
-
-    if (postedBy) {
-      stages.unshift({ $match: { postedBy: new ObjectId(postedBy), ...query } })
-    }
-
-    const posts = (await postsCollection.aggregate(stages).toArray())[0]
+    const posts = (await postsCollection.aggregate(aggregation).toArray())[0]
     const countValues = { sold: posts.sold[0]?.sold || 0, notSold: posts.notSold[0]?.notSold || 0 }
     const mappedPostedBy = posts.data.map(post => { post.postedBy = MongoHelper.map(post.postedBy); return post })
     const result: LoadAllPostsRepository.Result = { result: MongoHelper.mapCollection(mappedPostedBy), count: countValues }

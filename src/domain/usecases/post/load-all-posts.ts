@@ -17,7 +17,7 @@ export namespace LoadAllPosts {
     year?: string[]
     steering?: string[]
     engine?: string[]
-    doors?: string[]
+    doors?: number[]
   }
   export type FilterOptions = {
     brand: string[]

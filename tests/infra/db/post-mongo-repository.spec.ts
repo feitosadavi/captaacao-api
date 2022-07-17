@@ -18,6 +18,7 @@ describe('PostMongoRepository', () => {
   // antes e depois de cada teste de integração, precisamos conectar e desconectar do banco
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL)
+    await MongoHelper.setupIndexes()
   })
 
   afterAll(async () => {
@@ -49,14 +50,14 @@ describe('PostMongoRepository', () => {
     return insertedPosts as unknown as InsertPostsAndReturnResult
   }
 
-  // describe('add()', () => {
-  //   test('Should create a post on add success', async () => {
-  //     const sut = makeSut()
-  //     await sut.addPost(mockPostsRepositoryParams()[0])
-  //     const post = await postsCollection.findOne({ title: 'any_title' })
-  //     expect(post).toBeTruthy()
-  //   })
-  // })
+  describe('add()', () => {
+    test('Should create a post on add success', async () => {
+      const sut = makeSut()
+      await sut.addPost(mockPostsRepositoryParams()[0])
+      const post = await postsCollection.findOne({ title: 'any_title' })
+      expect(post).toBeTruthy()
+    })
+  })
 
   describe('loadAll()', () => {
     test('Should load all posts with none skip parameters has been passed', async () => {
@@ -86,8 +87,7 @@ describe('PostMongoRepository', () => {
       const sut = makeSut()
       const insertedPost = (await insertPostsAndReturnResult())[0]
       const posts = await sut.loadAll({ brand: [insertedPost.carBeingSold.brand, 'Fusca'] })
-      console.log({ posts })
-      expect(posts.result.length).toBe(2)
+      expect(posts.result.length).toBe(1)
       expect(posts.result[0].carBeingSold.brand).toBe('any_brand')
     })
 
@@ -95,7 +95,7 @@ describe('PostMongoRepository', () => {
       const sut = makeSut()
       const insertedPost = (await insertPostsAndReturnResult())[0]
       const posts = await sut.loadAll({ color: [insertedPost.carBeingSold.color, 'Roxo'] })
-      expect(posts.result.length).toBe(2)
+      expect(posts.result.length).toBe(1)
       expect(posts.result[0].carBeingSold.color).toBe('any_color')
     })
 
@@ -103,7 +103,7 @@ describe('PostMongoRepository', () => {
       const sut = makeSut()
       const insertedPost = (await insertPostsAndReturnResult())[0]
       const posts = await sut.loadAll({ steering: [insertedPost.carBeingSold.steering, 'Elétrica'] })
-      expect(posts.result.length).toBe(2)
+      expect(posts.result.length).toBe(1)
       expect(posts.result[0].carBeingSold.steering).toBe('any_steering')
     })
 
@@ -111,15 +111,31 @@ describe('PostMongoRepository', () => {
       const sut = makeSut()
       const insertedPost = (await insertPostsAndReturnResult())[0]
       const posts = await sut.loadAll({ year: [insertedPost.carBeingSold.year, '2000'] })
-      expect(posts.result.length).toBe(2)
+      expect(posts.result.length).toBe(1)
       expect(posts.result[0].carBeingSold.year).toBe('any_year')
     })
 
     test('Should load all posts given doors filter', async () => {
       const sut = makeSut()
       const insertedPost = (await insertPostsAndReturnResult())[0]
-      const posts = await sut.loadAll({ doors: [String(insertedPost.carBeingSold.doors)] }) // DOOORS VERIFICAR
-      expect(posts.result.length).toBe(2)
+      const posts = await sut.loadAll({ doors: [Number(insertedPost.carBeingSold.doors)] })
+      expect(posts.result.length).toBe(1)
+      expect(posts.result[0].carBeingSold.doors).toBe(insertedPost.carBeingSold.doors)
+    })
+
+    test('Should load all posts given the searching by title', async () => {
+      const sut = makeSut()
+      const insertedPost = (await insertPostsAndReturnResult())[0]
+      const posts = await sut.loadAll({ search: 'any_title' })
+      expect(posts.result.length).toBe(1)
+      expect(posts.result[0].carBeingSold.doors).toBe(insertedPost.carBeingSold.doors)
+    })
+
+    test('Should load all posts given the searching by description', async () => {
+      const sut = makeSut()
+      const insertedPost = (await insertPostsAndReturnResult())[0]
+      const posts = await sut.loadAll({ search: 'any_description' })
+      expect(posts.result.length).toBe(1)
       expect(posts.result[0].carBeingSold.doors).toBe(insertedPost.carBeingSold.doors)
     })
 
