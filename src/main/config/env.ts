@@ -1,5 +1,5 @@
 export default {
-  mongoUrl: process.env.MONGO_URL ?? 'mongodb+srv://captacao-admins:dq42hSFYWgwZZ32c@captacao.ddftp.mongodb.net/myFirstDatabase?retryWrites=false&w=majority',
+  mongoUrl: process.env.MONGO_URL ?? 'mongodb://localhost:27017/captacao-db',
   port: process.env.PORT ?? 5050,
   secret: process.env.SECRET ?? 'secret',
   apiUrl: process.env.API_URL ?? 'http://localhost:',
