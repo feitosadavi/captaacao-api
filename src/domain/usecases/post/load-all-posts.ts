@@ -14,7 +14,7 @@ export namespace LoadAllPosts {
     limit?: number
     color?: string[]
     brand?: string[]
-    year?: string[]
+    year?: number[]
     steering?: string[]
     engine?: string[]
     doors?: number[]

@@ -25,7 +25,7 @@ export namespace PostModel {
 
     brand: string
     model: string
-    year: string
+    year: number
     color: string
     doors: number
     steering: string

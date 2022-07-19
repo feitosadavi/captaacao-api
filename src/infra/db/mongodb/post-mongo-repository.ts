@@ -14,7 +14,7 @@ export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepos
   async loadAll (params: LoadAllPostsRepository.Params): Promise<LoadAllPostsRepository.Result> {
     const postsCollection = await MongoHelper.getCollection('posts')
     // postedBy is an ID, so we need to convert it so that it can be used in find
-    const { skip, limit, count, postedBy, search, ...filters } = params
+    const { skip, limit, count, postedBy, search, year, ...filters } = params
 
     // SETUP FILTERS
     const and = []
@@ -32,6 +32,7 @@ export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepos
 
     if (postedBy) and.push({ postedBy: new ObjectId(postedBy) })
     if (search) and.push({ $text: { $search: search } })
+    if (year?.length > 0) and.push({ 'carBeingSold.year': { $gte: year[0], $lte: year[1] ?? 9999 } })
 
     const aggregation = [
       { $match: { $and: and } },
