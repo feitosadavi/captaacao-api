@@ -125,4 +125,8 @@ export default gql`
     sold: Boolean!
     fastSale: Boolean
   }
+
+  extend type Subscription {
+    pegaTudo: [Post!]
+  }
 `
