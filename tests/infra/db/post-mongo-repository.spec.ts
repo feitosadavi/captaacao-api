@@ -110,9 +110,9 @@ describe('PostMongoRepository', () => {
     test('Should load all posts given year filter', async () => {
       const sut = makeSut()
       const insertedPost = (await insertPostsAndReturnResult())[0]
-      const posts = await sut.loadAll({ year: [insertedPost.carBeingSold.year, '2000'] })
-      expect(posts.result.length).toBe(1)
-      expect(posts.result[0].carBeingSold.year).toBe('any_year')
+      const posts = await sut.loadAll({ year: [2000, insertedPost.carBeingSold.year] })
+      expect(posts.result.length).toBe(2)
+      expect(posts.result[0].carBeingSold.year).toBe(insertedPost.carBeingSold.year)
     })
 
     test('Should load all posts given doors filter', async () => {
