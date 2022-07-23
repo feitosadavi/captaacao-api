@@ -1,7 +1,5 @@
 FROM node:16 AS builder
 
-MAINTAINER davifeitosa.dev@protonmail.com
-
 WORKDIR /usr/src/captaacao-api
 
 # Install app dependencies

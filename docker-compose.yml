@@ -8,14 +8,14 @@ services:
       - ./data:/data/db
     ports:
       - "27017:27017"
-  api:
-    container_name: api-container
-    restart: always
-    build: .
-    ports:
-      - "5050:5050"
-    environment:
-      - MONGO_URL=mongodb://mongo:27017/captaacao-api
-    links:
-      - mongo
+  # api:
+  #   container_name: api-container
+  #   restart: always
+  #   build: .
+  #   ports:
+  #     - "5050:5050"
+  #   environment:
+  #     - MONGO_URL=mongodb://mongo:27017/captaacao-api
+  #   links:
+  #     - mongo
 
