@@ -11,10 +11,10 @@ import { mockAddPost, mockValidation } from '@tests/presentation/mocks'
 const mockRequest = (): AddPostController.Request => {
   const { status, views, createdAt, modifiedAt, photos, postedBy, active, carBeingSold, ...request } = mockPostsParams()[0]
   return {
-    data: {
+    data: JSON.stringify({
       ...carBeingSold,
       ...request
-    },
+    }),
     accountId: postedBy,
     clientFiles: photos
   }
@@ -50,7 +50,7 @@ describe('AddPost Controller', () => {
     const validateSpy = jest.spyOn(validationStub, 'validate')
     const request = mockRequest()
     await sut.handle(request)
-    expect(validateSpy).toHaveBeenCalledWith(request)
+    expect(validateSpy).toHaveBeenCalledWith(JSON.parse(request.data))
   })
 
   test('Should return 400 if validation fails', async () => {

@@ -21,9 +21,8 @@ export namespace LoadAllPosts {
   }
   export type FilterOptions = {
     brand: string[]
-    model: string[]
     fuel: string[]
-    year: string[]
+    year: number[]
     color: string[]
     doors: number[]
     steering: string[]

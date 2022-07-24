@@ -25,7 +25,7 @@ export namespace LoadAllPostsController {
   // price: number
   // brand: string
   // model: string
-  // year: string
+  // year: number
   // color: string
   // doors: number
   // steering: string

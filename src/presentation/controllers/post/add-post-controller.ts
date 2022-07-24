@@ -12,7 +12,8 @@ export class AddPostController implements Controller<AddPostController.Request> 
   async handle (request: AddPostController.Request): Promise<HttpResponse> {
     try {
       const { accountId, data, clientFiles } = request
-      const params = JSON.parse(data as unknown as any)
+
+      const params = JSON.parse(data) as AddPostController.Data
 
       const error = this.validation.validate(params)
       if (error) return badRequest(error)
@@ -46,7 +47,7 @@ export class AddPostController implements Controller<AddPostController.Request> 
 }
 
 export namespace AddPostController {
-  type Data = Omit<AddPost.Params,
+  export type Data = Omit<AddPost.Params,
   'status' |
   'active' |
   'views' |
@@ -61,7 +62,7 @@ export namespace AddPostController {
 
     brand: string
     model: string
-    year: string
+    year: number
     color: string
     doors: number
     steering: string
@@ -75,7 +76,7 @@ export namespace AddPostController {
   }
   // eslint-disable-next-line @typescript-eslint/array-type
   export type Request = {
-    data: Data
+    data: string
     accountId: string
     clientFiles?: Array<{
       fileName: string

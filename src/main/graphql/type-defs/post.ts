@@ -10,7 +10,7 @@ export default gql`
       postedBy: String,
       color: [String!]
       brand: [String!]
-      year: [String!]
+      year: [Int!]
       steering: [String!]
       fuel: [String!]
       doors: [Int!]

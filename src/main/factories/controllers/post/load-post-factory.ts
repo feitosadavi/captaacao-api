@@ -5,6 +5,6 @@ import { Controller } from '@/presentation/protocols'
 
 export const makeLoadAllPostsController = (): Controller => {
   const postMongoRepository = new PostMongoRepository()
-  const dbLoadAllPosts = new DbLoadAllPosts(postMongoRepository)
+  const dbLoadAllPosts = new DbLoadAllPosts(postMongoRepository, postMongoRepository)
   return new LoadAllPostsController(dbLoadAllPosts)
 }

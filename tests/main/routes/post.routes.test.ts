@@ -7,9 +7,8 @@ import { MongoHelper } from '@/infra/db/mongodb'
 import { setupApp } from '@/main/config/app'
 import env from '@/main/config/env'
 
-import { Express } from 'express'
-
 import fs from 'fs'
+import { Server } from 'http'
 
 let postsCollection: Collection
 let accountsCollection: Collection
@@ -21,7 +20,7 @@ describe('Post Routes', () => {
   const dir = './test_tmp'
   const path = `${dir}/${fileName}`
 
-  let app: Express
+  let app: Server
 
   beforeAll(async () => {
     createFile()
@@ -135,6 +134,7 @@ describe('Post Routes', () => {
         .attach('photos', file, { filename: 'test_img-1_post' })
         .attach('photos', file, { filename: 'test_img_2_post' })
         .set('Content-Type', 'multipart/form-data')
+      console.log({ res })
       expect(res.body).toEqual({})
       expect(res.status).toBe(204)
     })

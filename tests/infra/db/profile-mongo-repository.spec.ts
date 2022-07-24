@@ -67,7 +67,7 @@ describe('Profile Mongo Repository', () => {
       const res = await profileCollection.insertOne({
         ...mockAddParams()
       })
-      const id = res.ops[0]._id
+      const id = String(res.insertedId)
 
       const deletionResult = await sut.deleteProfile({ id })
       expect(deletionResult).toBe(true)

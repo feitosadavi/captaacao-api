@@ -14,11 +14,12 @@ export class UpdatePostController implements Controller<UpdatePostController.Req
     try {
       const { clientFiles, id, data } = request // exclude id
       const error = this.validation.validate(data)
-      if (error) {
-        return badRequest(error)
+      if (error) return badRequest(error)
+      const params = JSON.parse(data) as UpdatePostController.Data
+      const fieldsToUpdate: any = { ...params }
+      if (clientFiles) {
+        fieldsToUpdate.photos = clientFiles
       }
-      const params = JSON.parse(data as unknown as string)
-      const fieldsToUpdate = { ...params, photos: clientFiles }
       const result = await this.updatePost.update({ id: id, fields: fieldsToUpdate })
       return serverSuccess({ ok: result })
     } catch (e) {
@@ -36,7 +37,7 @@ export namespace UpdatePostController {
     }>
   }
 
-  type Data = {
+  export type Data = {
     title: string
     photos: string[]
     description: string
@@ -52,6 +53,6 @@ export namespace UpdatePostController {
   export type Request = {
     accountId: string
     id: string
-    data: Data
+    data: string
   } & ClientFiles
 }

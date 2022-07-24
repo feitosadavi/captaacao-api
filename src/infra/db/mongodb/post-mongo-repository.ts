@@ -1,21 +1,59 @@
 /* eslint-disable no-dupe-keys */
 import { ObjectId } from 'mongodb'
 
-import { AddPostRepository, LoadPostByIdRepository, LoadAllPostsRepository, DeletePostRepository, UpdatePostRepository } from '@/data/protocols'
+import { AddPostRepository, LoadPostByIdRepository, LoadAllPostsRepository, DeletePostRepository, UpdatePostRepository, LoadRawFilterOptions } from '@/data/protocols'
 import { MongoHelper } from '@/infra/db/mongodb'
 import { DeletePost } from '@/domain/usecases'
 
-export class PostMongoRepository implements AddPostRepository, LoadAllPostsRepository, LoadPostByIdRepository, UpdatePostRepository, DeletePostRepository {
+export class PostMongoRepository implements AddPostRepository,
+  LoadAllPostsRepository,
+  LoadRawFilterOptions,
+  LoadPostByIdRepository,
+  UpdatePostRepository,
+  DeletePostRepository {
   async addPost (params: AddPostRepository.Params): AddPostRepository.Result {
     const postsCollection = await MongoHelper.getCollection('posts')
     await postsCollection.insertOne(params)
   }
 
+  async loadRaw (): Promise<LoadRawFilterOptions.Result> {
+    const postsCollection = await MongoHelper.getCollection('posts')
+    const cars = await postsCollection.find({},
+      {
+        // @ts-ignore
+        'carBeingSold.brand': 1,
+        'carBeingSold.year': 1,
+        'carBeingSold.steering': 1,
+        'carBeingSold.fuel': 1,
+        'carBeingSold.color': 1,
+        'carBeingSold.doors': 1
+      }
+    ).toArray()
+    const filterNames: Array<'brand' | 'fuel' | 'year' | 'color' | 'steering' | 'doors'> = [
+      'brand',
+      'fuel',
+      'year',
+      'color',
+      'steering',
+      'doors'
+    ]
+    const filterOptions: any = {}
+    for (const filterName of filterNames) {
+      filterOptions[filterName] = []
+      for (const car of cars) {
+        if (!filterOptions[filterName]?.includes(car.carBeingSold[filterName])) {
+          filterOptions[filterName].push(car.carBeingSold[filterName])
+        }
+      }
+    }
+    return filterOptions
+  }
+
   async loadAll (params: LoadAllPostsRepository.Params): Promise<LoadAllPostsRepository.Result> {
     const postsCollection = await MongoHelper.getCollection('posts')
-    // postedBy is an ID, so we need to convert it so that it can be used in find
+    // postedBy is an ID so, we need to convert it so that it can be used in find
     const { skip, limit, count, postedBy, search, year, ...filters } = params
-
+    console.log({ search })
     // SETUP FILTERS
     const and = []
     const keys = Object.keys(filters)

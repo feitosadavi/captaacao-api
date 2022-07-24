@@ -27,7 +27,7 @@ export class DbUpdatePost implements UpdatePost {
       if (title) fieldsToUpdate.title = title
       if (description) fieldsToUpdate.description = description
 
-      if (params.fields.photos.length > 0) {
+      if (params.fields.photos?.length > 0) {
         await this.deleteManyFiles.deleteMany({ filesNames: post.photos })
         const remote: Array<{ file: Buffer, fileName: string }> = []
         const local: string[] = []

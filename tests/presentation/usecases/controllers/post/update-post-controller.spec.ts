@@ -22,7 +22,7 @@ const makeSut = (): SutTypes => {
 }
 const mockRequest = (): UpdatePostController.Request => {
   const { createdAt, modifiedAt, ...params } = mockPostsModel()[0]
-  return { ...params, accountId: 'any_account_id' }
+  return { id: 'any_post_id', data: JSON.stringify(params), accountId: 'any_account_id' }
 }
 describe('UpdatePost Controller', () => {
   test('Should return 400 if Validation returns an error ', async () => {
@@ -38,8 +38,8 @@ describe('UpdatePost Controller', () => {
     const request = mockRequest()
     const updateSpy = jest.spyOn(updatePostStub, 'update')
     await sut.handle(request)
-    const { accountId, ...updateParams } = request
-    expect(updateSpy).toHaveBeenCalledWith({ id: accountId, fields: updateParams })
+    const { id, data } = request
+    expect(updateSpy).toHaveBeenCalledWith({ id, fields: JSON.parse(data) })
   })
 
   test('Should call updatePost with correct values', async () => {

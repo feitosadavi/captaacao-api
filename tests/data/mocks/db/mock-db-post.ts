@@ -2,7 +2,8 @@ import {
   AddPostRepository,
   LoadPostByIdRepository,
   LoadAllPostsRepository,
-  UpdatePostRepository
+  UpdatePostRepository,
+  LoadRawFilterOptions
 } from '@/data/protocols'
 import { DeletePostRepository } from '@/data/protocols/db/post/delete-post-repository'
 import { mockPostsModel } from '@tests/domain/mocks'
@@ -23,6 +24,22 @@ export const mockLoadAllPostsRepository = (): LoadAllPostsRepository => {
     }
   }
   return new LoadAllPostsRepositoryStub()
+}
+
+export const mockLoadRawFilterOptions = (): LoadRawFilterOptions => {
+  class LoadRawFilterOptionsStub implements LoadRawFilterOptions {
+    async loadRaw (): Promise<LoadRawFilterOptions.Result> {
+      return Promise.resolve({
+        brand: [],
+        year: [],
+        steering: [],
+        color: [],
+        fuel: [],
+        doors: []
+      })
+    }
+  }
+  return new LoadRawFilterOptionsStub()
 }
 
 export const mockLoadPostByIdRepository = (): LoadPostByIdRepository => {
